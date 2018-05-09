@@ -18,17 +18,17 @@
 !  This file contains the input parameters in namelist format for ARPS
 !  gridded data interpolation program ARPSINTRP.
 !
-!  ARPSINTRP reads in a series of gridded data (input grid) in ARPS 
+!  ARPSINTRP reads in a series of gridded data (input grid) in ARPS
 !  history data format and interpolate the fields to a new grid (output
-!  grid) specified by parameters in namelist block &newgrid, and 
-!  writes out the gridded data on the new (output) grid in the ARPS 
-!  history format. When exbcdmp=1, it also writes out a set of data 
+!  grid) specified by parameters in namelist block &newgrid, and
+!  writes out the gridded data on the new (output) grid in the ARPS
+!  history format. When exbcdmp=1, it also writes out a set of data
 !  in the external boundary condition file format.
 !
 !  This program is the primary tool for performing one way nested runs.
 !
 !  A explanation on the NAMELIST format can be found in ARPS input file
-!  arps.input. 
+!  arps.input.
 !
 !  Note that only lines between &NAMELIST_NAME and / are read as the
 !  input data, and there must be a blank space in front of the '&' sign.
@@ -38,7 +38,7 @@
 !  data statement.
 !
 !  Steps to use this program:
-!  
+!
 !  Step 1: Compile and link using 'makearps arpsintrp'
 !  Step 2: Edit input file input/arpsintrp.input
 !  Step 3: Run job using 'bin/arpsintrp < input/arpsintrp.input'.
@@ -52,11 +52,11 @@
 !
 !   Modification history:
 !
-!   8/12/1997 (Ming Xue) 
+!   8/12/1997 (Ming Xue)
 !   Modified for ARPSINTRP.
 !
 !   4/6/1999 (M. Xue)
-!   Significant rewriting of the program. 
+!   Significant rewriting of the program.
 !   Renamed Version 2.0
 !
 !   2000/05/20 (Gene Bassett)
@@ -67,36 +67,126 @@
 !
 !   2001/06/28 (Gene Bassett)
 !   Added ntagopt, option to set surface winds in new grid to the surface
-!   winds in the original grid for areas where new terrain is above the 
+!   winds in the original grid for areas where new terrain is above the
 !   original terrain.
 !
 !   2001/10/25 (Gene Bassett)
-!   Added noutgrds, option to output multiple grids from each input arps 
+!   Added noutgrds, option to output multiple grids from each input arps
 !   file.
 !
+!   11/13/2014 (Y. Wang)
+!   Added MPI capability.
+!
+*-----------------------------------------------------------------------
+!
+!
+! Message passing parameters
+!
+!  MESSAGE_PASSING  Namelist for message passing version of the ARPS.
+!                   These values are ignored for the non-MP version.
+!
+!  nproc_x      Number of processors in the x-direction.
+!  nproc_y      Number of processors in the y-direction.
+!               Note that if (nx-3)/nproc_x or (ny-3)/nproc_y are not
+!               integers, ny & ny will be increased so that they are.
+!
+!  max_fopen    Maximum number of files allowed open when reading or
+!               writing, a number smaller than the number of processors
+!               can be used if dictated by the computing platform.
+!               However, the system will set max_fopen = number of
+!               processors automatically as needing in some situations.
+!
+! nproc_x_in    Number of input patches in x-direction
+! nproc_y_in    Number of input patches in y-direction
+!
+!         NOTE: Must be either 1 or nproc_x/nproc_y at present
+!
+! inisplited  Flag to indicate whether the external data file (inifile,
+!             inigbf, exbcname, terndta, sfcdtfl, soilinfl, rstinf etc.)
+!             is in a single joined file or in multiple files which were
+!             created using splitfiles. Valid for MPI mode.
+!          = 0, external data file is in a single file. The program should
+!               split the file on-the-fly.
+!          = 1, external files have already been split for each process.
+!
+!          Introduced 'bit' control since arps5.3.2 (see instruciton for
+!          dmp_out_joined for details). The bit order is "I A T S B R H".
+!
+! nproc_x_out   Number of patches in x-direction for output
+! nproc_y_out   Number of patches in y-direction for output
+!               If those parameters are specified, they must be multiples of
+!               nproc_x/nproc_y respectively. Furthermore, the grid sizes of
+!               each output patch must also be an integer, i.e.
+!               MOD((nx-3),nproc_x_out) = 0 and MOD((ny-3),nproc_y_out) = 0.
+!               Currently, it is only supported with HDF4 and netCDF format.
+!
+! dmp_out_joined = 0/1   Flag indicating if, when the model is run in
+!         distributed-memory-parallel mode (e.g., using MPI), the output
+!         fields from different processes will be gathered and joined first
+!         before being written out (into single files).
+!         = 0, each process writes out its own portion of data; the output
+!              can be joined together later using the joinfiles program.
+!         = 1, the output fields from different processs will be gathered
+!              and joined first before being written out. The joinfiles
+!              step is no longer needed.
+!
+!         Introduced 'bit' control since arps5.2.14. The bit order (uses decimal
+!         integer instead of binary integer for simplicity) is
+!         as this: "I A T S B R H", where
+!            H stands for History files,
+!            R for restart files,
+!            B for Boundary files,
+!            S for soil file,
+!            T for terrain file and surface file,
+!            A for arbitrary 2D/3D files,
+!            I for increment files (ADAS or 3DVAR).
+!
+!         For example, "0010001" means terrain file and history files
+!         will be joined, but restart files, boundary files and surface file
+!         will be in split form. Note that this option only play a role in
+!         MPI mode.
+!
+!   NOTE: Joined-dump only works for GrADS, binary, netCDF and HDF format.
+!                                                                    =*
 !-----------------------------------------------------------------------
+
+ &message_passing
+   nproc_x = 5,
+   nproc_y = 2,
+   max_fopen = 1,
+
+   nproc_x_in = 1,
+   nproc_y_in = 1,
+   inisplited = 0,
+
+   nproc_x_out = 1,
+   nproc_y_out = 1,
+   dmp_out_joined = 1111111,
+ /
+
+*-----------------------------------------------------------------------
 !
 !  hinfmt   The format flag of the input history data.
 !          = 1, unformatted binary data dump
 !          = 2, formatted ascii data dump
 !          = 3, NCSA HDF4 format data dump
 !          = 4, Packed binary data dump
-!          = 5, dump for Savi3D visualization package 
+!          = 5, dump for Savi3D visualization package
 !               (Not supported as an INPUT file format)
 !          = 6, binary allowing data point skip
-!          = 7, NetCDF format 
-!          = 8, Packed NetCDF format 
+!          = 7, NetCDF format
+!          = 8, Packed NetCDF format
 !          = 9, GrADS data dump
 !          = 10, GRIB data dump.
 !
-!  hdmpinopt = Indicate the way history data files are specified. 
+!  hdmpinopt = Indicate the way history data files are specified.
 !            = 1, Data are at a constant time interval given start and
 !                 end times.  The files names are constucted using ARPS
 !                 history data naming convention given file header
 !                 (runname plus directory name in arps).
-!            = 2, Data files are explicitly listed. 
+!            = 2, Data files are explicitly listed.
 !
-!  hdmpfheader  History data file name header (not including '.' at the end), 
+!  hdmpfheader  History data file name header (not including '.' at the end),
 !               corresponding to runname plus directory name.
 !               e.g., hdmpfheader='./may20'.  (For hdmpinopt=1.)
 !
@@ -114,7 +204,7 @@
 !  nhisfile The number of time-dependent history files to be processed
 !           (hdmpinopt=2).
 !  hisfile  Name of history data files (hdmpinopt=2).
-!
+!                                                                     =*
 !-----------------------------------------------------------------------
 !
 
@@ -124,17 +214,17 @@
 
    hdmpinopt    = 1,
 
-     hdmpfheader = '/nsftor/rtanamachi/cases/26may2010/arps/realdata/from_sooner/3km_KCYS_KPUX_stderr52/3km_enkf/ena/ena001/ena001',
+     hdmpfheader = 'dump_dir/3km0331163DVARCA030015min540_6km1hr15RUNTMP',
      hdmpftrailer= '',
      tintv_dmpin = 300.0,
-     tbgn_dmpin  = 21600.0,
+     tbgn_dmpin  = 10800.0,
      tend_dmpin  = 21600.0,
 
-     grdbasfn =   '/nsftor/rtanamachi/cases/26may2010/arps/realdata/from_sooner/3km_KCYS_KPUX_stderr52/3km_enkf/ena/ena001/ena001.hdfgrdbas',
+     grdbasfn =   './may20.grbgrdbas',
      nhisfile = 3,
-     hisfile(1) = '/nsftor/rtanamachi/cases/26may2010/arps/realdata/from_sooner/3km_KCYS_KPUX_stderr52/3km_enkf/ena/ena001/ena001.hdf010800',
-     hisfile(2) = '/nsftor/rtanamachi/cases/26may2010/arps/realdata/from_sooner/3km_KCYS_KPUX_stderr52/3km_enkf/ena/ena001/ena001.hdf012600',
-     hisfile(3) = '/nsftor/rtanamachi/cases/26may2010/arps/realdata/from_sooner/3km_KCYS_KPUX_stderr52/3km_enkf/ena/ena001/ena001.hdf014400',
+     hisfile(1) = './may20.grb000000',
+     hisfile(2) = './may20.grb003600',
+     hisfile(3) = './may20.grb007200',
  /
 
 !-----------------------------------------------------------------------
@@ -144,13 +234,13 @@
 !-----------------------------------------------------------------------
 
  &output_dims
-    nx1 = 163,
-    ny1 = 123,
-    nz1 = 51,
+    nx1 = 203,
+    ny1 = 203,
+    nz1 = 53,
  /
 !
 !-----------------------------------------------------------------------
-! 
+!
 !  THE FOLLOWING NAMELIST BLOCKS SPECIFY THE PARAMETERS CONTROLING THE
 !  OUTPUT
 !
@@ -188,9 +278,9 @@
  &newgrid_soil
    soilmodel_option = 1,
    nzsoil1          = 2,
-   dzsoil1          = 1.0,
+   dzsoil1          = 1.00,
    zrefsoil1        = 0.0,
-   soilstrhopt      = 0, 
+   soilstrhopt      = 0,
    soildzmin        = 0.01,
    soildlayer1      = 0.0,
    soildlayer2      = 1.0,
@@ -199,16 +289,16 @@
 
 !-----------------------------------------------------------------------
 !
-!  runname, a string of up to 80 characters long, is used to identify 
-!  this job and construct the output file names. 
+!  runname, a string of up to 80 characters long, is used to identify
+!  this job and construct the output file names.
 !
-!  The characters before either a blank space or comma will be used 
+!  The characters before either a blank space or comma will be used
 !  as the prefix of the output file names.
 !
 !-----------------------------------------------------------------------
 
  &jobname
-   runname = '1km26may2010icbc'
+   runname = '1kmbgbc_3km3DVARCA030015min540_6km1hr15RUNTMP'
  /
 
 !-----------------------------------------------------------------------
@@ -224,22 +314,22 @@
 !          = 1 use xctr1 & yctr1,
 !          = 2 use ctrlat1 & ctrlon1.
 !
-!  snap_to_grid Option to enforce matching of grid lines of output 
-!              grid with input grid (i.e., output grid lines snap to 
+!  snap_to_grid Option to enforce matching of grid lines of output
+!              grid with input grid (i.e., output grid lines snap to
 !              certain input grid lines).
 !          = 0 No change to output grid specification
-!          = 1 Shift, if necessary, output grid location by no more 
+!          = 1 Shift, if necessary, output grid location by no more
 !              than half the output grid space, if necessary.
-!          = 2 Shift, if necessary, output grid so that x1(1) lines 
+!          = 2 Shift, if necessary, output grid so that x1(1) lines
 !              up with x(i), where 1<<i<<nx, and y1(1) lines up with y(j).
 !              With this option and when (nx1-1)*dx1 is an integer multiple
 !              of dx and similarly for y, the output (computational)
-!              grid boundaries lines up with the input grid cell boundaries. 
-!             
+!              grid boundaries lines up with the input grid cell boundaries.
+!
 !  same_res   Flag indicating that the output grid has the same horizontal
 !             and vertical resolution as the input grid and the grid lines
-!             of the two grids line up. No interpolation is performed  
-!             in this case for better efficiency. 
+!             of the two grids line up. No interpolation is performed
+!             in this case for better efficiency.
 !
 !             NOTE: If nz1 does not match nz same_res will be reset to zero.
 !
@@ -265,7 +355,7 @@
 !  zrefsfc1   Reference height of the surface (ground level) (m).
 !
 !  dlayer11  Height (m) of the layer beneath which stretching is not applied.
-!            0.0 =< dlayer1 < (nz-3)*dz 
+!            0.0 =< dlayer1 < (nz-3)*dz
 !
 !  dlayer21  Depth of the mid-layer with stretched vertical spacing (m)
 !            0.0 =< dlayer2 < (nz-3)*dz and 0.0 =< dlayer1+dlayer2 < (nz-3)*dz
@@ -275,16 +365,16 @@
 !            A value between 0.2 and 5.0 is recommended. Stretching
 !            becomes more linear as strhtune increases. Default value is 1.0.
 !
-!  zflat1    Height at which the grid becomes flat in the 
+!  zflat1    Height at which the grid becomes flat in the
 !            terrain-following coordinate transformation (m).
 !
 !  plevels   The values of pressure levels in mb. Should be specified in
 !            decending order. The number of levels specified should be nz1.
-!            nz1 is specified in intrpdims.inc for the Fortran 77 version 
+!            nz1 is specified in intrpdims.inc for the Fortran 77 version
 !            but in this input file for the Fortran 90 version of ARPSINTRP.
 !            This array is used only when z_or_p = 2.
 !
-!  nstyp1   The number of soil types per grid point to use for the 
+!  nstyp1   The number of soil types per grid point to use for the
 !           interpolated grid (use a value of -1 to keep the same number
 !           of soil types as in the input data).
 !
@@ -297,7 +387,7 @@
 !    yctr_grd  = y-coord of new center
 !    clat_grd  = center latitude
 !    clon_grd  = center longitude
-!    name_grd  = Name of each output grid 
+!    name_grd  = Name of each output grid
 !
 !-----------------------------------------------------------------------
 
@@ -308,32 +398,32 @@
    xy_or_ll = 2,
      xctr1  = 32495.0,
      yctr1  = 32201.0,
-     ctrlat1=  40.07355,
-     ctrlon1= -104.30067,
+     ctrlat1=  34.8,
+     ctrlon1= -87.68,
 
-   snap_to_grid = 2,
+   snap_to_grid = 1,
    same_res = 0,
 
    dx1    =  1000.0,
    dy1    =  1000.0,
-   dz1    =  500.0,
+   dz1    =  400.0,
 
    zrefsfc1  = 0.0,
-   strhopt1  = 2,
-     dzmin1    = 50.0,
+   strhopt1  = 1,
+     dzmin1    = 20.0,
      dlayer11  = 0.0,
      dlayer21  = 1.0e5,
-     strhtune1 = 1.0,
+     strhtune1 = 0.2,
      zflat1    = 1.0e5,
 
-   nstyp1 = -1,
+   nstyp1 = 3,
 
-   noutgrds = 1,
+   noutgrds = 0,
      xctr_grd(1) = 0.,
      yctr_grd(1) = 0.,
-     clat_grd(1) = 40.07355,
-     clon_grd(1) = -104.30067,
-     name_grd(1) = '1km26may2010icbc_001',
+     clat_grd(1) = 0.,
+     clon_grd(1) = 0.,
+     name_grd(1) = 'NULL',
 
  /
 
@@ -377,15 +467,15 @@
 !-----------------------------------------------------------------------
 
  &newterrain
-   ternopt1 = 3,
-     ntmerge = 7,
+   ternopt1 = 4,
+     ntmerge = 12,
      mntopt1  = 0,
        hmount1  =     0.000,
        mntwidx1 = 10000.000,
        mntwidy1 = 10000.000,
        mntctrx1 = 10000.000,
        mntctry1 = 10000.000,
-     terndta1 = 'arpstern.dat',
+     terndta1 = '/Users/dawson29/VORTEXSE/simulations/ARPS/trndata/1km203x203.trndata',
        ternfmt1 = 3,
  /
 
@@ -398,9 +488,9 @@
 !  intrphopt=2, intrpvopt=1 recommended.
 !
 !  bglopt  Options for setting values below ground
-!         = 1, linear extrapolation 
-!         = 2, equal the first value above ground 
-!         = 3, set the total and perturbation fields to misvalue, 
+!         = 1, linear extrapolation
+!         = 2, equal the first value above ground
+!         = 3, set the total and perturbation fields to misvalue,
 !              a number representing a missing value. Base state values
 !              are set to zero.
 !         = 4, deduction based on constant temperature lapse rate
@@ -413,17 +503,17 @@
 !         Option 4 recommended if the output is used for model initialization.
 !         1 or 2 are intended for use with graphics.
 !
-!  ntagopt Option for setting wind values for locations where new terrain 
+!  ntagopt Option for setting wind values for locations where new terrain
 !         is above the original terrain.
 !         = 0, Use wind values interpolated directly from original grid;
 !         = 1, Set surface values to those on the surface of the original
 !              grid.  Transition to the directly intrepolated winds over
 !              a height of aghght.
 !
-!  aghght Height (m) over which to transition surface winds to directly 
+!  aghght Height (m) over which to transition surface winds to directly
 !         interplated winds when using ntagopt=1.
 !
-!  misvalue  The value flagging the missing value. Default= -9999.0 
+!  misvalue  The value flagging the missing value. Default= -9999.0
 !
 !-----------------------------------------------------------------------
 
@@ -465,7 +555,7 @@
 !         = 3, HDF4 (uncompressed).
 !
 !-----------------------------------------------------------------------
- 
+
  &sfc_data
    sfcdat   = 0,
      styp     = 3,
@@ -473,8 +563,8 @@
      lai0     = 0.31,
      roufns0  = 0.01,
      veg0     = 0.3,
-     sfcdtfl  = '../jun08/jun08B.sfcdata',
-     sfcfmt   = 1,
+     sfcdtfl  = '/Users/dawson29/VORTEXSE/simulations/ARPS/sfcdata/1km203x203.sfcdata',
+     sfcfmt   = 3,
  /
 
 !-----------------------------------------------------------------------
@@ -511,7 +601,7 @@
 !          = 0, history files not compressed.
 !          = 1, history files compressed;
 !
-!  readyfl   Flag to writing a _ready file after each history dump file 
+!  readyfl   Flag to writing a _ready file after each history dump file
 !            is writen
 !          = 0, no _ready file
 !          = 1, write _ready file
@@ -533,7 +623,7 @@
 !          = 1, qi, qs and qh output.
 !  tkeout    TKE output option in history dump.
 !          = 0, no
-!          = 1, yes 
+!          = 1, yes
 !  trbout    Turbulence field (km) output option in history dump.
 !          = 0, no km output;
 !          = 1, km output.
@@ -542,11 +632,11 @@
 !          = 1, yes.
 !  prcout    Option to include precipitation rates output in history dump.
 !          = 0, no,
-!          = 1, yes. 
+!          = 1, yes.
 !  sfcout    Soil model variable output option in history dump.
 !          = 0, no,
-!          = 1, yes. 
-!  landout   Option for soil and vegetation property array output in 
+!          = 1, yes.
+!  landout   Option for soil and vegetation property array output in
 !            history dump.
 !          = 0, no,
 !          = 1, yes.
@@ -563,8 +653,8 @@
 !          = 3, adaptive or skipping Huffman compression;
 !          = 4-7, as above plus mapping reals to 16 bit integers.
 !            Note that only options 0-2 work on Cray platforms.
-!  
-!            When exbchdfcompr > 4, inside of domain (unused portion, 
+!
+!            When exbchdfcompr > 4, inside of domain (unused portion,
 !            determined by ngbrz & zbrdmp) set to a constant value.
 !
 !  ngbrz     Number of boundary grid points (used only with exbcdmp=3).
@@ -610,17 +700,17 @@
 !-----------------------------------------------------------------------
 
  &output
-   dirname  = './',
+   dirname  = 'out_dir/',
 
    hdmpfmt    = 0,
      grbpkbit   = 16,
-     hdfcompr   = 5,
+     hdfcompr   = 2,
 
    filcmprs = 0,
    readyfl  = 0,
 
-   basout   = 1,
-   grdout   = 1,
+   basout   = 0,
+   grdout   = 0,
    varout   = 1,
    mstout   = 1,
    iceout   = 1,
@@ -634,14 +724,17 @@
    flxout   = 1,
 
    exbcdmp  = 3,
-     exbchdfcompr = 5,
+     exbchdfcompr = 2,
      qcexout  = 1,
      qrexout  = 1,
      qiexout  = 1,
      qsexout  = 1,
      qhexout  = 1,
+     qgexout  = 1,
+     nqexout  = 1,
+     zqexout  = 1,
 
-     ngbrz = 5,
+     ngbrz = 12,
      zbrdmp = 12000.0,
 
    sfcdmp  = 0,
