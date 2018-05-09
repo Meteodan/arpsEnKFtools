@@ -1,9 +1,15 @@
 
 import re
 
-def _namelistToString(value):
+def _namelistToString(value, padded_zeros=None):
     if type(value) in [ int, float ]:
-        str_value = str(value)
+        if(padded_zeros is None):
+            str_value = str(value)
+        else:
+            try:
+                str_value = str(value).zfill(padded_zeros)
+            except:
+                str_value = str(value)
     elif type(value) in [ bool ]:
         str_value = ".%s." % str(value).lower()
     else:
@@ -11,7 +17,7 @@ def _namelistToString(value):
     return str_value
 
 def _namelistFromString(str_value):
-    if str_value[0] == "'" and str_value[-1] == "'": 
+    if str_value[0] == "'" and str_value[-1] == "'":
         # Remove the quotes and leave the value as a string
         value = str_value[1:-1]
     elif str_value[0] == "." and str_value[-1] == ".":
@@ -28,25 +34,26 @@ def _namelistFromString(str_value):
 
 def _searchLine(line, **kwargs):
     for parameter, replacement in kwargs.iteritems():
+        padded_zeros = None
         # Only pull out the regular expressions if we have reason to believe the parameter might be on this line.
         if line.find(parameter) > 0:
             # Escape any special characters in the parameter
             parameter_escaped = re.escape(parameter)
-
             # Looks for the parameter name preceded by a space, a comma, or the beginning of the line.
             match = re.search(r"(?<=[\s,])%s(?=[\s]*=[\s]*[\S]+[\s]*,)" % parameter_escaped, line)
             if match is None: match = re.search(r"^%s(?=[\s]*=[\s]*[\S]+[\s]*,)" % parameter_escaped, line)
-
             if line[0] != '!' and match is not None:
+                if(parameter in ['inisplited', 'dmp_out_joined']):
+                    padded_zeros = 7
                 if type(replacement) in [ list, tuple ]:
-                    str_value = ", ".join([ _namelistToString(r) for r in replacement ])
+                    str_value = ", ".join([ _namelistToString(r, padded_zeros=padded_zeros) for r in replacement ])
                 else:
-                    str_value = _namelistToString(replacement)
+                    str_value = _namelistToString(replacement, padded_zeros=padded_zeros)
 
-#               print "Replacing %s with %s" % (parameter, replacement)
+                #print "Replacing %s with %s" % (parameter, replacement)
 
                 # Looks for a string that matches (parameter = a comma-separated list of either strings, booleans, or numbers) followed by a bareword (another variable name) or a newline.
-                line = re.sub(r"%s[\s]*=[\s]*(?:(?:'[^']+'[\s]*,?[\s]*)+|(?:\.(?:true|TRUE|false|FALSE)\.[\s]*,?[\s]*)+|(?:[\dEe.-]+[\s]*,?[\s]*)+?)(?=[A-Za-z][\w(,)]*|" % parameter_escaped + "\n)", 
+                line = re.sub(r"%s[\s]*=[\s]*(?:(?:'[^']+'[\s]*,?[\s]*)+|(?:\.(?:true|TRUE|false|FALSE)\.[\s]*,?[\s]*)+|(?:[\dEe.-]+[\s]*,?[\s]*)+?)(?=[A-Za-z][\w(,)]*|" % parameter_escaped + "\n)",
                     "%s = %s," % (parameter, str_value), line)
 
     return line
@@ -69,7 +76,7 @@ def joinSplicedStrings(spliced_list, delimiter=", "):
 def editNamelistFile(file_name_src, file_name_dest, **kwargs):
     """
     editNamelistFile
-    Purpose:    Takes a FORTRAN-90 namelist file and edits it either using the keys/values of kwargs.  The special key __file_name_values__ 
+    Purpose:    Takes a FORTRAN-90 namelist file and edits it either using the keys/values of kwargs.  The special key __file_name_values__
                     can be used to find all the values from another namelist file and use them.
     Parameters: file_name_src [type=str]
                     The name of the namelist file to read from
