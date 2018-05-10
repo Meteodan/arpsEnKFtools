@@ -4,15 +4,16 @@
 SCRATCHBASE="/scratch/rice/d/dawson29/"
 DEPOTBASE="/depot/dawson29/"
 BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/2016_IOP3/ARPS/EnKF/"
-RUNNAME="3kmtest"
-TEMPLATEDIR="${DEPOTBASE}apps/EnKF_template/"
-SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/sfcdata/3km107x107.sfcdata"
-TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/trndata/3km107x107.trndata"
-BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/2016_IOP3/EnKF/3km033116NAM107x107bgandbc/"
-RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/2016_IOP3/processed_radar/"
-ARPSEXE="/home/dawson29/arps5.4_exp/bin/arps_mpi"
-ARPSENKFICEXE="/home/dawson29/arps5.4_exp/bin/arpsenkfic"
-ARPSENKFEXE="/home/dawson29/arps5.4_exp/bin/arpsenkf_mpi"
+RUNNAME="3km153x153"
+TEMPLATEDIR="${DEPOTBASE}apps/arpsEnKFtools/EnKF_template/"
+SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/sfcdata/3km153x153.sfcdata"
+TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/trndata/3km153x153.trndata"
+BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/2016_IOP3/EnKF/3km153x153_6kmconvicbc/"
+RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
+ARPSEXE="/home/dawson29/arps5.4/bin/arps_mpi"
+ARPSENKFICEXE="/home/dawson29/arps5.4/bin/arpsenkfic"
+ARPSENKFEXE="/home/dawson29/arps5.4/bin/arpsenkf_mpi"
+PERTURBIC=1
 INIFILE="3km033116NAM107x107bgandbc.hdf010800"
 INIBASE="3km033116NAM107x107bgandbc.hdfgrdbas"
 
@@ -26,8 +27,11 @@ cd ${EXPDIR}
 ln -s ${SFCDATA} .
 ln -s ${TRNDATA} .
 ln -s ${BOUNDARYDIR} boundary
-ln -s boundary/${INIBASE} .
-ln -s boundary/${INIFILE} .
+if [ "${PERTURBIC}" -eq 1 ]
+then
+  ln -s boundary/${INIBASE} .
+  ln -s boundary/${INIFILE} .
+fi
 ln -s ${ARPSEXE} arps
 ln -s ${ARPSENKFICEXE} arpsenkfic
 ln -s ${ARPSENKFEXE} arpsenkf

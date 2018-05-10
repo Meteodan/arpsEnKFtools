@@ -7,34 +7,37 @@
 
 ### USER SPECIFICATIONS ###
 # Absolute path to directory containing ARPS history files
-basedir = "/Volumes/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6kmconv/6kmconv"
+basedir = "/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6kmconv/6kmconv"
 # Absolute path to the arpsintrp.input template file
-template = "/Users/dawson29/arpsEnKFtools/EnKF_intrp/arpsintrp.input.template"
+template = "/depot/dawson29/apps/arpsEnKFtools/EnKF_intrp/arpsintrp.input.template"
 # Absolute path to where the resulting arpsintrp input files should be stored.
-rinPath = "/Users/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/arpsintrp_input"
+rinPath = "/home/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/arpsintrp_input"
 # Name of the experiment (used as a prefix for the output):
 expPrefix = "3km153x153"
+# Location of terrain data file
+trndata = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/trndata/"
 # Number of ensemble members
 n_ens_members = 40
-member_start = 1
+member_start = 8
 member_end = 40
 # Start, End, Step time for history files to process
 start_time = 36000.
 end_time = 54000.
 step_time = 300.
 # Directory to save interpolated history files
-outputdir = "/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6kmconvicbc"
+outputdir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6kmconvicbc"
 # Option to run arpsintrp on the generated files
 run_arpsintrp = True
 run_t0 = False
 run_lbc = True
 # Absolute path to arpsintrp executable
-arpsintrp_exe = '/Users/dawson29/arps5.4_exp/bin/arpsintrp_mpi'
+arpsintrp_exe = '/home/dawson29/arps5.4/bin/arpsintrp_mpi'
 # MPI executable (if desired)
-mpi_exe = '/opt/openmpi/bin/mpirun'
+mpi_exe = 'mpiexec'
+mpi_nproc_flag = '-n'
 # MPI parameters
-nproc_x = 5
-nproc_y = 2
+nproc_x = 10
+nproc_y = 6
 nproc_x_in = 10
 nproc_y_in = 6
 nproc_x_out = 1
@@ -48,7 +51,7 @@ import os
 import glob
 import sys
 import subprocess
-sys.path.append('/Users/dawson29/arpsEnKFtools/modules/')
+sys.path.append('/depot/dawson29/apps/arpsEnKFtools/modules/')
 from editNamelist import editNamelistFile
 
 ens_member_list = xrange(member_start, member_end + 1)
@@ -83,7 +86,8 @@ for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, memb
         nproc_x_out=nproc_x_out,
         nproc_y_out=nproc_y_out,
         inisplited=inisplited,
-        dmp_out_joined=dmp_out_joined)
+        dmp_out_joined=dmp_out_joined,
+        terndta1="%s/%s.trndata" % (trndata, expPrefix))
 
     # Boundary conditions
     editNamelistFile("%s" % template, lbc_interp_input_file_name,
@@ -102,7 +106,8 @@ for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, memb
         inisplited=inisplited,
         dmp_out_joined=dmp_out_joined,
         hdmpfmt=0,
-        exbcdmp=3)
+        exbcdmp=3,
+        terndta1="%s/%s.trndata" % (trndata, expPrefix))
 
 if run_arpsintrp:
     for t0_interp_input_file_name, t0_interp_output_file_name, lbc_interp_input_file_name, \
@@ -110,18 +115,19 @@ if run_arpsintrp:
             t0_interp_output_file_names, lbc_interp_input_file_names, \
             lbc_interp_output_file_names):
 
-        command='%s -np %d %s' % (mpi_exe, nproc_x*nproc_y, arpsintrp_exe)
+        command='exec %s %s %d %s' % (mpi_exe, mpi_nproc_flag, nproc_x*nproc_y, arpsintrp_exe)
         if run_t0:
             with open(t0_interp_input_file_name, 'r') as input, \
                  open(t0_interp_output_file_name, 'w') as output:
                 print "Running %s for %s" % (arpsintrp_exe, t0_interp_input_file_name)
-                subprocess.call(command, stdin=input, stdout=output, shell=True)
+                job = subprocess.call(command, stdin=input, stdout=output, shell=True)
+                print "Job status = ",job
         if run_lbc:
             with open(lbc_interp_input_file_name, 'r') as input, \
                  open(lbc_interp_output_file_name, 'w') as output:
                 print "Running %s for %s" % (arpsintrp_exe, lbc_interp_input_file_name)
-                subprocess.call(command, stdin=input, stdout=output, shell=True)
-
+                job = subprocess.call(command, stdin=input, stdout=output, shell=True)
+                print "Job status = ",job
 
 
 
