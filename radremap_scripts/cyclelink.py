@@ -29,7 +29,7 @@ debug = 0
 ### END OF USER SPECIFICATIONS ###
 
 # Generate a list of datetime objects corresponding to the desired times.
-timeList = perdelta(startTime, endTime+interval, interval)
+timeList = list(perdelta(startTime, endTime+interval, interval))
 # timeList = [];
 # timeIter = startTime
 # while timeIter <= endTime:
