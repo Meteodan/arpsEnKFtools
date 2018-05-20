@@ -18,7 +18,7 @@ expPrefix = "3km153x153"
 trndata = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/trndata/"
 # Number of ensemble members
 n_ens_members = 40
-member_start = 8
+member_start = 40
 member_end = 40
 # Start, End, Step time for history files to process
 start_time = 36000.
@@ -115,18 +115,20 @@ if run_arpsintrp:
             t0_interp_output_file_names, lbc_interp_input_file_names, \
             lbc_interp_output_file_names):
 
-        command='exec %s %s %d %s' % (mpi_exe, mpi_nproc_flag, nproc_x*nproc_y, arpsintrp_exe)
+        #command='exec %s %s %d %s' % (mpi_exe, mpi_nproc_flag, nproc_x*nproc_y, arpsintrp_exe)
+        command=[mpi_exe, mpi_nproc_flag, str(nproc_x*nproc_y), arpsintrp_exe]        
+
         if run_t0:
-            with open(t0_interp_input_file_name, 'r') as input, \
-                 open(t0_interp_output_file_name, 'w') as output:
+            with open(t0_interp_input_file_name, 'r') as inputfile, \
+                 open(t0_interp_output_file_name, 'w') as outputfile:
                 print "Running %s for %s" % (arpsintrp_exe, t0_interp_input_file_name)
-                job = subprocess.call(command, stdin=input, stdout=output, shell=True)
+                job = subprocess.call(command, stdin=inputfile, stdout=outputfile)
                 print "Job status = ",job
         if run_lbc:
-            with open(lbc_interp_input_file_name, 'r') as input, \
-                 open(lbc_interp_output_file_name, 'w') as output:
+            with open(lbc_interp_input_file_name, 'r') as inputfile, \
+                 open(lbc_interp_output_file_name, 'w') as outputfile:
                 print "Running %s for %s" % (arpsintrp_exe, lbc_interp_input_file_name)
-                job = subprocess.call(command, stdin=input, stdout=output, shell=True)
+                job = subprocess.call(command, stdin=inputfile, stdout=outputfile)
                 print "Job status = ",job
 
 
