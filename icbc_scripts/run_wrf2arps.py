@@ -14,9 +14,9 @@ from arpsenkftools.editNamelist import editNamelistFile
 # Absolute path to directory containing NEWS-e WRF history files
 basedir = "/depot/dawson29/data/VORTEXSE/model_data/newse_data/"
 # Absolute path to the arpsintrp.input template file
-template = "/Users/dawson29/arpsEnKFtools/EnKF_intrp/wrf2arps.input.template"
+template = "/depot/dawson29/apps/arpsEnKFtools/icbc_scripts/wrf2arps.input.template"
 # Absolute path to where the resulting arpsintrp input files should be stored.
-rinPath = "/depot/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/wrf2arps_input/"
+rinPath = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/wrf2arps_input/"
 # Name of the experiment (used as a prefix for the output):
 expPrefix = "3km153x153"
 # Number of ensemble members
@@ -33,10 +33,10 @@ start_sec = 0
 start_date = datetime(start_year, start_month, start_day, start_hour, start_min, start_sec)
 
 end_year = 2016
-end_month = 4
-end_day = 1
-end_hour = 2
-end_min = 45
+end_month = 3
+end_day = 31
+end_hour = 18
+end_min = 0
 end_sec = 0
 end_date = datetime(end_year, end_month, end_day, end_hour, end_min, end_sec)
 
@@ -49,7 +49,7 @@ datetime_range = [start_date + timedelta(seconds=x) for x in
 outputdir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newseicbc"
 # Option to run wrf2arps on the generated files
 run_wrf2arps = False
-run_t0 = True
+run_t0 = False
 run_lbc = False
 # Absolute path to wrf2arps executable
 wrf2arps_exe = '/home/dawson29/arps5.4_main/bin/wrf2arps'
@@ -79,10 +79,7 @@ lbc_interp_input_file_names = ["%s/%s.wrf2arps_lbc.input" % (rinPath, ens_member
                                for ens_member_name in ens_member_names]
 lbc_interp_output_file_names = ["%s/%s.wrf2arps_lbc.output" % (rinPath, ens_member_name)
                                 for ens_member_name in ens_member_names]
-
 newse_timestrings = [d.strftime('%Y-%m-%d_%H:%M:%S') for d in datetime_range]
-member_paths = ["{}/%03d/%s" % (basedir, m, ens_member_name) for m, ens_member_name in
-                zip(ens_member_list, ens_member_names)]
 
 for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, newse_timestring in \
         zip(ens_member_names, t0_interp_input_file_names, lbc_interp_input_file_names,
@@ -101,7 +98,7 @@ for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, news
                      exbcdmp=0)
 
     # Boundary conditions
-    editNamelistFile("{}".format(template), t0_interp_input_file_name,
+    editNamelistFile("{}".format(template), lbc_interp_input_file_name,
                      dir_extd=basedir,
                      runname="%s" % ens_member_name,
                      init_time_str=newse_timestring,

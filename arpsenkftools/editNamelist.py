@@ -33,7 +33,7 @@ def _namelistFromString(str_value):
     return value
 
 def _searchLine(line, **kwargs):
-    for parameter, replacement in kwargs.iteritems():
+    for parameter, replacement in kwargs.items():
         padded_zeros = None
         # Only pull out the regular expressions if we have reason to believe the parameter might be on this line.
         if line.find(parameter) > 0:
