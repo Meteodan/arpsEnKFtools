@@ -69,17 +69,26 @@ dmp_out_joined = 1  # 1111111
 
 ### END OF USER SPECIFICATIONS ###
 
+newse_timestrings = [d.strftime('%Y-%m-%d_%H:%M:%S') for d in datetime_range]
+fn_timestrings = [d.strftime('%Y-%m-%d_%H_%M_%S') for d in datetime_range]
 ens_member_list = range(member_start, member_end + 1)
 ens_member_names = ["ena%03d" % m for m in ens_member_list]
-t0_interp_input_file_names = ["%s/%s.wrf2arps_t0.input" % (rinPath, ens_member_name)
-                              for ens_member_name in ens_member_names]
-t0_interp_output_file_names = ["%s/%s.wrf2arps_t0.output" % (rinPath, ens_member_name)
-                               for ens_member_name in ens_member_names]
-lbc_interp_input_file_names = ["%s/%s.wrf2arps_lbc.input" % (rinPath, ens_member_name)
-                               for ens_member_name in ens_member_names]
-lbc_interp_output_file_names = ["%s/%s.wrf2arps_lbc.output" % (rinPath, ens_member_name)
-                                for ens_member_name in ens_member_names]
-newse_timestrings = [d.strftime('%Y-%m-%d_%H:%M:%S') for d in datetime_range]
+t0_interp_input_file_names = ["{}/{}_{}.wrf2arps_t0.input".format(rinPath, ens_member_name,
+                                                                  fn_timestring)
+                              for ens_member_name, fn_timestring in zip(ens_member_names,
+                                                                        fn_timestrings)]
+t0_interp_output_file_names = ["{}/{}_{}.wrf2arps_t0.output".format(rinPath, ens_member_name,
+                                                                    fn_timestring)
+                               for ens_member_name, fn_timestring in zip(ens_member_names,
+                                                                         fn_timestrings)]
+lbc_interp_input_file_names = ["{}/{}_{}.wrf2arps_lbc.input".format(rinPath, ens_member_name,
+                                                                    fn_timestring)
+                               for ens_member_name, fn_timestring in zip(ens_member_names,
+                                                                         fn_timestrings)]
+lbc_interp_output_file_names = ["{}/{}_{}.wrf2arps_lbc.output".format(rinPath, ens_member_name,
+                                                                      fn_timestring)
+                                for ens_member_name, fn_timestring in zip(ens_member_names,
+                                                                          fn_timestrings)]
 
 for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, newse_timestring in \
         zip(ens_member_names, t0_interp_input_file_names, lbc_interp_input_file_names,
