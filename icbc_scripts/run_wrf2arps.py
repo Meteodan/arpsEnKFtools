@@ -75,48 +75,48 @@ ens_member_list = range(member_start, member_end + 1)
 ens_member_names = ["ena%03d" % m for m in ens_member_list]
 t0_interp_input_file_names = ["{}/{}_{}.wrf2arps_t0.input".format(rinPath, ens_member_name,
                                                                   fn_timestring)
-                              for ens_member_name, fn_timestring in zip(ens_member_names,
-                                                                        fn_timestrings)]
+                              for ens_member_name in ens_member_names
+                              for fn_timestring in fn_timestrings]
 t0_interp_output_file_names = ["{}/{}_{}.wrf2arps_t0.output".format(rinPath, ens_member_name,
                                                                     fn_timestring)
-                               for ens_member_name, fn_timestring in zip(ens_member_names,
-                                                                         fn_timestrings)]
+                               for ens_member_name in ens_member_names
+                               for fn_timestring in fn_timestrings]
 lbc_interp_input_file_names = ["{}/{}_{}.wrf2arps_lbc.input".format(rinPath, ens_member_name,
                                                                     fn_timestring)
-                               for ens_member_name, fn_timestring in zip(ens_member_names,
-                                                                         fn_timestrings)]
+                               for ens_member_name in ens_member_names
+                               for fn_timestring in fn_timestrings]
 lbc_interp_output_file_names = ["{}/{}_{}.wrf2arps_lbc.output".format(rinPath, ens_member_name,
                                                                       fn_timestring)
-                                for ens_member_name, fn_timestring in zip(ens_member_names,
-                                                                          fn_timestrings)]
+                                for ens_member_name in ens_member_names
+                                for fn_timestring in fn_timestrings]
 
-for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name, newse_timestring in \
-        zip(ens_member_names, t0_interp_input_file_names, lbc_interp_input_file_names,
-            newse_timestrings):
+for newse_timestring in newse_timestrings:
+    for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name in \
+            zip(ens_member_names, t0_interp_input_file_names, lbc_interp_input_file_names):
 
-    # Initial conditions
-    editNamelistFile("{}".format(template), t0_interp_input_file_name,
-                     dir_extd=basedir,
-                     runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring,
-                     start_time_str=newse_timestring,
-                     end_time_str=newse_timestring,
-                     dirname=outputdir,
-                     dmp_out_joined=dmp_out_joined,
-                     hdmpfmt=3,
-                     exbcdmp=0)
+        # Initial conditions
+        editNamelistFile("{}".format(template), t0_interp_input_file_name,
+                         dir_extd=basedir,
+                         runname="%s" % ens_member_name,
+                         init_time_str=newse_timestring,
+                         start_time_str=newse_timestring,
+                         end_time_str=newse_timestring,
+                         dirname=outputdir,
+                         dmp_out_joined=dmp_out_joined,
+                         hdmpfmt=3,
+                         exbcdmp=0)
 
-    # Boundary conditions
-    editNamelistFile("{}".format(template), lbc_interp_input_file_name,
-                     dir_extd=basedir,
-                     runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring,
-                     start_time_str=newse_timestring,
-                     end_time_str=newse_timestring,
-                     dirname=outputdir,
-                     dmp_out_joined=dmp_out_joined,
-                     hdmpfmt=0,
-                     exbcdmp=3)
+        # Boundary conditions
+        editNamelistFile("{}".format(template), lbc_interp_input_file_name,
+                         dir_extd=basedir,
+                         runname="%s" % ens_member_name,
+                         init_time_str=newse_timestring,
+                         start_time_str=newse_timestring,
+                         end_time_str=newse_timestring,
+                         dirname=outputdir,
+                         dmp_out_joined=dmp_out_joined,
+                         hdmpfmt=0,
+                         exbcdmp=3)
 
 if run_wrf2arps:
     for t0_interp_input_file_name, t0_interp_output_file_name, lbc_interp_input_file_name, \
