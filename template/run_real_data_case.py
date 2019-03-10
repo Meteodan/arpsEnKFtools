@@ -1,6 +1,6 @@
 
 import os
-import subprocess
+import subprocess 
 import time
 import argparse
 from math import ceil
@@ -109,7 +109,7 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time, dump_time,
         ens_member_name = "ena%03d" % (n_ens + 1)
         ens_member_directory = "EN%03d" % (n_ens + 1)
 
-        ens_arps_file_name = arps_input_file_name % { 'ens':(n_ens + 1) }
+        ens_arps_file_name = arps_input_file_name % { 'ens':(n_ens + 1) } 
 
         if read_split:
             init_file = "%s/%s/%s.hdf%06d" % (work_path, ens_member_directory, ens_member_name, start_time),
@@ -146,13 +146,13 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time, dump_time,
         )
 
     if cm_args.algorithm == 'ensrf':
-        command = [
+        command = [ 
             "%s %s $base/arps %s > %s " % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, arps_debug_file_name),
             "rm %s" % ( " ".join(extraneous_files) )
         ]
         command.extend(epilogue)
     elif cm_args.algorithm == '4densrf':
-        command = [
+        command = [ 
             "%s %s $base/arps %s %s > %s " % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, arpsenkf_input_file_name, arps_debug_file_name),
             "rm %s" % ( " ".join(extraneous_files) )
         ]
@@ -261,7 +261,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                 # Multiplicative inflation over the entire domain
                 kwargs['mult_inflat'] = 2
                 kwargs['cinf'] = inflation_factor
-
+        
             elif inflation_method == "adapt":
                 # Relaxation to Prior Spread ("Adaptive") inflation
                 kwargs['adapt_inflat'] = 1
@@ -276,14 +276,14 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         kwargs['anaopt'] = 2
     elif cm_args.algorithm == '4densrf':
         kwargs['anaopt'] = 5
-
+    
     try:
         n_radars = len(radar_data_flag[True]) if True in radar_data_flag else 0
     except:
         n_radars = 0
     radardaopt = 1 if n_radars > 0 else 0
 
-    editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkf_template), enkf_input_file_name,
+    editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkf_template), enkf_input_file_name, 
         nen=cm_args.n_ens_members,
         casenam=cm_args.job_name,
         enkfdtadir="%s/" % work_path,
@@ -375,7 +375,7 @@ def generateDomainSubset(cm_args, batch, src_path, start_time, end_time, step_ti
 
     commands = [ "rm %s/%sicbc.*" % (bc_path, "ena%(ens)03d"), "" ]
     if perturb_ic:
-        commands.append("%s -n 1 $base/arpsintrp %s/arps.input < %s > %s ; %s -n 1 $base/arpsenkfic %s < %s > %s" % (batch.getMPIprogram(), input_path, interp_input_file_name,
+        commands.append("%s -n 1 $base/arpsintrp %s/arps.input < %s > %s ; %s -n 1 $base/arpsenkfic %s < %s > %s" % (batch.getMPIprogram(), input_path, interp_input_file_name, 
             interp_debug_file_name, batch.getMPIprogram(), arps_input_file_name, arpsenkfic_input_file_name, arpsenkfic_debug_file_name))
     else:
         commands.append("%s -n 1 $base/arpsintrp %s/arps.input < %s > %s" % (batch.getMPIprogram(), input_path, interp_input_file_name, interp_debug_file_name))
@@ -390,7 +390,7 @@ def generateDomainSubset(cm_args, batch, src_path, start_time, end_time, step_ti
 
     return command_lines
 
-def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squash_jobs=False):
+def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_time, hybrid=False, squash_jobs=False):
     job_suffixes = []
     job_completed = []
 
@@ -400,7 +400,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
         n_mpi = n_cores
 
     n_nodes = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
-
+    
     envname = batch.getEnv()
     if(envname == 'rice'):
         queuename = 'dawson29'
@@ -408,7 +408,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
     else:
         queuename = 'normal'
 
-    debug_path = getPaths(cm_args.base_path, cm_args.job_name, debug=True)
+    debug_path, batch_path = getPaths(cm_args.base_path, cm_args.job_name, debug=True, batch=True)
 
     if type(command_lines) in [ list, tuple ]:
         command_lines = {'enkf': command_lines}
@@ -418,7 +418,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
     if(squash_jobs):
         runs_per_job = 4
         squashed_command_lines = defaultdict(list)
-        count = 0
+        count = 0 
         for key, commands in command_lines.iteritems():
             if(count % runs_per_job == 0):
                 newkey = '%03d'%((count+runs_per_job)/runs_per_job)
@@ -426,11 +426,14 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
                 squashed_command_lines[newkey].append(cmd)
             count += 1
         command_lines = squashed_command_lines
-
+            
     for key, commands in command_lines.iteritems():
         key = 'e' + key[-2:]
 
-        job_key = "%s-%s" % (key, cm_args.job_name)
+        if(key == 'ekf'):
+            job_key = "%s-%s_%d" % (key, cm_args.job_name, end_time)
+        else:
+            job_key = "%s-%s_%d-%d" % (key, cm_args.job_name, start_time, end_time)
         if(envname == 'rice'):
             queuename = 'dawson29'
             file_text = batch.gen(commands, queue=queuename, nnodes=n_nodes, ppn=ppn, timereq=wall_time + ":00", jobname=job_key)
@@ -440,8 +443,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
 
         job_suffixes.append(key)
 
-        if not written_example:
-            file = open("%s.csh" % job_key, 'w')
+        if not written_example or cm_args.save_batch:
+            file = open("%s/%s.csh" % (batch_path, job_key), 'w')
             file.write(file_text)
             file.close()
             written_example = True
@@ -468,7 +471,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
             job_name_len = max( len(n) for n in jobs_queued )
 
             for idx, suffix in enumerate(job_suffixes):
-                key = "%s-%s" % (suffix, cm_args.job_name)
+                if suffix == 'ekf':
+                    key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
+                else:
+                    key = "%s-%s_%d-%d" % (suffix, cm_args.job_name, start_time, end_time)
                 if key[:job_name_len] in jobs_queued:
                     jdy = jobs_queued.index(key[:job_name_len])
                     if queue[jdy]['state'] == 'Complte':
@@ -481,12 +487,9 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, hybrid=False, squa
 
         print "Completed: " + " ".join( "C" if c else "N" for c in job_completed )
 
-        # TODO: Put some logic in here to check if jobs completed successfully, and if any didn't,
-        # to resubmit them.
-
         if all(job_completed):
             print "All jobs are completed, returning for the next step ..."
-            return
+            return        
 
     return
 
@@ -535,6 +538,7 @@ def main():
     ap.add_argument('--no-submit', dest='submit', action='store_false')
     ap.add_argument('--restart', dest='restart', action='store_true')
     ap.add_argument('--debug', dest='debug', action='store_true')
+    ap.add_argument('--save-batch', dest='save_batch', action='store_true')
 
     args = ap.parse_args()
     batch = Batch('rice') # stampede
@@ -654,18 +658,18 @@ def main():
 
         if args.split_files:
             command = "mkdir %s/%s ; mkdir %s/%s" % (work_path, 'EN%(ens)03d', work_path, 'ENF%(ens)03d')
-            appendCommands(command_lines,
+            appendCommands(command_lines, 
                 doForEnsemble(command, member_list)
             )
 
         if args.init_cond == "":
             print "Generate random initial conditions ..."
-            appendCommands(command_lines,
+            appendCommands(command_lines, 
                 generateEnsemblePerturbations(args, batch, args.t_ens_start)
             )
 
             command = "cp %s/%s.hdfgrdbas %s/%s.hdfgrdbas" % (work_path, 'ena%(ens)03d', work_path, 'enf%(ens)03d')
-            appendCommands(command_lines,
+            appendCommands(command_lines, 
                 doForEnsemble(command, member_list)
             )
         else:
@@ -677,7 +681,7 @@ def main():
                 )
 
                 command = "cp %s/%s.hdfgrdbas %s/%s.hdfgrdbas" % (boundary_path, 'ena%(ens)03d', work_path, 'enf%(ens)03d')
-                appendCommands(command_lines,
+                appendCommands(command_lines, 
                     doForEnsemble(command, member_list)
                 )
 
@@ -688,7 +692,7 @@ def main():
                     "cp %s/%s.hdfgrdbas %s" % (boundary_path, 'ena%(ens)03d', work_path),
                     "cp %s/%s.hdfgrdbas %s/%s.hdfgrdbas" % (boundary_path, 'ena%(ens)03d', work_path, 'enf%(ens)03d')
                 ]
-                appendCommands(command_lines,
+                appendCommands(command_lines, 
                     doForEnsemble(command, member_list)
                 )
 
@@ -700,7 +704,7 @@ def main():
             )
 
             command = "cp %s/%s.hdfgrdbas %s/%s.hdfgrdbas" % (boundary_path, 'ena%(ens)03d', work_path, 'enf%(ens)03d')
-            appendCommands(command_lines,
+            appendCommands(command_lines, 
                 doForEnsemble(command, member_list)
             )
 
@@ -731,7 +735,7 @@ def main():
             if args.subset and t_chunk == exp_start:
                 req_time = args.init_free_fcst_req
 
-            submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, hybrid=False)
+            submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, chunk_start, chunk_end, hybrid=False)
             command_lines.clear()
 
             command = [ "set base=%s" % args.base_path, "cd $base", "" ]
@@ -739,7 +743,7 @@ def main():
                 doForEnsemble(command, member_list)
             )
 
-
+                
     else:
         for t_ens in xrange(args.t_ens_start, args.t_ens_end, args.dt_assim_step):
             print "Generating timestep %d ..." % t_ens
@@ -796,7 +800,7 @@ def main():
                     )
 
                     if args.split_files and t_chunk == exp_start:
-                        command = doForMPIConfig("cp %s/%s/%s/%s.hdfgrdbas_%s %s/%s/%s/%s.hdfgrdbas_%s" % (args.base_path, args.job_name, 'EN%(ens)s', 'ena%(ens)s', '%(x_proc)03d%(y_proc)03d',
+                        command = doForMPIConfig("cp %s/%s/%s/%s.hdfgrdbas_%s %s/%s/%s/%s.hdfgrdbas_%s" % (args.base_path, args.job_name, 'EN%(ens)s', 'ena%(ens)s', '%(x_proc)03d%(y_proc)03d', 
                             args.base_path, args.job_name, 'ENF%(ens)s', 'enf%(ens)s', '%(x_proc)03d%(y_proc)03d'), args.mpi_config_dump)
 
                         appendCommands(command_lines,
@@ -807,7 +811,7 @@ def main():
                     if (args.subset or not args.restart) and t_chunk == exp_start:
                         req_time = args.init_fcst_req
 
-                    submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, hybrid=False, squash_jobs=False)
+                    submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, chunk_start, chunk_end, hybrid=False, squash_jobs=False)
                     command_lines.clear()
 
                     command = [ "set base=%s" % args.base_path, "cd $base", "" ]
@@ -831,7 +835,7 @@ def main():
             )
             print "Submitting assimilation for timestep %d ..." % t_ens
             #submit(args, batch, assimilation_lines, req_time, nproc_x * nproc_y * batch.getNCoresPerNode(), hybrid=True) # Will have to ask Tim about this...
-            submit(args, batch, assimilation_lines, req_time, nproc_x_enkf * nproc_y_enkf, hybrid=False)
+            submit(args, batch, assimilation_lines, req_time, nproc_x_enkf * nproc_y_enkf, start_time, end_time, hybrid=False)
         print "Experiment complete!"
     return
 
