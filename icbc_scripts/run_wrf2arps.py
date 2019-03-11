@@ -34,10 +34,10 @@ start_sec = 0
 start_date = datetime(start_year, start_month, start_day, start_hour, start_min, start_sec)
 
 end_year = 2016
-end_month = 3
-end_day = 31
-end_hour = 18
-end_min = 0
+end_month = 4
+end_day = 1
+end_hour = 2
+end_min = 45
 end_sec = 0
 end_date = datetime(end_year, end_month, end_day, end_hour, end_min, end_sec)
 
@@ -49,9 +49,9 @@ datetime_range = [start_date + timedelta(seconds=x) for x in
 # Directory to save interpolated history files
 outputdir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newseicbc"
 # Option to run wrf2arps on the generated files
-run_wrf2arps = False
-run_t0 = False
-run_lbc = False
+run_wrf2arps = True
+run_t0 = True
+run_lbc = True
 # Absolute path to wrf2arps executable
 wrf2arps_exe = '/home/dawson29/arps5.4_main/bin/wrf2arps'
 # MPI executable (if desired)
@@ -147,6 +147,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
         wrfout_file_link_path = os.path.join(basedir, wrfout_file_link_name)
 
         command = 'ln -sf {} {}'.format(wrfout_file_path, wrfout_file_link_path)
+        print("Linking {} to {}".format(wrfout_file_link_path, wrfout_file_path))
         subprocess.call(command, shell=True)
 
         if run_mpi:

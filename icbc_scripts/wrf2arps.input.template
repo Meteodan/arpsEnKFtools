@@ -423,7 +423,7 @@
      csound   = 150.0,
 
    hydradj = 0,
-   wndadj  = 2,
+   wndadj  = 0,
      obropt  = 12,
      obrzero = 12000.,
  /
@@ -583,8 +583,8 @@
      qsexout  = 0,
      qhexout  = 0,
 
-   soildmp  = 1,
-   terndmp  = 1,
+   soildmp  = 0,
+   terndmp  = 0,
 
    hdmpfmt  = 3,
    hdfcompr = 2,
