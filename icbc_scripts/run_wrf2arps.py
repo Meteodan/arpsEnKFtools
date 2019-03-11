@@ -6,11 +6,12 @@
 # files.
 # Based on an older script for arpsintrp from RLT
 
+import os
 import subprocess
 from datetime import datetime, timedelta
 from arpsenkftools.editNamelist import editNamelistFile
 
-### USER SPECIFICATIONS ###
+# USER SPECIFICATIONS ###
 # Absolute path to directory containing NEWS-e WRF history files
 basedir = "/depot/dawson29/data/VORTEXSE/model_data/newse_data/"
 # Absolute path to the arpsintrp.input template file
@@ -67,75 +68,103 @@ nproc_y_out = 1
 # inisplited = 0000001
 dmp_out_joined = 1  # 1111111
 
-### END OF USER SPECIFICATIONS ###
+# END OF USER SPECIFICATIONS ###
 
 newse_timestrings = [d.strftime('%Y-%m-%d_%H:%M:%S') for d in datetime_range]
 fn_timestrings = [d.strftime('%Y-%m-%d_%H_%M_%S') for d in datetime_range]
 ens_member_list = range(member_start, member_end + 1)
 ens_member_names = ["ena%03d" % m for m in ens_member_list]
-t0_interp_input_file_names = ["{}/{}_{}.wrf2arps_t0.input".format(rinPath, ens_member_name,
-                                                                  fn_timestring)
-                              for ens_member_name in ens_member_names
-                              for fn_timestring in fn_timestrings]
-t0_interp_output_file_names = ["{}/{}_{}.wrf2arps_t0.output".format(rinPath, ens_member_name,
-                                                                    fn_timestring)
-                               for ens_member_name in ens_member_names
-                               for fn_timestring in fn_timestrings]
-lbc_interp_input_file_names = ["{}/{}_{}.wrf2arps_lbc.input".format(rinPath, ens_member_name,
-                                                                    fn_timestring)
-                               for ens_member_name in ens_member_names
-                               for fn_timestring in fn_timestrings]
-lbc_interp_output_file_names = ["{}/{}_{}.wrf2arps_lbc.output".format(rinPath, ens_member_name,
-                                                                      fn_timestring)
-                                for ens_member_name in ens_member_names
-                                for fn_timestring in fn_timestrings]
 
-for newse_timestring in newse_timestrings:
-    for ens_member_name, t0_interp_input_file_name, lbc_interp_input_file_name in \
-            zip(ens_member_names, t0_interp_input_file_names, lbc_interp_input_file_names):
+# Create a list of dictionaries to store the input/output file names as well as the NEWS-e
+# output file associated with it.
 
-        # Initial conditions
-        editNamelistFile("{}".format(template), t0_interp_input_file_name,
-                         dir_extd=basedir,
-                         runname="%s" % ens_member_name,
-                         init_time_str=newse_timestring,
-                         start_time_str=newse_timestring,
-                         end_time_str=newse_timestring,
-                         dirname=outputdir,
-                         dmp_out_joined=dmp_out_joined,
-                         hdmpfmt=3,
-                         exbcdmp=0)
+wrf2arps_dict_list = []
+for newse_timestring, fn_timestring in zip(newse_timestrings, fn_timestrings):
+    for ens_member, ens_member_name in zip(ens_member_list, ens_member_names):
 
-        # Boundary conditions
-        editNamelistFile("{}".format(template), lbc_interp_input_file_name,
-                         dir_extd=basedir,
-                         runname="%s" % ens_member_name,
-                         init_time_str=newse_timestring,
-                         start_time_str=newse_timestring,
-                         end_time_str=newse_timestring,
-                         dirname=outputdir,
-                         dmp_out_joined=dmp_out_joined,
-                         hdmpfmt=0,
-                         exbcdmp=3)
+        t0_input_file_name = "{}/{}_{}.wrf2arps_t0.input".format(rinPath, ens_member_name,
+                                                                 fn_timestring)
+        t0_output_file_name = "{}/{}_{}.wrf2arps_t0.output".format(rinPath, ens_member_name,
+                                                                   fn_timestring)
+        lbc_input_file_name = "{}/{}_{}.wrf2arps_lbc.input".format(rinPath, ens_member_name,
+                                                                   fn_timestring)
+        lbc_output_file_name = "{}/{}_{}.wrf2arps_lbc.output".format(rinPath, ens_member_name,
+                                                                     fn_timestring)
+        wrfout_file_name = "wrfout_d01_{}_{:d}".format(newse_timestring, ens_member)
+        wrf2arps_dict = dict(t0_input_file_name=t0_input_file_name,
+                             t0_output_file_name=t0_output_file_name,
+                             lbc_input_file_name=lbc_input_file_name,
+                             lbc_output_file_name=lbc_output_file_name,
+                             ens_member_name=ens_member_name,
+                             ens_member=ens_member,
+                             wrfout_file_name=wrfout_file_name,
+                             newse_timestring=newse_timestring)
+        wrf2arps_dict_list.append(wrf2arps_dict)
 
-if run_wrf2arps:
-    for t0_interp_input_file_name, t0_interp_output_file_name, lbc_interp_input_file_name, \
-            lbc_interp_output_file_name in zip(t0_interp_input_file_names,
-                                               t0_interp_output_file_names,
-                                               lbc_interp_input_file_names,
-                                               lbc_interp_output_file_names):
+for wrf2arps_dict in wrf2arps_dict_list:
+
+    t0_input_file_name = wrf2arps_dict['t0_input_file_name']
+    t0_output_file_name = wrf2arps_dict['t0_output_file_name']
+    lbc_input_file_name = wrf2arps_dict['lbc_input_file_name']
+    lbc_output_file_name = wrf2arps_dict['lbc_output_file_name']
+    ens_member_name = wrf2arps_dict['ens_member_name']
+    newse_timestring = wrf2arps_dict['newse_timestring']
+    ens_member = wrf2arps_dict['ens_member']
+
+    # Initial conditions
+    editNamelistFile("{}".format(template),
+                     t0_input_file_name,
+                     dir_extd=basedir,
+                     runname="%s" % ens_member_name,
+                     init_time_str=newse_timestring,
+                     start_time_str=newse_timestring,
+                     end_time_str=newse_timestring,
+                     dirname=outputdir,
+                     dmp_out_joined=dmp_out_joined,
+                     hdmpfmt=3,
+                     exbcdmp=0)
+
+    # Boundary conditions
+    editNamelistFile("{}".format(template),
+                     lbc_input_file_name,
+                     dir_extd=basedir,
+                     runname="%s" % ens_member_name,
+                     init_time_str=newse_timestring,
+                     start_time_str=newse_timestring,
+                     end_time_str=newse_timestring,
+                     dirname=outputdir,
+                     dmp_out_joined=dmp_out_joined,
+                     hdmpfmt=0,
+                     exbcdmp=3)
+
+    if run_wrf2arps:
+
+        # Need to make a temporary softlink to the correct wrfout file but removing the ensemble
+        # member from the end, because this is what wrf2arps is expecting
+        wrfout_file_name = wrf2arps_dict['wrfout_file_name']
+        wrfout_file_link_name = "wrfout_d01_{}".format(newse_timestring)
+        wrfout_file_path = os.path.join(basedir, wrfout_file_name)
+        wrfout_file_link_path = os.path.join(basedir, wrfout_file_link_name)
+
+        command = 'ln -sf {} {}'.format(wrfout_file_path, wrfout_file_link_path)
+        subprocess.call(command, shell=True)
+
         if run_mpi:
             command = '{} {} {:d} {}'.format(mpi_exe, mpi_numproc_arg, nproc_x*nproc_y,
                                              wrf2arps_exe)
         else:
             command = '{}'.format(wrf2arps_exe)
         if run_t0:
-            with open(t0_interp_input_file_name, 'r') as input, \
-                 open(t0_interp_output_file_name, 'w') as output:
-                print("Running %s for %s" % (wrf2arps_exe, t0_interp_input_file_name))
+            with open(t0_input_file_name, 'r') as input, \
+                 open(t0_output_file_name, 'w') as output:
+                print("Running %s for %s" % (wrf2arps_exe, t0_input_file_name))
                 subprocess.call(command, stdin=input, stdout=output, shell=True)
         if run_lbc:
-            with open(lbc_interp_input_file_name, 'r') as input, \
-                 open(lbc_interp_output_file_name, 'w') as output:
-                print("Running %s for %s" % (wrf2arps_exe, lbc_interp_input_file_name))
+            with open(lbc_input_file_name, 'r') as input, \
+                 open(lbc_output_file_name, 'w') as output:
+                print("Running %s for %s" % (wrf2arps_exe, lbc_input_file_name))
                 subprocess.call(command, stdin=input, stdout=output, shell=True)
+
+        # Now remove the softlink
+        command = 'unlink {}'.format(wrfout_file_link_path)
+        subprocess.call(command, shell=True)
