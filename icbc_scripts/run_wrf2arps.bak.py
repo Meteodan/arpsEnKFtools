@@ -21,9 +21,9 @@ rinPath = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/wrf2arp
 # Name of the experiment (used as a prefix for the output):
 expPrefix = "3km153x153"
 # Number of ensemble members
-n_ens_members = 40
+n_ens_members = 1
 member_start = 1
-member_end = 40
+member_end = 1
 # Start date, end date, and interval for history files to process
 start_year = 2016
 start_month = 3
@@ -116,7 +116,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
                      t0_input_file_name,
                      dir_extd=basedir,
                      runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring,
+                     init_time_str=newse_timestring[0],
                      start_time_str=newse_timestring,
                      end_time_str=newse_timestring,
                      dirname=outputdir,
@@ -129,7 +129,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
                      lbc_input_file_name,
                      dir_extd=basedir,
                      runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring,
+                     init_time_str=newse_timestring[0],
                      start_time_str=newse_timestring,
                      end_time_str=newse_timestring,
                      dirname=outputdir,
