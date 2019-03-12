@@ -14,7 +14,7 @@ def isDivisible(dividend, divisor):
     return float(dividend) / int(divisor) == int(dividend) / int(divisor)
 
 def appendCommands(current_commands, commands):
-    for e, cmd in commands.items():
+    for e, cmd in commands.iteritems():
         current_commands[e].extend(cmd)
     return current_commands
 
@@ -79,7 +79,7 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time, dump_time,
 
     read_split = split_files in ['read', 'both']
     dump_split = split_files in ['dump', 'both']
-    print("dump_split = ",dump_split)
+    print "dump_split = ",dump_split
 
     if move_for_assim:
         if dump_split:
@@ -207,7 +207,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     cvn_data_flags = dict( (k, getattr(cm_args, k)) for k in ['sndgflags', 'profflags', 'surfflags' ] )
     assim_all = False
     if isDivisible(assim_time, 3600):
-        print("Assimilate all data ...")
+        print "Assimilate all data ..."
     else:
         cvn_data_flags['sndgflags'] = 'no'
         cvn_data_flags['profflags'] = 'no'
@@ -235,7 +235,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         else:
             covariance_inflation = cov_infl
 
-    print("Covariance inflation for this timestep is", covariance_inflation)
+    print "Covariance inflation for this timestep is", covariance_inflation
 
     # Covariance inflation flags
     kwargs['mult_inflat'] = 0
@@ -419,7 +419,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
         runs_per_job = 4
         squashed_command_lines = defaultdict(list)
         count = 0 
-        for key, commands in command_lines.items():
+        for key, commands in command_lines.iteritems():
             if(count % runs_per_job == 0):
                 newkey = '%03d'%((count+runs_per_job)/runs_per_job)
             for cmd in commands:
@@ -427,7 +427,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
             count += 1
         command_lines = squashed_command_lines
             
-    for key, commands in command_lines.items():
+    for key, commands in command_lines.iteritems():
         key = 'e' + key[-2:]
 
         if(key == 'ekf'):
@@ -452,10 +452,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
         if cm_args.submit:
             batch.submit(file_text)
         else:
-            print("I would submit %s here ..." % job_key)
+            print "I would submit %s here ..." % job_key
         job_completed.append(False)
 
-    print("Done submitting ...")
+    print "Done submitting ..."
 
     if not cm_args.submit: return
 
@@ -482,13 +482,13 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
                 else:
                     job_completed[idx] = True
         else:
-            for idx in range(len(job_completed)):
+            for idx in xrange(len(job_completed)):
                 job_completed[idx] = True
 
-        print("Completed: " + " ".join( "C" if c else "N" for c in job_completed ))
+        print "Completed: " + " ".join( "C" if c else "N" for c in job_completed )
 
         if all(job_completed):
-            print("All jobs are completed, returning for the next step ...")
+            print "All jobs are completed, returning for the next step ..."
             return        
 
     return
@@ -551,18 +551,18 @@ def main():
         getPaths(args.base_path, args.job_name, work=True, input=True, debug=True, batch=True, boundary=True, hx=True)
 
     if not os.path.exists(work_path):
-        os.mkdir(work_path, 0o755)
+        os.mkdir(work_path, 0755)
     if not os.path.exists(input_path):
-        os.mkdir(input_path, 0o755)
+        os.mkdir(input_path, 0755)
     if not os.path.exists(debug_path):
-        os.mkdir(debug_path, 0o755)
+        os.mkdir(debug_path, 0755)
     if not os.path.exists(batch_path):
-        os.mkdir(batch_path, 0o755)
+        os.mkdir(batch_path, 0755)
     if not os.path.exists(hx_path):
-        os.mkdir(hx_path, 0o755)
+        os.mkdir(hx_path, 0755)
 
     member_list = [ m - 1 for m in args.members ]
-    if member_list == []: member_list = list(range(args.n_ens_members))
+    if member_list == []: member_list = range(args.n_ens_members)
     args.members = member_list
 
     nproc_x_mod, nproc_y_mod = args.mpi_config_model
@@ -602,11 +602,11 @@ def main():
 
     if args.dt_ens_step > args.chunk_size:
         args.dt_ens_step = args.chunk_size
-        print("Warning: resetting dt_ens_step to be chunk_size (%d)" % args.dt_ens_step)
+        print "Warning: resetting dt_ens_step to be chunk_size (%d)" % args.dt_ens_step
 
     if not args.free_forecast:
         try:
-            exec(open("%s/%s" % (args.base_path, args.radflags), 'r'), locals()) # Get the radar assimilation flags from the file
+            exec open("%s/%s" % (args.base_path, args.radflags), 'r') in locals() # Get the radar assimilation flags from the file
         except:
             radar_data_flag = None
 #       args.radar_data_flags = radar_data_flag
@@ -620,7 +620,7 @@ def main():
         subprocess.Popen(['cp', file, "%s/." % work_path])
 
     if args.restart:
-        for t_ens in range(args.t_ens_start, args.t_ens_end + args.dt_assim_step, args.dt_assim_step):
+        for t_ens in xrange(args.t_ens_start, args.t_ens_end + args.dt_assim_step, args.dt_assim_step):
 
             if args.split_files and args.split_init != 'no':
                 ena_exist = [ os.path.exists("%s/EN%03d/ena%03d.hdf%06d_001001" % (work_path, n_ens + 1, n_ens + 1, t_ens)) for n_ens in member_list ]
@@ -639,7 +639,7 @@ def main():
                 args.t_ens_start = t_ens - args.dt_assim_step
                 do_first_integration = False
 
-            for t_chunk in range(t_ens, t_ens + args.dt_assim_step, args.chunk_size):
+            for t_chunk in xrange(t_ens, t_ens + args.dt_assim_step, args.chunk_size):
                 if args.split_files and args.split_init != 'no':
                     ena_exist = [ os.path.exists("%s/EN%03d/ena%03d.hdf%06d_001001" % (work_path, n_ens + 1, n_ens + 1, t_chunk)) for n_ens in member_list ]
                 else:
@@ -649,12 +649,12 @@ def main():
                     ens_chunk_start = t_chunk
 
         if do_first_integration:
-            print("Restarting from time %d (with integration) ..." % (args.t_ens_start))
+            print "Restarting from time %d (with integration) ..." % (args.t_ens_start)
         else:
-            print("Restarting from time %d (no integration) ..." % (args.t_ens_start + args.dt_assim_step))
+            print "Restarting from time %d (no integration) ..." % (args.t_ens_start + args.dt_assim_step)
 
     else:
-        print("New experiment ...")
+        print "New experiment ..."
 
         if args.split_files:
             command = "mkdir %s/%s ; mkdir %s/%s" % (work_path, 'EN%(ens)03d', work_path, 'ENF%(ens)03d')
@@ -663,7 +663,7 @@ def main():
             )
 
         if args.init_cond == "":
-            print("Generate random initial conditions ...")
+            print "Generate random initial conditions ..."
             appendCommands(command_lines, 
                 generateEnsemblePerturbations(args, batch, args.t_ens_start)
             )
@@ -673,9 +673,9 @@ def main():
                 doForEnsemble(command, member_list)
             )
         else:
-            print("Use supplied initial conditions ...")
+            print "Use supplied initial conditions ..."
             if args.subset:
-                print("Subset and perturb the domain ...")
+                print "Subset and perturb the domain ..."
                 appendCommands(command_lines,
                     generateDomainSubset(args, batch, args.init_cond, args.t_ens_start, args.t_ens_end, args.dt_ens_step, perturb_ic=True)
                 )
@@ -686,7 +686,7 @@ def main():
                 )
 
             else:
-                print("No domain subset ...")
+                print "No domain subset ..."
                 command = [
                     "cp %s/%s.hdf%06d %s" % (boundary_path, 'ena%(ens)03d', args.t_ens_start, work_path),
                     "cp %s/%s.hdfgrdbas %s" % (boundary_path, 'ena%(ens)03d', work_path),
@@ -698,7 +698,7 @@ def main():
 
     if args.free_forecast:
         if args.subset and args.t_ens_start == exp_start:
-            print("Subset the boundary conditions ...")
+            print "Subset the boundary conditions ..."
             appendCommands(command_lines,
                 generateDomainSubset(args, batch, args.bound_cond, args.t_ens_start, args.t_ens_end, args.dt_ens_step, perturb_ic=False, copy_ic=False)
             )
@@ -714,7 +714,7 @@ def main():
         n_chunk_start = (ens_chunk_start - args.t_ens_start) / args.chunk_size
 
         for n_chunk, t_chunk in enumerate(range(ens_chunk_start, args.t_ens_end, args.chunk_size)):
-            print("Generating free forecast from %d to %d (chunk %d of %d) ..." % (args.t_ens_start, args.t_ens_end, n_chunk + n_chunk_start + 1, n_chunks))
+            print "Generating free forecast from %d to %d (chunk %d of %d) ..." % (args.t_ens_start, args.t_ens_end, n_chunk + n_chunk_start + 1, n_chunks)
             chunk_start = t_chunk
             chunk_end = t_chunk + args.chunk_size
 
@@ -745,8 +745,8 @@ def main():
 
                 
     else:
-        for t_ens in range(args.t_ens_start, args.t_ens_end, args.dt_assim_step):
-            print("Generating timestep %d ..." % t_ens)
+        for t_ens in xrange(args.t_ens_start, args.t_ens_end, args.dt_assim_step):
+            print "Generating timestep %d ..." % t_ens
 
             start_time = t_ens
             end_time = t_ens + args.dt_assim_step
@@ -760,7 +760,7 @@ def main():
                     start_time = ens_chunk_start
 
                 for n_chunk, t_chunk in enumerate(range(start_time, end_time, args.chunk_size)):
-                    print("Submitting ensemble integration for timestep %d (chunk %d of %d) ..." % (t_ens, n_chunk + n_chunk_start + 1, n_chunks))
+                    print "Submitting ensemble integration for timestep %d (chunk %d of %d) ..." % (t_ens, n_chunk + n_chunk_start + 1, n_chunks)
 
                     chunk_start = t_chunk
                     chunk_end = t_chunk + args.chunk_size
@@ -833,10 +833,10 @@ def main():
             assimilation_lines.extend(
                 generateEnKFAssimilation(args, batch, end_time, radar_data_flag_sngltime)
             )
-            print("Submitting assimilation for timestep %d ..." % t_ens)
+            print "Submitting assimilation for timestep %d ..." % t_ens
             #submit(args, batch, assimilation_lines, req_time, nproc_x * nproc_y * batch.getNCoresPerNode(), hybrid=True) # Will have to ask Tim about this...
             submit(args, batch, assimilation_lines, req_time, nproc_x_enkf * nproc_y_enkf, start_time, end_time, hybrid=False)
-        print("Experiment complete!")
+        print "Experiment complete!"
     return
 
 if __name__ == "__main__":
