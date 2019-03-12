@@ -460,7 +460,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
         job_suffixes.append(key)
 
         if not written_example or cm_args.save_batch:
-            file = open("%s/%s.csh" % (batch_path, job_key), 'w')
+            file = open("%s/%s.csh" % (batch_path, job_key), 'w', encoding='utf8')
             file.write(file_text)
             file.close()
             written_example = True
@@ -632,7 +632,7 @@ def main():
 
     # Copy the configuration information to the working directory, so we'll **ALWAYS HAVE IT IF WE NEED TO GO BACK AND LOOK AT IT**
     config_files = [ "%s/%s" % (args.base_path, f) for f in [ args.arps_template, args.arpsenkf_template, args.arpsenkfic_template ] ]
-    config_files.extend(['run_real_data_case.py', 'run_real_data_case.csh'])
+    config_files.extend(['run_real_data_case.py', 'run_real_data_case.sh'])
 
     for file in config_files:
         subprocess.Popen(['cp', file, "%s/." % work_path])

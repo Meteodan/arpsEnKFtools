@@ -119,7 +119,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
     if file_name_src != file_name_dest:
         # If the files do not have the same name, open them both at the same time (saves on memory)
         file_src = open(file_name_src, 'r', encoding='utf8')
-        file_dest = open(file_name_dest, 'w')
+        file_dest = open(file_name_dest, 'w', encoding='utf8')
 
         for line in file_src:
             line = _searchLine(line, **kwargs)
@@ -136,7 +136,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
             buffer.append(line)
         file_src.close()
 
-        file_dest = open(file_name_dest, 'w')
+        file_dest = open(file_name_dest, 'w', encoding='utf8')
         for line in buffer:
             file.dest.write(line)
         file_dest.close()

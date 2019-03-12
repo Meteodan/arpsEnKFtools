@@ -146,14 +146,14 @@ class Batch(object):
         subm = subprocess.Popen([ self._env['submitprog'] ], stdin=echo.stdout, stdout=subprocess.PIPE)
         echo.stdout.close()
         ret_value = subm.communicate()[0]
-        print(ret_value.strip().split("\n")[-1])
+        print(ret_value.decode('utf-8').strip().split("\n")[-1])
         return
 
     def getQueueStatus(self, display=True):
         queue = subprocess.Popen([self._env['queueprog'], '-u', self._username], stdout=subprocess.PIPE)
         queue_text = queue.communicate()[0]
         lines = []
-        for line in queue_text.strip().split("\n"):
+        for line in queue_text.decode('utf-8').strip().split("\n"):
             line_dict = self._env['queueparse'](line)
             if line_dict != "":
                 lines.append(line_dict)
