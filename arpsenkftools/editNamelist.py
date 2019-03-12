@@ -95,7 +95,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
         file_name_values = kwargs['__file_name_values__']
         del kwargs['__file_name_values__']
 
-        file_values = open(file_name_values, 'r')
+        file_values = open(file_name_values, 'r', encoding='utf8')
         for line in file_values:
             if line[0] != '!' and line.find(",") > -1:
                 bits = re.split(r",[\s]*(?=[A-Za-z][\w(,)]*|" + "\n)", line)
@@ -118,7 +118,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
 
     if file_name_src != file_name_dest:
         # If the files do not have the same name, open them both at the same time (saves on memory)
-        file_src = open(file_name_src, 'r')
+        file_src = open(file_name_src, 'r', encoding='utf8')
         file_dest = open(file_name_dest, 'w')
 
         for line in file_src:
@@ -129,7 +129,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
         file_src.close()
     else:
         # If the files do have the same name, open one after the other and load the entire source file into memory.
-        file_src = open(file_name_src, 'r')
+        file_src = open(file_name_src, 'r', encoding='utf8')
         buffer = []
         for line in file_src:
             line = _searchLine(line, **kwargs)

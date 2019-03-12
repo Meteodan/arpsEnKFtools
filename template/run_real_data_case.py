@@ -7,9 +7,8 @@ from math import ceil
 from collections import defaultdict
 import sys
 import imp
-sys.path.append('/depot/dawson29/apps/EnKF_python_modules/')
-from editNamelist import editNamelistFile
-from batch import Batch
+from arpsenkftools.editNamelist import editNamelistFile
+from arpsenkftools.batch import Batch
 
 def import_all_from(module_path):
     """Modified from http://grokbase.com/t/python/python-list/1172ahxp0s/from-module-import-using-import
@@ -625,7 +624,7 @@ def main():
         try:
             rd = import_all_from("%s/%s" % (args.base_path, args.radflags))
             radar_data_flag = rd.radar_data_flag
-            print radar_data_flag
+            print(radar_data_flag)
         except:
             radar_data_flag = None
 #       args.radar_data_flags = radar_data_flag

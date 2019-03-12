@@ -96,6 +96,8 @@ except NameError:
     # for python < 2.4 compatibility (sets module is there since 2.3):
     from sets import Set as set
 
+# Python 2to3 program changed "basestr" to "str" below. Not sure if this matters, but look into
+# it
 try:
     str
 except NameError:
