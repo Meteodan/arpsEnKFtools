@@ -123,7 +123,7 @@ class Batch(object):
 
     def gen(self, commands, **kwargs):
         env_dict = {}
-        for k, v in self._env.items():
+        for k, v in self._env.iteritems():
             try:
                 assert k[0] == '-'
                 env_dict[k] = v % kwargs
@@ -131,7 +131,7 @@ class Batch(object):
                 pass
             
         text = "#!/bin/csh\n"
-        for arg, val in env_dict.items():
+        for arg, val in env_dict.iteritems():
             text += "#%s %s%s\n" % (self._env['btmarker'], arg, val)
 
         if(self._envname == 'rice'):
@@ -146,7 +146,7 @@ class Batch(object):
         subm = subprocess.Popen([ self._env['submitprog'] ], stdin=echo.stdout, stdout=subprocess.PIPE)
         echo.stdout.close()
         ret_value = subm.communicate()[0]
-        print(ret_value.strip().split("\n")[-1])
+        print ret_value.strip().split("\n")[-1]
         return
 
     def getQueueStatus(self, display=True):
@@ -163,15 +163,15 @@ class Batch(object):
         return lines
 
     def displayQueue(self, queue):
-        print("Queue State as of %s" % datetime.now().strftime("%H:%M:%S %d %b %Y"))
+        print "Queue State as of %s" % datetime.now().strftime("%H:%M:%S %d %b %Y")
         for line in queue:
             if line['state'].lower() == 'running':
-                print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
+                print "%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line
             else:
-                print("%(name)s (PID %(id)d): %(state)s" % line)
+                print "%(name)s (PID %(id)d): %(state)s" % line
 
         if len(queue) == 0:
-            print("[ empty ]")
+            print "[ empty ]"
         return
 
     def getMPIprogram(self):
