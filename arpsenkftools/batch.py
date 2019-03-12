@@ -5,7 +5,7 @@ from datetime import datetime
 def parseQLineStampede(line):
     cols_order = ['id', 'name', 'username', 'state', 'ncores', 'timerem'] #, 'timestart']
     cols = dict([
-        ('id',        slice(0,  9)), 
+        ('id',        slice(0,  9)),
         ('name',      slice(9,  20)),
         ('username',  slice(20, 34)),
         ('state',     slice(34, 42)),
@@ -60,22 +60,22 @@ def parseQLineRice(line):
         ('state',       slice(99,100)),
         ('timeuse',     slice(101,None)),
     ])
-    
+
     line_dict = {}
     for name in cols_order:
         line_dict[name] = line[cols[name]].strip()
-	#print line_dict[name]        
+	#print line_dict[name]
     try:
         line_dict['id'] = int(line_dict['id'])
         #print line_dict['id']
     except ValueError:
         return ""
-    
+
     return line_dict
 
 _environment = {
     'stampede':{
-        'btmarker':"SBATCH", 
+        'btmarker':"SBATCH",
         '-J':"%(jobname)s",
         '-o':"%(debugfile)s",
         '-n':"%(nmpi)d",
@@ -86,9 +86,9 @@ _environment = {
         'queueparse':parseQLineStampede,
         'submitprog':'sbatch', # Name of the program submits the batch file
         'mpiprog':'ibrun',     # Name of the program that runs MPI
-        'n_cores_per_node':16, 
+        'n_cores_per_node':16,
     },
-    'kraken':{ 
+    'kraken':{
         'btmarker':"PBS",
         'queueprog':'qstat',
         'queueparse':parseQLineKraken,
@@ -129,13 +129,13 @@ class Batch(object):
                 env_dict[k] = v % kwargs
             except (AssertionError, KeyError):
                 pass
-            
+
         text = "#!/bin/csh\n"
         for arg, val in env_dict.items():
             text += "#%s %s%s\n" % (self._env['btmarker'], arg, val)
 
         if(self._envname == 'rice'):
-            commands.insert(0,"module load devel")
+            commands.insert(0,"module load netcdf")
             #text += "\n" + "module load devel" + "\n"
 
         text += "\n" + "\n".join(commands) + "\n"
@@ -182,7 +182,7 @@ class Batch(object):
 
     def getNCoresPerNode(self):
         return self._env['n_cores_per_node']
-        
+
     def getEnv(self):
         return self._envname
 
