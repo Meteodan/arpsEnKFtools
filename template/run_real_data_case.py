@@ -6,9 +6,17 @@ import argparse
 from math import ceil
 from collections import defaultdict
 import sys
+import imp
 sys.path.append('/depot/dawson29/apps/EnKF_python_modules/')
 from editNamelist import editNamelistFile
 from batch import Batch
+
+def import_all_from(module_path):
+    """Modified from http://grokbase.com/t/python/python-list/1172ahxp0s/from-module-import-using-import
+       Loads python file at "module_path" as module and adds contents to global namespace."""
+    #mod = __import__(module_name)
+    mod = imp.load_source('mod',module_path)
+    return mod
 
 def isDivisible(dividend, divisor):
     return float(dividend) / int(divisor) == int(dividend) / int(divisor)
@@ -276,7 +284,8 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         kwargs['anaopt'] = 2
     elif cm_args.algorithm == '4densrf':
         kwargs['anaopt'] = 5
-    
+
+    #print len(radar_data_flag[True]) if True in radar_data_flag else 0    
     try:
         n_radars = len(radar_data_flag[True]) if True in radar_data_flag else 0
     except:
@@ -319,8 +328,16 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         **kwargs
     )
 
+    # DTD: removed extra cd to work_path here, so that we are running job in same directory (base_path) as ARPS jobs.
+    # This is so that relative paths that are set in arps.input work for both ARPS and ARPSENKF
     command_lines = [
         "cd %s" % work_path,
+        "%s %s $base/arpsenkf %s < %s > %s" % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, enkf_input_file_name, enkf_debug_file_name),
+        "cd -",
+        "",
+    ]
+
+    command_lines = [
         "%s %s $base/arpsenkf %s < %s > %s" % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, enkf_input_file_name, enkf_debug_file_name),
         "cd -",
         "",
@@ -606,7 +623,9 @@ def main():
 
     if not args.free_forecast:
         try:
-            exec(open("%s/%s" % (args.base_path, args.radflags), 'r'), locals()) # Get the radar assimilation flags from the file
+            rd = import_all_from("%s/%s" % (args.base_path, args.radflags))
+            radar_data_flag = rd.radar_data_flag
+            print radar_data_flag
         except:
             radar_data_flag = None
 #       args.radar_data_flags = radar_data_flag
