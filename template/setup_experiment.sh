@@ -4,7 +4,7 @@
 SCRATCHBASE="/scratch/rice/d/dawson29/"
 DEPOTBASE="/depot/dawson29/"
 BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/"
-RUNNAME="3km153x153"
+RUNNAME="3km153x153_newse"
 TEMPLATEDIR="${DEPOTBASE}apps/arpsEnKFtools/EnKF_template/"
 SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/3km153x153.sfcdata"
 TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/3km153x153.trndata"

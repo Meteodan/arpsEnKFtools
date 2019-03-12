@@ -23,7 +23,7 @@ expPrefix = "3km153x153"
 # Number of ensemble members
 n_ens_members = 1
 member_start = 1
-member_end = 1
+member_end = 40
 # Start date, end date, and interval for history files to process
 start_year = 2016
 start_month = 3
@@ -51,7 +51,7 @@ outputdir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km15
 # Option to run wrf2arps on the generated files
 run_wrf2arps = True
 run_t0 = True
-run_lbc = True
+run_lbc = False
 # Absolute path to wrf2arps executable
 wrf2arps_exe = '/home/dawson29/arps5.4_main/bin/wrf2arps'
 # MPI executable (if desired)
@@ -116,20 +116,20 @@ for wrf2arps_dict in wrf2arps_dict_list:
                      t0_input_file_name,
                      dir_extd=basedir,
                      runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring[0],
+                     init_time_str=newse_timestrings[0],
                      start_time_str=newse_timestring,
                      end_time_str=newse_timestring,
                      dirname=outputdir,
                      dmp_out_joined=dmp_out_joined,
                      hdmpfmt=3,
-                     exbcdmp=0)
+                     exbcdmp=3)
 
     # Boundary conditions
     editNamelistFile("{}".format(template),
                      lbc_input_file_name,
                      dir_extd=basedir,
                      runname="%s" % ens_member_name,
-                     init_time_str=newse_timestring[0],
+                     init_time_str=newse_timestrings[0],
                      start_time_str=newse_timestring,
                      end_time_str=newse_timestring,
                      dirname=outputdir,
