@@ -75,6 +75,12 @@
 !                   analysis time during the WRF run.
 !              = 2, wrfout_d01_YYYY-MM-DD_HH:MM:SS format.
 !
+!  phupdtopt     Option to update ph field with updated p field before dumping
+!                out (given that ph is used by WRF while p is used by ARPS as
+!                model state variable).
+!              = 0, ph is not updated.
+!              = 1, ph is updated.
+!
 ! nocolons     When 1, the date string in the history file name will look like
 !              '00_00_00' instead of '00:00:00'.  Any directories entered
 !              should follow the same convention.
@@ -97,6 +103,7 @@
    modopt     = 1,
    magnitude_processor = 5,
    wrfoutopt  = 0,
+     phupdtopt  = 0,
 
    inidirname = './',
    nocolons = 0,
@@ -121,7 +128,7 @@
 !  fatime  The model time of the first analysis
 !          used to determine if base-state and grid history file will be output
 !          (when time == fatime); and if covariance inflation will be
-!          applied (when time > fatime).
+!          applied (when time >= fatime).
 !
 !  timeext Option to use time-extended sampling approach (Xu et. al. MWR 2008)
 !          = 0, no

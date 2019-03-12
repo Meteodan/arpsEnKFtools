@@ -1346,6 +1346,7 @@
 !                NOTE: the NSSL scheme configuration is very similar to that in WRFV3.5.1.
 !                Users can compare module_mp_nssl2mom.F in src/arps with that in WRF to
 !                see differences.
+!          = 16, Morrison 2-moment scheme. Reference: Morrison et al. (2009, MWR)
 !
 !          REFERENCE for microphysics scheme 8-12:
 !
@@ -2399,6 +2400,13 @@
 !
 !  wavelen   Wavelength of radar in mm (WSR-88D: 107, CASA: 31.9)
 !
+!  MFflg    Option for melting treatment.
+!       = 0    Melting following Jung et al. (2008)
+!       = 1    Reserved for melting following Dawson et al. (2014)  ! Not yet implemented.
+!       = 2    No melting
+!       = 3    Temperature-dependent melting (snow: -2.5C - 2.5C, hail/graupel: 0C - 5C)
+!      [Note] Option 1 doesn't work for rfopt = 1.
+!
 !  nlam     For rfopt=3, number of lamda values to use for lookup table
 !  nalf     For rfopt=3, number of alpha values to use for lookup table
 !  l_min    For rfopt=3, minimum/initial lamda value for lookup table
@@ -2495,6 +2503,7 @@
    rfopt = -1,
    rsadir = 'scatt/S-band',
    wavelen = 107.,
+   MFflg      = 0,
 
    nlam = 30000,
    nalpha = 1,
@@ -3632,6 +3641,23 @@
 ! Additional parameters for program 3DVAR
 !
 !======================================================================
+
+!  --------------------------------------------------------------------
+!  3dvar, En3dvar, and En4dvar options
+!  opt_envar=1  ! Data asismilation option: =0: 3dvar; =1: en3dvar or en4dvar
+!  num_4d_time, used when openvar >0, = 0 for en3dvar and >=1 for en4dvar
+!  enn=40,   used when optenvar >0, number of ensember members
+!  opt_lz: 0, no localization; =1  En4DVar-NPC
+!  opt_mva: 0, uni-variable analysis; =1 multi-variable analysis
+! ---------------------------------------------------------------------
+
+ &var_opt
+  opt_envar = 1,
+  num_4d_time = 0,
+  enn = 40,
+  opt_lz = 1,
+  opt_mva = 0,
+/
 
 *----------------------------------------------------------------------
 !
