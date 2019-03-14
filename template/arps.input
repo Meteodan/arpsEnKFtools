@@ -412,7 +412,7 @@
 !-----------------------------------------------------------------------
 
  &initialization
-   initime = '2016-03-31.12:00:00',
+   initime = '2016-03-31.18:00:00',
    initopt = 3,
      timeopt = 1,
 
@@ -431,6 +431,8 @@
      inisplited = 0,
      inifile = './6km033116NAMnoDA.hdf010800',
      inigbf = './6km033116NAMnoDA.hdfgrdbas',
+     ensfile = 'may20.bin000000',
+     ensgbf = 'may20.bingrdbas',
 
    inibasopt = 1,
      viniopt = 1,
@@ -1085,7 +1087,7 @@
  &exbcpara
    exbcname = './boundary/3kmbgfrom3DVAR',
    tinitebd = '1999-05-03.21:00:00',
-   tintvebd = 3600,
+   tintvebd = 900,
    ngbrz = 10,
    brlxhw = 4,
    cbcdmp = 0.00555556,
