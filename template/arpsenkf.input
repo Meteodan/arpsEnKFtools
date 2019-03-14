@@ -97,15 +97,15 @@
 !----------------------------------------------------------------------=*
 
  &arps_input
-   nproc_x_in = 5,
-   nproc_y_in = 3,
+   nproc_x_in = 6,
+   nproc_y_in = 5,
 
    modopt     = 1,
    magnitude_processor = 5,
    wrfoutopt  = 0,
      phupdtopt  = 0,
 
-   inidirname = './',
+   inidirname = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153//3km153x153//ENF%3N',
    nocolons = 0,
  /
 
@@ -314,18 +314,18 @@
 !----------------------------------------------------------------------=*
 
  &anapara
-   nen = 10,
-   casenam = '3kmtest',
-   assim_time = 1500.0,
+   nen = 40,
+   casenam = '3km153x153',
+   assim_time = 22500,
    anaopt = 2,
    fatime = 600.0,
 
    timeext = 0,
      nr = 0,
 
-   mult_inflat = 1,
+   mult_inflat = 2,
      zcovinf = 5.0,
-     cinf = 1.2,
+     cinf = 1.05,
 
      inf_h_width = 0.0,
      inf_v_width = 0.0,
@@ -546,7 +546,7 @@
 !----------------------------------------------------------------------=*
 
  &enkf_conventional
-   cvndatadir = './data',
+   cvndatadir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153//obs/',
    innovcvn = 1,
 
    sfcassim = 0,
@@ -641,7 +641,7 @@
 
    ntiltmax = 14,
 
-   rdrobsdir = '/scratch/rice/d/dawson29/may0399/EnKF/0417runs/3kmtest/nexrad',
+   rdrobsdir = './nexrad',
  /
 
 *-----------------------------------------------------------------------
@@ -1059,17 +1059,17 @@
    radardaopt = 1,
    exptype    = 2,
 
-   loc_rdrinfo = '../data/adas',
+   loc_rdrinfo = 'data/adas',
 
-   nrdrused = 1,
-     radarname= 'KTLX','KCYR',
-     ntwtype  =      1,     3,
-     vcpmode  =     11,    10,
+   nrdrused = 7,
+     radarname= 'KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH',
+     ntwtype  =      1,      1,      1,      1,      1,      1,      1,
+     vcpmode  =     11,     11,     11,     11,     11,     11,     11, 
 
-     rdrlocopt =     1,       1,
-     xpos      =   0.0, 25000.0,
-     ypos      =   0.0, 15000.0,
-     hpos      =  10.0,    10.0,
+     rdrlocopt =     1,       1,     1,      1,      1,      1,      1,
+     xpos      =   0.0, 25000.0,   0.0,    0.0,    0.0,    0.0,    0.0,
+     ypos      =   0.0, 15000.0,   0.0,    0.0,    0.0,    0.0,    0.0,
+     hpos      =  10.0,    10.0,  10.0,   10.0,   10.0,   10.0,   10.0,
 
      z04vr = 10.0,
      Zupprlim = 100.0,
@@ -1078,28 +1078,28 @@
    rdrfmt    = 1,
      numrdra = 8,
 
-     ngridx=1, 1,
-     ngridy=1, 1,
-     nzlwx =1, 1,
-     nzlwy =1, 1,
+     ngridx=1, 1, 1, 1, 1, 1, 1,
+     ngridy=1, 1, 1, 1, 1, 1, 1,
+     nzlwx =1, 1, 1, 1, 1, 1, 1,
+     nzlwy =1, 1, 1, 1, 1, 1, 1,
 
-     rdrdaopt1 = 1, 1,
-     rdrdaopt2 = 1, 1,
-     rdrdaopt3 = 0, 0,
-     rdrdaopt4 = 0, 0,
-     rdrdaopt5 = 0, 0,
-     rdrdaopt6 = 0, 0,
-     rdrdaopt7 = 0, 0,
+     rdrdaopt1 = 1, 1, 1, 1, 1, 1, 1,
+     rdrdaopt2 = 1, 1, 1, 1, 1, 1, 1,
+     rdrdaopt3 = 0, 0, 0, 0, 0, 0, 0,
+     rdrdaopt4 = 0, 0, 0, 0, 0, 0, 0,
+     rdrdaopt5 = 0, 0, 0, 0, 0, 0, 0,
+     rdrdaopt6 = 0, 0, 0, 0, 0, 0, 0,
+     rdrdaopt7 = 0, 0, 0, 0, 0, 0, 0,
 
-     rdrthd1= -990.0, -990.0,
-     rdrthd2=  -90.0,  -99.0,
-     rdrthd3=   10.0,   10.0,
-     rdrthd4=    0.3,    0.3,
-     rdrthd5=    1.9,    1.9,
-     rdrthd6=    0.9,    0.9,
-     rdrthd7=   0.01,   0.01,
+     rdrthd1= -990.0, -990.0, -990.0, -990.0, -990.0, -990.0, -990.0,
+     rdrthd2=  -90.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,
+     rdrthd3=   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,   10.0, 
+     rdrthd4=    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,
+     rdrthd5=    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,
+     rdrthd6=    0.9,    0.9,    0.9,    0.9,    0.9,    0.9,    0.9,
+     rdrthd7=   0.01,   0.01,   0.01,   0.01,   0.01,   0.01,   0.01,
 
-     paramest=0, 0,
+     paramest=0, 0, 0, 0, 0, 0, 0,
  /
 
 *-----------------------------------------------------------------------
@@ -1280,7 +1280,7 @@
    hdmpdir = './',
    hdmpfrmt = 1,
    hdfcomp = 0,
-   hdmpfheader = 'may20',
+   hdmpfheader = '3km153x153',
    hdmpfheader_prefix = 'da_amean',
 
    randomerropt = 0,
