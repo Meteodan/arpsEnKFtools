@@ -206,7 +206,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     arps_input_file_name = "%s/%d.arps.input" % (input_path, assim_time)
     enkf_input_file_name = "%s/%d.arpsenkf.input" % (input_path, assim_time)
     enkf_debug_file_name = "%s/%d.arpsenkf.debug" % (debug_path, assim_time)
-    batch_file_name = "%s/%d.csh" % (batch_path, assim_time)
+    batch_file_name = "%s/%d.sh" % (batch_path, assim_time)
 
     kwargs = {}
 
@@ -460,7 +460,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
         job_suffixes.append(key)
 
         if not written_example or cm_args.save_batch:
-            file = open("%s/%s.csh" % (batch_path, job_key), 'w', encoding='utf8')
+            file = open("%s/%s.sh" % (batch_path, job_key), 'w', encoding='utf8')
             file.write(file_text)
             file.close()
             written_example = True
@@ -594,7 +594,7 @@ def main():
     ]
 
     command_lines = doForEnsemble(prologue, member_list)
-    command = [ "set base=%s" % args.base_path, "cd $base", "" ]
+    command = [ "base=%s" % args.base_path, "cd $base", "" ]
     appendCommands(command_lines,
         doForEnsemble(command, member_list)
     )
@@ -632,7 +632,7 @@ def main():
 
     # Copy the configuration information to the working directory, so we'll **ALWAYS HAVE IT IF WE NEED TO GO BACK AND LOOK AT IT**
     config_files = [ "%s/%s" % (args.base_path, f) for f in [ args.arps_template, args.arpsenkf_template, args.arpsenkfic_template ] ]
-    config_files.extend(['run_real_data_case.py', 'run_real_data_case.sh'])
+    config_files.extend(['run_real_data_case.py', 'run_real_data_case.csh'])
 
     for file in config_files:
         subprocess.Popen(['cp', file, "%s/." % work_path])
@@ -756,7 +756,7 @@ def main():
             submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, chunk_start, chunk_end, hybrid=False)
             command_lines.clear()
 
-            command = [ "set base=%s" % args.base_path, "cd $base", "" ]
+            command = [ "base=%s" % args.base_path, "cd $base", "" ]
             appendCommands(command_lines,
                 doForEnsemble(command, member_list)
             )
@@ -832,7 +832,7 @@ def main():
                     submit(args, batch, command_lines, req_time, nproc_x_mod * nproc_y_mod, chunk_start, chunk_end, hybrid=False, squash_jobs=False)
                     command_lines.clear()
 
-                    command = [ "set base=%s" % args.base_path, "cd $base", "" ]
+                    command = [ "base=%s" % args.base_path, "cd $base", "" ]
                     appendCommands(command_lines,
                         doForEnsemble(command, member_list)
                     )
@@ -843,7 +843,7 @@ def main():
 
             # Ask Tim about rationale for using hybrid with so many total cores...
             #assimilation_lines = [ "set base=%s" % args.base_path, "cd $base", "", "setenv OMP_NUM_THREADS %d" % batch.getNCoresPerNode(), "" ]
-            assimilation_lines = [ "set base=%s" % args.base_path, "cd $base", "" ]
+            assimilation_lines = [ "base=%s" % args.base_path, "cd $base", "" ]
             try:
                 radar_data_flag_sngltime = radar_data_flag[end_time]
             except:

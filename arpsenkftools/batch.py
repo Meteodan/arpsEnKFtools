@@ -130,7 +130,7 @@ class Batch(object):
             except (AssertionError, KeyError):
                 pass
 
-        text = "#!/bin/csh\n"
+        text = "#!/bin/bash\n"
         for arg, val in env_dict.items():
             text += "#%s %s%s\n" % (self._env['btmarker'], arg, val)
 

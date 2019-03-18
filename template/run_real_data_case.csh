@@ -27,13 +27,13 @@
 
 python run_real_data_case.py  \
     --base-path /scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newse/  --job-name 3km153x153                                        \
-    --n-ens 36  --mpi-config-model 6 5 --mpi-config-dump 6 5 --mpi-config-enkf 6 5 --algorithm ensrf                                                                        \
-    --ens-start 0  --ens-end 900  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --n-ens 36  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
+    --ens-start 1800 --ens-end 31500 --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2016_IOP3.radflag  --initial-conditions yes --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:multd=1.05 \
     --fcst-req 0:20  --init-fcst-req 0:20  --assim-on-req 0:45                                                              \
-    --split-init auto --debug --save-batch
+    --split-init auto --debug --save-batch --restart
 
 # python run_real_data_case.py  \
 #     --base-path /scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153/  --job-name 3km153x153                                        \
