@@ -369,9 +369,9 @@
    Vr_updtime_qcrish = 0.0,
    Vr_updtime_ncrish = 0.0,
    Vr_updtime_zrish = 0.0,
-   Vr_updtime_vh = 0.0,  
+   Vr_updtime_vh = 0.0,
    Vr_updtime_c2 = 0.0,
-  
+
 
    Z_updtime_uv = 0.0,
    Z_updtime_w = 0.0,
@@ -383,7 +383,7 @@
    Z_updtime_qrsh = 0.0,
    Z_updtime_ncrish = 0.0,
    Z_updtime_zrish = 0.0,
-   Z_updtime_vh = 0.0, 
+   Z_updtime_vh = 0.0,
    Z_updtime_c2 = 0.0,
 
    DP_delay_opt = 0,
@@ -437,7 +437,7 @@
 !  nrincdmp   Save rain water number concentration increment
 !  niincdmp   Save ice number concentration increment
 !  nsincdmp   Save snow number concentration increment
-!  ngincdmp   Save graupel number concentration increment 
+!  ngincdmp   Save graupel number concentration increment
 !  nhincdmp   Save hail number concentration increment
 !
 !
@@ -465,7 +465,7 @@
    nrincdmp = 0,
    niincdmp = 0,
    nsincdmp = 0,
-   ngincdmp = 0, 
+   ngincdmp = 0,
    nhincdmp = 0,
  /
 
@@ -562,7 +562,7 @@
      use_sfc_p  = 1, err_sfc_p  =   2.0, dif_sfc_p  = 20.0,
 
      sfcweight = 2,
-     sfcr0h      = 300000.0,
+     sfcr0h      = 100000.0,
      sfcr0h_meso = 50000.0,
      sfcr0v      = 6000.0,
 
@@ -682,11 +682,11 @@
 !           (1) rain, (2) snow, (3) hail, (4) graupel
 !  l_max    For rfopt=3, maximum lamda value for lookup table
 !           (1) rain, (2) snow, (3) hail, (4) graupel
-!  alf_min  For rfopt=3, minimum/initial alpha value for lookup table. This is 
-!           '0' for both min and max if a triple moment scheme is not being 
-!           used. 
+!  alf_min  For rfopt=3, minimum/initial alpha value for lookup table. This is
+!           '0' for both min and max if a triple moment scheme is not being
+!           used.
 !           (1) rain, (2) snow, (3) hail, (4) graupel
-!  alf_max  For rfopt 3, maximum alpha value for lookup table 
+!  alf_max  For rfopt 3, maximum alpha value for lookup table
 !           (1) rain, (2) snow, (3) hail, (4) graupel
 !
 !  dsdparaopt Option to specify the value of DSD parameters in
@@ -1002,9 +1002,9 @@
 !  Zupprlim   Assimilate Z when Z < Zupprlim
 !
 !  Kdpupprlim Assimilate Kdp when Kdp < Kdpupprlim
-! 
+!
 !  dphgtlim   Only assimilate dualpol obs when beam height < dphgtlim
-!             Default of 0.0 assimilates all data. 
+!             Default of 0.0 assimilates all data.
 !             (3)Zvv (4)Zdr  (5)Zdp (6)Kdp (7)rhv
 !
 !  rdrcomopt  Data analysis option for radar Data
@@ -1033,9 +1033,9 @@
 !            point in x direction
 !  nzlwy     Same as nzlwx but in y direction
 !
-!  rdrdp     Flag to indicate whether radar is dual-pol or not. 
-!             = 0 Radar does not contain dual-pol variables 
-!             = 1 Radar contains dual-pol variables 
+!  rdrdp     Flag to indicate whether radar is dual-pol or not.
+!             = 0 Radar does not contain dual-pol variables
+!             = 1 Radar contains dual-pol variables
 !
 !  rdrdaopt   Option to assimilate radar data
 !             (1)Vr  (2)Zhh  (3)Zvv (4)Zdr  (5)Zdp (6)Kdp (7)rhv
@@ -1064,7 +1064,7 @@
    nrdrused = 7,
      radarname= 'KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH',
      ntwtype  =      1,      1,      1,      1,      1,      1,      1,
-     vcpmode  =     11,     11,     11,     11,     11,     11,     11, 
+     vcpmode  =     11,     11,     11,     11,     11,     11,     11,
 
      rdrlocopt =     1,       1,     1,      1,      1,      1,      1,
      xpos      =   0.0, 25000.0,   0.0,    0.0,    0.0,    0.0,    0.0,
@@ -1093,7 +1093,7 @@
 
      rdrthd1= -990.0, -990.0, -990.0, -990.0, -990.0, -990.0, -990.0,
      rdrthd2=  -90.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,
-     rdrthd3=   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,   10.0, 
+     rdrthd3=   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,
      rdrthd4=    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,
      rdrthd5=    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,
      rdrthd6=    0.9,    0.9,    0.9,    0.9,    0.9,    0.9,    0.9,
@@ -1340,9 +1340,9 @@
 !
 !  (when obsdtaopt=1)
 !  Note, rdrfmt must be set above to use either gridtilt (0) or column tilt (1)
-!  radar data. If the format is gridtilt, the 'k' points below for the 
-!  location of the chosen data point is tilt level and not nz. 
-! 
+!  radar data. If the format is gridtilt, the 'k' points below for the
+!  location of the chosen data point is tilt level and not nz.
+!
 !  rdrnum      Number of radars
 !  rdrdanam    Option to specify radar data file name
 !              = 1, file header plus model time, model time is
@@ -1362,7 +1362,7 @@
 !             covarainces are calculated
 !  dirnamevrc Output directory. './' for current directory
 !  ivr, jvr, kvr (i,j,k) of chosen Vr data point
-!  Note k is tilt level if rdrfmt is 0 
+!  Note k is tilt level if rdrfmt is 0
 !  corvru, corvrv, corvrw, corvrptprt, corvrpprt, corvrqv, corvrqc
 !  corvrqr, corvrqi, corvrqs, corvrqg, corvrqh
 !  Option to calculate covariance between Vr and model state variables
@@ -1384,7 +1384,7 @@
 !             covaraince are calculated
 !  dirnamezc  Output directory. './' for current directory
 !  iz, jz, kz (i,j,k) of chosen reflectivity data point
-!  Note k is tilt level if rdrfmt is 0 
+!  Note k is tilt level if rdrfmt is 0
 !  corzu, corzv, corzw, corzptprt, corzpprt, corzqv, corzqc
 !  corzqr, corzqi, corzqs, corzqh
 !  Option to calculate covariance between reflectivity and model
@@ -1394,11 +1394,11 @@
 !         = 2, yes, dump both correlation coefficient and
 !              covariance
 !
-!  covzdrnum    Number of differential reflectivity data points with 
+!  covzdrnum    Number of differential reflectivity data points with
 !             respect to which covaraince are calculated
 !  dirnamezdrc  Output directory. './' for current directory
 !  izdr, jzdr, kzdr (i,j,k) of chosen differential reflectivity data point
-!  Note k is till level if rdrfmt is 0 
+!  Note k is till level if rdrfmt is 0
 !  corzdru, corzdrv, corzdrw, corzdrptprt, corzdrpprt, corzdrqv, corzdrqc
 !  corzdrqr, corzdrqi, corzdrqs, corzdrqh
 !  Option to calculate covariance between differential reflectivity and model

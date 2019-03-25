@@ -4,11 +4,13 @@
 SCRATCHBASE="/scratch/rice/d/dawson29/"
 DEPOTBASE="/depot/dawson29/"
 BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/"
-RUNNAME="3km153x153_newse"
+RUNNAMEBASE="1km453x453"
+RUNNAMETAG="_newse"
+RUNNAME=${RUNNAMEBASE}${RUNNAMETAG}
 TEMPLATEDIR="${DEPOTBASE}apps/arpsEnKFtools/template/"
-SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/3km153x153.sfcdata"
-TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/3km153x153.trndata"
-BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newseicbc/"
+SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/${RUNNAMEBASE}.sfcdata"
+TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/${RUNNAMEBASE}.trndata"
+BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/${RUNNAMEBASE}_newseicbc/"
 RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
 SCATTDIR="/home/dawson29/arps5.4_main/data/scatt/"
 ARPSEXE="/home/dawson29/arps5.4_main/bin/arps_mpi"
@@ -16,6 +18,7 @@ ARPSENKFICEXE="/home/dawson29/arps5.4_main/bin/arpsenkfic"
 ARPSENKFEXE="/home/dawson29/arps5.4_main/bin/arpsenkf_mpi"
 RADFLAG="2016_IOP3.radflag"
 PERTURBIC=0
+# The following are only needed when running arpsenkfic
 INIFILE="3km033116NAM107x107bgandbc.hdf010800"
 INIBASE="3km033116NAM107x107bgandbc.hdfgrdbas"
 

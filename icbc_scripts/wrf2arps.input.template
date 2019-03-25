@@ -250,10 +250,10 @@
 
  &arpsgrid
    use_wrf_grid = 0,
-     nx     = 153,
-     ny     = 153,
-     dx     = 3000.00,
-     dy     = 3000.00,
+     nx     = 453,
+     ny     = 453,
+     dx     = 1000.00,
+     dy     = 1000.00,
      mapproj = 2,
      trulat1 =  33.0,
      trulat2 =  36.0,
@@ -360,8 +360,8 @@
      tbc = 1,
        fftopt = 1,
 
-   wrfexttrnopt = 1,
-     terndta   = 'arpstern.data',
+   wrfexttrnopt = 3,
+     terndta   = '/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/trndata/4km153x153.trndata',
      ternfmt   = 3,
      extntmrg  = 7,
  /
