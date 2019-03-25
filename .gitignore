@@ -81,3 +81,7 @@ target/
 
 #Visual Studio Code
 .vscode
+
+#Misc
+*.ps*
+*.output*
