@@ -361,7 +361,7 @@
        fftopt = 1,
 
    wrfexttrnopt = 3,
-     terndta   = '/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/trndata/4km153x153.trndata',
+     terndta   = '/depot/dawson29/data/VORTEXSE/simulations/ARPS/trndata/1km453x453.trndata',
      ternfmt   = 3,
      extntmrg  = 7,
  /
