@@ -329,15 +329,16 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
 
     # DTD: removed extra cd to work_path here, so that we are running job in same directory (base_path) as ARPS jobs.
     # This is so that relative paths that are set in arps.input work for both ARPS and ARPSENKF
-    command_lines = [
-        "cd %s" % work_path,
-        "%s %s $base/arpsenkf %s < %s > %s" % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, enkf_input_file_name, enkf_debug_file_name),
-        "cd -",
-        "",
-    ]
+#    command_lines = [
+#        "cd %s" % work_path,
+#        "%s %s $base/arpsenkf %s < %s > %s" % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, enkf_input_file_name, enkf_debug_file_name),
+#        "cd -",
+#        "",
+#    ]
 
     command_lines = [
         "%s %s $base/arpsenkf %s < %s > %s" % (batch.getMPIprogram(), batch.getMPIargs()%(nproc_x*nproc_y), arps_input_file_name, enkf_input_file_name, enkf_debug_file_name),
+        "mv *hdfwgt* %s/%s/" % (work_path, "wgt"),
         "cd -",
         "",
     ]
@@ -420,7 +421,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores, start_time, end_ti
     envname = batch.getEnv()
     if(envname == 'rice'):
         queuename = 'dawson29'
-        ppn = min(batch.getNCoresPerNode(),n_cores)
+        if cm_args.ppn_req > 0:
+            ppn = cm_args.ppn_req
+        else:
+            ppn = min(batch.getNCoresPerNode(),n_cores)
     else:
         queuename = 'normal'
 
@@ -555,6 +559,7 @@ def main():
     ap.add_argument('--restart', dest='restart', action='store_true')
     ap.add_argument('--debug', dest='debug', action='store_true')
     ap.add_argument('--save-batch', dest='save_batch', action='store_true')
+    ap.add_argument('--ppn', dest='ppn_req', default=-1, type=int)    
 
     args = ap.parse_args()
     batch = Batch('rice') # stampede

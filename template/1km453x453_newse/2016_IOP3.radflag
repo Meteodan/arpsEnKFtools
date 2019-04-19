@@ -35,10 +35,10 @@ radar_data_flag = {
     25200:    {True:all_radars,              False:[]      }, #0100:00
     26100:    {True:all_radars,              False:[]      }, #0115:00
     27000:    {True:all_radars,              False:[]      }, #0130:00
-    28900:    {True:all_radars,              False:[]      }, #0145:00
-    27800:    {True:all_radars,              False:[]      }, #0200:00
-    26700:    {True:all_radars,              False:[]      }, #0215:00
-    25800:    {True:all_radars,              False:[]      }, #0230:00
-    24700:    {True:all_radars,              False:[]      }, #0245:00
-    23600:    {True:all_radars,              False:[]      }, #0300:00
+    27900:    {True:all_radars,              False:[]      }, #0145:00
+    28800:    {True:all_radars,              False:[]      }, #0200:00
+    29700:    {True:all_radars,              False:[]      }, #0215:00
+    30600:    {True:all_radars,              False:[]      }, #0230:00
+    31500:    {True:all_radars,              False:[]      }, #0245:00
+    32400:    {True:all_radars,              False:[]      }, #0300:00
 }

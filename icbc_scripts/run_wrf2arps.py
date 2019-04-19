@@ -14,6 +14,9 @@ from arpsenkftools.editNamelist import editNamelistFile
 # USER SPECIFICATIONS ###
 # Absolute path to directory containing NEWS-e WRF history files
 basedir = "/depot/dawson29/data/VORTEXSE/model_data/newse_data/"
+linkdir = os.path.join(basedir, 'temp1/')
+if not os.path.exists(linkdir):
+    os.makedirs(linkdir)
 # Absolute path to the arpsintrp.input template file
 template = "/depot/dawson29/apps/arpsEnKFtools/icbc_scripts/wrf2arps.input.template"
 # Absolute path to where the resulting arpsintrp input files should be stored.
@@ -117,7 +120,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
     # Initial conditions
     editNamelistFile("{}".format(template),
                      t0_input_file_name,
-                     dir_extd=basedir,
+                     dir_extd=linkdir,
                      runname="%s" % ens_member_name,
                      init_time_str=newse_timestrings[0],
                      start_time_str=newse_timestring,
@@ -132,7 +135,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
     # Boundary conditions
     editNamelistFile("{}".format(template),
                      lbc_input_file_name,
-                     dir_extd=basedir,
+                     dir_extd=linkdir,
                      runname="%s" % ens_member_name,
                      init_time_str=newse_timestrings[0],
                      start_time_str=newse_timestring,
@@ -151,7 +154,7 @@ for wrf2arps_dict in wrf2arps_dict_list:
         wrfout_file_name = wrf2arps_dict['wrfout_file_name']
         wrfout_file_link_name = "wrfout_d01_{}".format(newse_timestring)
         wrfout_file_path = os.path.join(basedir, wrfout_file_name)
-        wrfout_file_link_path = os.path.join(basedir, wrfout_file_link_name)
+        wrfout_file_link_path = os.path.join(linkdir, wrfout_file_link_name)
 
         command = 'ln -sf {} {}'.format(wrfout_file_path, wrfout_file_link_path)
         print("Linking {} to {}".format(wrfout_file_link_path, wrfout_file_path))

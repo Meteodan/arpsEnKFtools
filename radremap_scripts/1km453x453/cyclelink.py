@@ -15,10 +15,10 @@ def perdelta(start, end, delta):
 
 ### USER SPECIFICATIONS ###
 # Absolute path to directory where gridtilt files reside.
-basedir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
+basedir = "/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
 radnames = ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH']
 startTime = D.datetime(2016,03,31,18,00,00)
-endTime = D.datetime(2016,04,01,03,00,00)
+endTime = D.datetime(2016,04,01,02,45,00)
 # Time interval as a timedelta object
 # Note that the constructor has the form timedelta(days, seconds, microseconds).
 # e.g., 5 min could be given as timedelta(0,300).
@@ -41,7 +41,7 @@ if debug:
 
 # Outer loop through radars
 for radname in radnames:
-    inDir = os.path.join(basedir, radname+"_153x153/")
+    inDir = os.path.join(basedir, radname+"_1km453x453/")
 
     # Generate a list of times corresponding to files in the directory.
     gtFile = glob.glob(inDir+"/"+radname+".*")

@@ -123,6 +123,14 @@ class Batch(object):
 
     def gen(self, commands, **kwargs):
         env_dict = {}
+        ppn = kwargs.get('ppn', 20)
+        nnodes = kwargs.get('nnodes', 1)
+        if ppn < 20 and nnodes > 1:
+            #print(self._env.keys())
+            try:
+                self._env.pop('-l naccesspolicy')
+            except (KeyError):
+                pass
         for k, v in self._env.items():
             try:
                 assert k[0] == '-'

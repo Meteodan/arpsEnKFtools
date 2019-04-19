@@ -663,7 +663,7 @@
    wtgrdtiltopt= 1,
    grdtiltver  = 2,
    grdtiltdp = 0,
-   wtsoloopt   = 0,
+   wtsoloopt   = 103,
    runname   = 'RUNNAMETMP',
    outtime   = OUTTIMETMP,
 /

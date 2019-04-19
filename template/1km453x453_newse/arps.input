@@ -2502,10 +2502,10 @@
      nqexout  = 0,
      zqexout  = 0,
 
-   rfopt = -1,
+   rfopt = 2,
    rsadir = 'scatt/S-band',
    wavelen = 107.,
-   MFflg      = 0,
+   MFflg      = 2,
 
    nlam = 30000,
    nalpha = 1,

@@ -26,14 +26,14 @@
 # 3km 31 March 2016 (nested in NEWS-e), radar data at 15-min intervals
 
 python run_real_data_case.py  \
-    --base-path /scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_newse/  --job-name 1km453x453                                        \
-    --n-ens 36  --mpi-config-model 15 8 --mpi-config-dump 5 4 --mpi-config-enkf 5 4 --algorithm ensrf                                                                        \
-    --ens-start 0 --ens-end 900 --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --base-path /scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_newse/  --job-name 1km453x453_newse                                        \
+    --n-ens 36  --mpi-config-model 15 6 --mpi-config-dump 15 6 --mpi-config-enkf 15 6 --algorithm ensrf                                                                        \
+    --ens-start 1800 --ens-end 31500 --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2016_IOP3.radflag  --initial-conditions yes --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:multd=1.05 \
-    --fcst-req 0:30  --init-fcst-req 0:30  --assim-on-req 1:00                                                              \
-    --split-init auto --debug --save-batch --restart
+    --fcst-req 0:30  --init-fcst-req 0:30  --assim-on-req 2:00                                                              \
+    --split-init auto --debug --save-batch --ppn 15 --restart
 
 # python run_real_data_case.py  \
 #     --base-path /scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153/  --job-name 3km153x153                                        \

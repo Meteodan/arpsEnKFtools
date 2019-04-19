@@ -749,8 +749,8 @@
    numvar = 2,
      dualvarname='vr_','zhh','zvv','zdr','zdp','kdp','rhv',
 
-     rdrstd_vr =   1.0,  1.0,  1.0,
-     rdrstd_zhh =  2.0,  2.0,  2.0,
+     rdrstd_vr =   3.0,  3.0,  3.0,
+     rdrstd_zhh =  5.0,  5.0,  5.0,
      rdrstd_zvv =  2.0,  2.0,  2.0,
      rdrstd_zdr =  0.2,  0.2,  0.2,
      rdrstd_zdp =  1.0,  1.0,  1.0,
@@ -1078,10 +1078,10 @@
    rdrfmt    = 1,
      numrdra = 8,
 
-     ngridx=1, 1, 1, 1, 1, 1, 1,
-     ngridy=1, 1, 1, 1, 1, 1, 1,
-     nzlwx =1, 1, 1, 1, 1, 1, 1,
-     nzlwy =1, 1, 1, 1, 1, 1, 1,
+     ngridx=2, 2, 2, 2, 2, 2, 2,
+     ngridy=2, 2, 2, 2, 2, 2, 2,
+     nzlwx =2, 2, 2, 2, 2, 2, 2,
+     nzlwy =2, 2, 2, 2, 2, 2, 2,
 
      rdrdaopt1 = 1, 1, 1, 1, 1, 1, 1,
      rdrdaopt2 = 1, 1, 1, 1, 1, 1, 1,

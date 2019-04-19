@@ -9,7 +9,7 @@ RUNNAMETAG=""				#Additional runname "variation" identifier
 BASEDIR="/depot/dawson29/apps/arpsEnKFtools/radremap_scripts/${RUNNAME}/" # Base directory containing radar remapper script and templates
 WORKDIR="/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/KGWX_${RUNNAME}"
 EXE88D2ARPS="/home/dawson29/arps5.4_main/bin/88d2arps"
-NTHREADS=15             # Number of simultaneous jobs to run at a time
+NTHREADS=15             # Number of simultaneous jobs to run
 
 NX=453					# Number of grid points in X direction
 NY=453					# Number of grid points in Y direction
@@ -51,7 +51,7 @@ MPHYOPT=15
 N0RAIN=8.0e6
 NSTYP=1
 
-INPUTDIR="/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km153x153_newse/"
+INPUTDIR="/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_newseicbc/"
 INPUTHDR="ena001"
 RADARDIR="/depot/dawson29/data/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/KGWX/level2/"
 
@@ -73,9 +73,10 @@ time3=$(printf "%06d" ${timesec})
 #radarfileprefix=${RADNAME}${year}$(printf "%02g" ${month})${initday}_${inithour}
 radarfileprefix=${RADNAME}
 
-cp ${BASEDIR}/radremap_88D.input_template ${WORKDIR}
-cp ${BASEDIR}/radarinfo.dat ${WORKDIR}
+#cp ${BASEDIR}/radremap_88D.input_template ${WORKDIR}
+#cp ${BASEDIR}/radarinfo.dat ${WORKDIR}
 
+count=0
 for RADNAME in "KBMX" "KGWX" "KHPX" "KHTX" "KNQA" "KOHX" "KPAH"
 do
 
@@ -92,7 +93,6 @@ cd ${RADARDIR}
 FILENAMES=$(ls ${radarfileprefix}*)
 cd ${WORKDIR}
 
-count=0
 for file in ${FILENAMES}
 do
   radtime=${file:13:6} # `expr substr $file 14 6`
