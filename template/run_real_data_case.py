@@ -694,11 +694,11 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         else:
             for idx in range(len(job_completed)):
                 job_completed[idx] = True
-        print("Member:    " + " ".join("{:02d}".format(idx)) for idx, _ in job_completed)
+        print("Member:    " + " ".join("{:02d}".format(idx+1) for idx, _ in enumerate(job_completed)))
         print("Completed: " + "  ".join("C" if c else "N" for c in job_completed))
         print("Failed:    " + "  ".join("{:d}".format(2) if job_failed[idx] else "{:d}".format(1)
                                         if job_submit_count[idx] == 2 else "{:d}".format(0) for
-                                        idx, _ in job_completed))
+                                        idx, _ in enumerate(job_completed)))
         if all(job_completed):
             print("All jobs are completed, returning for the next step ...")
             return
