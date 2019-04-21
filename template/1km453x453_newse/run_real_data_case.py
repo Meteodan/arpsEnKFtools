@@ -263,14 +263,14 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     arps_input_file_name = "%s/%d.arps.input" % (input_path, assim_time)
     enkf_input_file_name = "%s/%d.arpsenkf.input" % (input_path, assim_time)
     enkf_debug_file_name = "%s/%d.arpsenkf.debug" % (debug_path, assim_time)
-    batch_file_name = "%s/%d.sh" % (batch_path, assim_time)
+    # batch_file_name = "%s/%d.sh" % (batch_path, assim_time)
 
     kwargs = {}
 
     # Figure out what conventional data we're assimilating (combine this with the next section!)
     cvn_data_flags = dict((k, getattr(cm_args, k))
                           for k in ['sndgflags', 'profflags', 'surfflags'])
-    assim_all = False
+    # assim_all = False
     if isDivisible(assim_time, 3600):
         print("Assimilate all data ...")
     else:
@@ -506,6 +506,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
 
     job_suffixes = []
     job_completed = []
+    job_submit_count = []
+    job_failed = []
 
     if hybrid:
         n_mpi = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
@@ -595,6 +597,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         else:
             print("I would submit %s here ..." % job_key)
         job_completed.append(False)
+        job_submit_count.append(1)
+        job_failed.append(False)
 
     print("Done submitting ...")
 
@@ -646,8 +650,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                                range(1, nproc_y_dump + 1)
                                                for proc_x in range(1, nproc_x_dump + 1)]
                         if not all(all_files_exist):
-                            # Something went wrong! Resubmit the job
-                            print("Problem with {}! Resubmitting!".format(key))
+                            # Something went wrong! Resubmit the job if it's the first time it's
+                            # happened. Otherwise quit after this cycle.
                             if(envname == 'rice'):
                                 queuename = 'dawson29'
                                 file_text = batch.gen(
@@ -671,20 +675,30 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                     timereq=wall_time +
                                     ":00")
                             if cm_args.submit:
-                                batch.submit(file_text)
+                                if job_submit_count[idx] == 1:
+                                    print("Problem with {}! Resubmitting!".format(key))
+                                    batch.submit(file_text)
+                                    job_submit_count[idx] = 2
+                                else:
+                                    print("Job {} failed a second time!".format(key),
+                                          "You might want to check that out...",
+                                          "Stopping after this cycle.")
+                                    job_failed[idx] = True
                             else:
                                 print("I would submit %s here ..." % key)
                         else:
-                            print("All is well!")
+                            print("Job {} completed successfully (I think)!".format(key))
                             job_completed[idx] = True
                     else:
                         job_completed[idx] = True
         else:
             for idx in range(len(job_completed)):
                 job_completed[idx] = True
-
-        print("Completed: " + " ".join("C" if c else "N" for c in job_completed))
-
+        print("Member:    " + " ".join("{:02d}".format(idx)) for idx, _ in job_completed)
+        print("Completed: " + "  ".join("C" if c else "N" for c in job_completed))
+        print("Failed:    " + "  ".join("{:d}".format(2) if job_failed[idx] else "{:d}".format(1)
+                                        if job_submit_count[idx] == 2 else "{:d}".format(0) for
+                                        idx, _ in job_completed))
         if all(job_completed):
             print("All jobs are completed, returning for the next step ...")
             return
@@ -741,6 +755,7 @@ def main():
     ap.add_argument('--debug', dest='debug', action='store_true')
     ap.add_argument('--save-batch', dest='save_batch', action='store_true')
     ap.add_argument('--ppn', dest='ppn_req', default=-1, type=int)
+    ap.add_argument('--error-check', dest='error_check', action='store_true')
 
     args = ap.parse_args()
     batch = Batch('rice')  # stampede
