@@ -609,7 +609,6 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
 
     batch.getQueueStatus()
     need_to_check = False
-    print("cm_args.error_check",cm_args.error_check)
 
     while True:
         time.sleep(0.5 * 60)
@@ -621,6 +620,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_name_len = max(len(n) for n in jobs_queued)
 
             for idx, suffix in enumerate(job_suffixes):
+                need_to_check = False
                 if suffix == 'ekf':
                     key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
                 else:
