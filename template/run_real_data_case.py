@@ -526,6 +526,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
     else:
         queuename = 'normal'
 
+    running_state, complete_state = batch.getQueueStateNames()
+
     work_path, debug_path, batch_path = getPaths(cm_args.base_path, cm_args.job_name, work=True,
                                                  debug=True, batch=True)
 
@@ -606,6 +608,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         return
 
     batch.getQueueStatus()
+    need_to_check = False
 
     while True:
         time.sleep(0.5 * 60)
@@ -617,80 +620,90 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_name_len = max(len(n) for n in jobs_queued)
 
             for idx, suffix in enumerate(job_suffixes):
+                need_to_check = False
                 if suffix == 'ekf':
                     key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
                 else:
                     key = "%s-%s_%d-%d" % (suffix, cm_args.job_name, start_time, end_time)
                 if key[:job_name_len] in jobs_queued:
                     jdy = jobs_queued.index(key[:job_name_len])
-                    if queue[jdy]['state'] == 'Complte':  # TODO: Is this even going to execute?
+                    if queue[jdy]['state'] == complete_state:
                         print("We are here!")
-                        job_completed[idx] = True
+                        if cm_args.error_check:
+                            need_to_check = True
+                        else:
+                            job_completed[idx] = True
                 else:
                     if cm_args.error_check:
-                        # TODO: check to make sure a CFL violation did not occur
-
-                        # Check to see if all the appropriate output files have been written
-                        # by the job. If not, something went wrong (likely a lustre problem)
-                        # Try resubmitting the job.
-                        if suffix == 'ekf':
-                            path_template = "%s/EN%03d/ena%03d.hdf%06d_%03d%03d"
-                            all_files_exist = [os.path.exists(path_template %
-                                               (work_path, n_ens + 1, n_ens + 1, end_time,
-                                                proc_x, proc_y)) for proc_y in
-                                               range(1, nproc_y_enkf + 1)
-                                               for proc_x in range(1, nproc_x_enkf + 1)
-                                               for n_ens in cm_args.member_list]
-                        else:
-                            # Check for individual forecast member failure
-                            path_template = "%s/ENF%03d/enf%03d.hdf%06d_%03d%03d"
-                            all_files_exist = [os.path.exists(path_template %
-                                               (work_path, key[1:3], key[1:3], end_time,
-                                                proc_x, proc_y)) for proc_y in
-                                               range(1, nproc_y_dump + 1)
-                                               for proc_x in range(1, nproc_x_dump + 1)]
-                        if not all(all_files_exist):
-                            # Something went wrong! Resubmit the job if it's the first time it's
-                            # happened. Otherwise quit after this cycle.
-                            if(envname == 'rice'):
-                                queuename = 'dawson29'
-                                file_text = batch.gen(
-                                    commands,
-                                    queue=queuename,
-                                    nnodes=n_nodes,
-                                    ppn=ppn,
-                                    timereq=wall_time + ":00",
-                                    jobname=key)
-                            else:
-                                queuename = 'normal'
-                                file_text = batch.gen(
-                                    commands,
-                                    jobname=job_key,
-                                    debugfile="%s/%s.output" %
-                                    (debug_path,
-                                        key),
-                                    nmpi=n_mpi,
-                                    nnodes=n_nodes,
-                                    queue=queuename,
-                                    timereq=wall_time +
-                                    ":00")
-                            if cm_args.submit:
-                                if job_submit_count[idx] == 1:
-                                    print("Problem with {}! Resubmitting!".format(key))
-                                    batch.submit(file_text)
-                                    job_submit_count[idx] = 2
-                                else:
-                                    print("Job {} failed a second time!".format(key),
-                                          "You might want to check that out...",
-                                          "Stopping after this cycle.")
-                                    job_failed[idx] = True
-                            else:
-                                print("I would submit %s here ..." % key)
-                        else:
-                            print("Job {} completed successfully (I think)!".format(key))
-                            job_completed[idx] = True
+                        need_to_check = True
                     else:
                         job_completed[idx] = True
+                if need_to_check:
+                    # TODO: check to make sure a CFL violation did not occur
+
+                    # Check to see if all the appropriate output files have been written
+                    # by the job. If not, something went wrong (likely a lustre problem)
+                    # Try resubmitting the job.
+                    if suffix == 'ekf':
+                        path_template = "%s/EN%03d/ena%03d.hdf%06d_%03d%03d"
+                        all_files_exist = [os.path.exists(path_template %
+                                            (work_path, n_ens + 1, n_ens + 1, end_time,
+                                            proc_x, proc_y)) for proc_y in
+                                            range(1, nproc_y_enkf + 1)
+                                            for proc_x in range(1, nproc_x_enkf + 1)
+                                            for n_ens in cm_args.member_list]
+                    else:
+                        # Check for individual forecast member failure
+                        path_template = "%s/ENF%03d/enf%03d.hdf%06d_%03d%03d"
+                        all_files_exist = [os.path.exists(path_template %
+                                            (work_path, key[1:3], key[1:3], end_time,
+                                            proc_x, proc_y)) for proc_y in
+                                            range(1, nproc_y_dump + 1)
+                                            for proc_x in range(1, nproc_x_dump + 1)]
+                    if not all(all_files_exist):
+                        # Something went wrong! Resubmit the job if it's the first time it's
+                        # happened. Otherwise quit after this cycle.
+                        if(envname == 'rice'):
+                            queuename = 'dawson29'
+                            file_text = batch.gen(
+                                commands,
+                                queue=queuename,
+                                nnodes=n_nodes,
+                                ppn=ppn,
+                                timereq=wall_time + ":00",
+                                jobname=key)
+                        else:
+                            queuename = 'normal'
+                            file_text = batch.gen(
+                                commands,
+                                jobname=job_key,
+                                debugfile="%s/%s.output" %
+                                (debug_path,
+                                    key),
+                                nmpi=n_mpi,
+                                nnodes=n_nodes,
+                                queue=queuename,
+                                timereq=wall_time +
+                                ":00")
+                        if cm_args.submit:
+                            if job_submit_count[idx] == 1:
+                                print("Problem with {}! Resubmitting!".format(key))
+                                batch.submit(file_text)
+                                job_submit_count[idx] = 2
+                            else:
+                                print("Job {} failed a second time!".format(key),
+                                        "You might want to check that out...",
+                                        "Stopping after this cycle.")
+                                job_failed[idx] = True
+                        else:
+                            print("I would submit %s here ..." % key)
+                    else:
+                        print("Job {} completed successfully (I think)!".format(key))
+                        job_completed[idx] = True
+                        need_to_check = False
+                else:
+                    print("Job {} completed successfully (I think)!".format(key))
+                    job_completed[idx] = True
         else:
             for idx in range(len(job_completed)):
                 job_completed[idx] = True

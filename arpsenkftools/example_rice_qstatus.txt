@@ -1,0 +1,4 @@
+                                                                                  Req'd       Req'd       Elap
+Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+10313447.rice-adm.rcac  dawson29    dawson29 STDIN             11459     1     20       --  240:00:00 R  01:13:32

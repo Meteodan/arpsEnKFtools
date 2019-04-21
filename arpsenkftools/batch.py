@@ -48,23 +48,23 @@ def parseQLineKraken(line):
 def parseQLineRice(line):
     cols_order = ['id', 'username', 'queue', 'name', 'sessid', 'nnodes', 'ncores', 'reqmem', 'reqtime', 'state', 'timeuse'] #, 'timestart']
     cols = dict([
-        ('id',          slice(0,  7)),
-        ('username',    slice(24, 35)),
-        ('queue',       slice(36, 44)),
-        ('name',        slice(45, 61)),
-        ('sessid',      slice(62, 68)),
-        ('nnodes',      slice(69, 74)),
-        ('ncores',      slice(75, 81)),
-        ('reqmem',      slice(82, 88)),
-        ('reqtime',     slice(90, 98)),
-        ('state',       slice(99,100)),
-        ('timeuse',     slice(101,None)),
+        ('id',          slice(0,     8)),
+        ('username',    slice(24,   35)),
+        ('queue',       slice(36,   44)),
+        ('name',        slice(45,   61)),
+        ('sessid',      slice(62,   68)),
+        ('nnodes',      slice(69,   74)),
+        ('ncores',      slice(75,   81)),
+        ('reqmem',      slice(82,   91)),
+        ('reqtime',     slice(92,  101)),
+        ('state',       slice(102, 103)),
+        ('timeuse',     slice(104, None)),
     ])
 
     line_dict = {}
     for name in cols_order:
         line_dict[name] = line[cols[name]].strip()
-	#print line_dict[name]
+    #print line_dict[name]
     try:
         line_dict['id'] = int(line_dict['id'])
         #print line_dict['id']
@@ -111,6 +111,8 @@ _environment = {
         'mpiprog':'mpiexec',
         'mpiargs':'-n %d',
         'n_cores_per_node':20,
+        'running_state': 'R',
+        'complete_state': 'C'
     }
 }
 
@@ -126,7 +128,7 @@ class Batch(object):
         ppn = kwargs.get('ppn', 20)
         nnodes = kwargs.get('nnodes', 1)
         if ppn < 20 and nnodes > 1:
-            #print(self._env.keys())
+            # print(self._env.keys())
             try:
                 self._env.pop('-l naccesspolicy')
             except (KeyError):
@@ -173,7 +175,8 @@ class Batch(object):
     def displayQueue(self, queue):
         print("Queue State as of %s" % datetime.now().strftime("%H:%M:%S %d %b %Y"))
         for line in queue:
-            if line['state'].lower() == 'running':
+            # if line['state'].lower() == 'running':
+            if line['state'] == self._env['running_state']:
                 print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
             else:
                 print("%(name)s (PID %(id)d): %(state)s" % line)
@@ -193,6 +196,9 @@ class Batch(object):
 
     def getEnv(self):
         return self._envname
+
+    def getQueueStateNames(self):
+        return self._env['running_state'], self._env['complete_state']
 
 if __name__ == "__main__":
     bt = Batch('rice')
