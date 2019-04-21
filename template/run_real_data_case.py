@@ -658,7 +658,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         # Check for individual forecast member failure
                         path_template = "%s/ENF%03d/enf%03d.hdf%06d_%03d%03d"
                         all_files_exist = [os.path.exists(path_template %
-                                            (work_path, key[1:3], key[1:3], end_time,
+                                            (work_path, int(key[1:3]), int(key[1:3]), end_time,
                                             proc_x, proc_y)) for proc_y in
                                             range(1, nproc_y_dump + 1)
                                             for proc_x in range(1, nproc_x_dump + 1)]
@@ -1059,6 +1059,12 @@ def main():
     else:
         for t_ens in range(args.t_ens_start, args.t_ens_end, args.dt_assim_step):
             print("Generating timestep %d ..." % t_ens)
+
+            # TODO: insert logic to generate lookup tables if needed at the beginning of an
+            # experiment. For now, just manually do so.
+            # if t_ens == args.t_ens_start and not args.restart:
+            #     print("This is the beginning of the experiment, we need to generate lookup"
+            #           "tables for rfopt = 3!")
 
             start_time = t_ens
             end_time = t_ens + args.dt_assim_step
