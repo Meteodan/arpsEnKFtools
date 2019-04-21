@@ -99,10 +99,10 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
     nproc_x_enkf, nproc_y_enkf = cm_args.mpi_config_enkf
 
     extraneous_files = [
-        "%s/%s.hdf%06d.01" % (work_path, 'ena%(ens)03d', start_time),
-        "%s/%s.hdfgrdbas.01" % (work_path, 'ena%(ens)03d'),
-        "%s/%s.log" % (work_path, 'ena%(ens)03d'),
-        "%s/%s.maxmin" % (work_path, 'ena%(ens)03d'),
+        "%s/%s.hdf%06d*.01" % (work_path, 'ena%(ens)03d', start_time),
+        "%s/%s.hdfgrdbas*.01" % (work_path, 'ena%(ens)03d'),
+        "%s/%s.log*" % (work_path, 'ena%(ens)03d'),
+        "%s/%s.maxmin*" % (work_path, 'ena%(ens)03d'),
     ]
 
     read_split = split_files in ['read', 'both']
