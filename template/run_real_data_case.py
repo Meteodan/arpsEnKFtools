@@ -628,17 +628,16 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                 if key[:job_name_len] in jobs_queued:
                     jdy = jobs_queued.index(key[:job_name_len])
                     if queue[jdy]['state'] == complete_state:
-                        print("We are here!")
                         if cm_args.error_check:
                             need_to_check = True
                         else:
                             job_completed[idx] = True
                 else:
                     if cm_args.error_check:
-                        print("We are here! We need to check that the job was successful")
+                        print("Check that job {} was successful".format(suffix))
                         need_to_check = True
                     else:
-                        print("We are here! No error checking!")
+                        print("No error checking!")
                         job_completed[idx] = True
                 if need_to_check:
                     # TODO: check to make sure a CFL violation did not occur
@@ -663,7 +662,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                             range(1, nproc_y_dump + 1)
                                             for proc_x in range(1, nproc_x_dump + 1)]
                     if not all(all_files_exist):
-                        print("We are here! Not all files exist!")
+                        print("Not all files exist for job {}!".format(suffix))
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
                         if(envname == 'rice'):
@@ -715,6 +714,11 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         print("Failed:    " + "  ".join("{:d}".format(2) if job_failed[idx] else "{:d}".format(1)
                                         if job_submit_count[idx] == 2 else "{:d}".format(0) for
                                         idx, _ in enumerate(job_completed)))
+        if any(job_failed):
+            print("The following jobs failed twice. Check their output before trying again!")
+            print("Failed jobs: ".join("{:02d}".format(idx+1) for idx, job in enumerate(job_failed)
+                                       if not job))
+            exit()
         if all(job_completed):
             print("All jobs are completed, returning for the next step ...")
             return
