@@ -609,6 +609,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
 
     batch.getQueueStatus()
     need_to_check = False
+    print("cm_args.error_check",cm_args.error_check)
 
     while True:
         time.sleep(0.5 * 60)
@@ -637,6 +638,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         print("We are here! We need to check that the job was successful")
                         need_to_check = True
                     else:
+                        print("We are here! No error checking!")
                         job_completed[idx] = True
                 if need_to_check:
                     # TODO: check to make sure a CFL violation did not occur
