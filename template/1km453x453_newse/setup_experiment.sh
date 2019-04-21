@@ -7,7 +7,8 @@ BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/"
 RUNNAMEBASE="1km453x453"
 RUNNAMETAG="_newse"
 RUNNAME=${RUNNAMEBASE}${RUNNAMETAG}
-TEMPLATEDIR="${DEPOTBASE}apps/arpsEnKFtools/template/${RUNNAME}"
+TEMPLATEBASEDIR="${DEPOTBASE}apps/arpsEnKFtools/template/"
+TEMPLATEDIR="${TEMPLATEBASEDIR}${RUNNAME}"
 SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/${RUNNAMEBASE}.sfcdata"
 TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/${RUNNAMEBASE}.trndata"
 BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/${RUNNAMEBASE}_newseicbc/"
@@ -42,7 +43,7 @@ ln -sf ${ARPSENKFICEXE} arpsenkfic
 ln -sf ${ARPSENKFEXE} arpsenkf
 ln -sf ${RADARDIR} nexrad
 ln -sf ${SCATTDIR} scatt
-cp ${TEMPLATEDIR}/run_real_data_case.py .
+cp ${TEMPLATEBASEDIR}/run_real_data_case.py .
 cp ${TEMPLATEDIR}/run_real_data_case.csh .
 cp ${TEMPLATEDIR}/${RADFLAG} .
 mkdir -p inputfiletemplates
