@@ -634,6 +634,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                             job_completed[idx] = True
                 else:
                     if cm_args.error_check:
+                        print("We are here! We need to check that the job was successful")
                         need_to_check = True
                     else:
                         job_completed[idx] = True
@@ -660,6 +661,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                             range(1, nproc_y_dump + 1)
                                             for proc_x in range(1, nproc_x_dump + 1)]
                     if not all(all_files_exist):
+                        print("We are here! Not all files exist!")
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
                         if(envname == 'rice'):
@@ -697,6 +699,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         else:
                             print("I would submit %s here ..." % key)
                     else:
+                        print("We are here! Had to check but everything's ok!")
                         print("Job {} completed successfully (I think)!".format(key))
                         job_completed[idx] = True
                         need_to_check = False
