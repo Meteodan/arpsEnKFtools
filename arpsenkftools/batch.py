@@ -177,7 +177,10 @@ class Batch(object):
         for line in queue:
             # if line['state'].lower() == 'running':
             if line['state'] == self._env['running_state']:
-                print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
+                if self._envname == 'rice':
+                    print("%(name)s (PID %(id)d): %(state)s (%(timeuse)s elapsed)" % line)
+                else:
+                    print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
             else:
                 print("%(name)s (PID %(id)d): %(state)s" % line)
 
