@@ -620,7 +620,6 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_name_len = max(len(n) for n in jobs_queued)
 
             for idx, suffix in enumerate(job_suffixes):
-                need_to_check = False
                 if suffix == 'ekf':
                     key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
                 else:
@@ -701,9 +700,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         print("Job {} completed successfully (I think)!".format(key))
                         job_completed[idx] = True
                         need_to_check = False
-                else:
+                elif job_completed[idx]:
                     print("Job {} completed successfully (I think)!".format(key))
-                    job_completed[idx] = True
         else:
             for idx in range(len(job_completed)):
                 job_completed[idx] = True
