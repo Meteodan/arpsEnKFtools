@@ -15,7 +15,7 @@ def perdelta(start, end, delta):
 
 ### USER SPECIFICATIONS ###
 # Absolute path to directory where gridtilt files reside.
-basedir = "/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
+basedir = "/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
 radnames = ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH']
 startTime = D.datetime(2016,03,31,18,00,00)
 endTime = D.datetime(2016,04,01,03,00,00)
