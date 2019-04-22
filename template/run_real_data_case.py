@@ -718,10 +718,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         print("Failed:    " + "  ".join("{:d}".format(2) if job_failed[idx] else "{:d}".format(1)
                                         if job_submit_count[idx] == 2 else "{:d}".format(0) for
                                         idx, _ in enumerate(job_completed)))
-        # if any(job_failed):
-        #     print("The following jobs failed twice. Check their output before trying again!")
-        #     print("Failed jobs: ".join("{:02d}".format(idx+1) for idx, job in enumerate(job_failed)
-        #                                if not job))
+        if any(job_failed):
+            #     print("The following jobs failed twice. Check their output before trying again!")
+            #     print("Failed jobs: ".join("{:02d}".format(idx+1) for idx, job in enumerate(job_failed)
+            #                                if not job))
             exit()
         if all(job_completed):
             print("All jobs are completed, returning for the next step ...")
