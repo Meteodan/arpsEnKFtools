@@ -665,6 +665,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         print("Not all files exist for job {}!".format(suffix))
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
+                        commands=command_lines[key]
                         if(envname == 'rice'):
                             queuename = 'dawson29'
                             file_text = batch.gen(
@@ -674,6 +675,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                 ppn=ppn,
                                 timereq=wall_time + ":00",
                                 jobname=key)
+                            print(file_text)
                         else:
                             queuename = 'normal'
                             file_text = batch.gen(
