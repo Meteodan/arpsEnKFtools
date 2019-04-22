@@ -626,7 +626,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                 else:
                     job_key = "%s-%s_%d-%d" % (suffix, cm_args.job_name, start_time, end_time)
                 if job_key[:job_name_len] in jobs_queued:
-                    jdy = jobs_queued.index(key[:job_name_len])
+                    jdy = jobs_queued.index(job_key[:job_name_len])
                     if queue[jdy]['state'] == complete_state:
                         if cm_args.error_check:
                             need_to_check = True
@@ -693,23 +693,23 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                 ":00")
                         if cm_args.submit:
                             if job_submit_count[idx] == 1:
-                                print("Problem with {}! Resubmitting!".format(key))
+                                print("Problem with {}! Resubmitting!".format(job_key))
                                 batch.submit(file_text)
                                 job_submit_count[idx] = 2
                             else:
-                                print("Job {} failed a second time!".format(key),
+                                print("Job {} failed a second time!".format(job_key),
                                         "You might want to check that out...",
                                         "Stopping after this cycle.")
                                 job_failed[idx] = True
                         else:
-                            print("I would submit %s here ..." % key)
+                            print("I would submit %s here ..." % job_key)
                     else:
                         print("We are here! Had to check but everything's ok!")
-                        print("Job {} completed successfully (I think)!".format(key))
+                        print("Job {} completed successfully (I think)!".format(job_key))
                         job_completed[idx] = True
                         need_to_check = False
                 elif job_completed[idx]:
-                    print("Job {} completed successfully (I think)!".format(key))
+                    print("Job {} completed successfully (I think)!".format(job_key))
         else:
             for idx in range(len(job_completed)):
                 job_completed[idx] = True
