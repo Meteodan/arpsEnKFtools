@@ -622,10 +622,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             for idx, suffix in enumerate(job_suffixes):
                 need_to_check = False
                 if suffix == 'ekf':
-                    key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
+                    job_key = "%s-%s_%d" % (suffix, cm_args.job_name, end_time)
                 else:
-                    key = "%s-%s_%d-%d" % (suffix, cm_args.job_name, start_time, end_time)
-                if key[:job_name_len] in jobs_queued:
+                    job_key = "%s-%s_%d-%d" % (suffix, cm_args.job_name, start_time, end_time)
+                if job_key[:job_name_len] in jobs_queued:
                     jdy = jobs_queued.index(key[:job_name_len])
                     if queue[jdy]['state'] == complete_state:
                         if cm_args.error_check:
@@ -646,6 +646,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                     # by the job. If not, something went wrong (likely a lustre problem)
                     # Try resubmitting the job.
                     if suffix == 'ekf':
+                        key = 'enkf'
                         path_template = "%s/EN%03d/ena%03d.hdf%06d_%03d%03d"
                         all_files_exist = [os.path.exists(path_template %
                                             (work_path, n_ens + 1, n_ens + 1, end_time,
@@ -655,9 +656,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                             for n_ens in cm_args.member_list]
                     else:
                         # Check for individual forecast member failure
+                        key = 'ena{:03d}'.format(int(job_key[1:3]))
                         path_template = "%s/ENF%03d/enf%03d.hdf%06d_%03d%03d"
                         all_files_exist = [os.path.exists(path_template %
-                                            (work_path, int(key[1:3]), int(key[1:3]), end_time,
+                                            (work_path, int(job_key[1:3]), int(job_key[1:3]), end_time,
                                             proc_x, proc_y)) for proc_y in
                                             range(1, nproc_y_dump + 1)
                                             for proc_x in range(1, nproc_x_dump + 1)]
@@ -674,7 +676,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                 nnodes=n_nodes,
                                 ppn=ppn,
                                 timereq=wall_time + ":00",
-                                jobname=key)
+                                jobname=job_key)
                             print(file_text)
                         else:
                             queuename = 'normal'
@@ -683,7 +685,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                 jobname=job_key,
                                 debugfile="%s/%s.output" %
                                 (debug_path,
-                                    key),
+                                    job_key),
                                 nmpi=n_mpi,
                                 nnodes=n_nodes,
                                 queue=queuename,
