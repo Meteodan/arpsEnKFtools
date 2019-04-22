@@ -653,7 +653,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                                             proc_x, proc_y)) for proc_y in
                                             range(1, nproc_y_enkf + 1)
                                             for proc_x in range(1, nproc_x_enkf + 1)
-                                            for n_ens in cm_args.member_list]
+                                            for n_ens in cm_args.members]
                     else:
                         # Check for individual forecast member failure
                         key = 'ena{:03d}'.format(int(job_key[1:3]))
@@ -667,7 +667,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         print("Not all files exist for job {}!".format(suffix))
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
-                        commands=command_lines[key]
+                        commands = command_lines[key]
                         if(envname == 'rice'):
                             queuename = 'dawson29'
                             file_text = batch.gen(
@@ -718,10 +718,10 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         print("Failed:    " + "  ".join("{:d}".format(2) if job_failed[idx] else "{:d}".format(1)
                                         if job_submit_count[idx] == 2 else "{:d}".format(0) for
                                         idx, _ in enumerate(job_completed)))
-        if any(job_failed):
-            print("The following jobs failed twice. Check their output before trying again!")
-            print("Failed jobs: ".join("{:02d}".format(idx+1) for idx, job in enumerate(job_failed)
-                                       if not job))
+        # if any(job_failed):
+        #     print("The following jobs failed twice. Check their output before trying again!")
+        #     print("Failed jobs: ".join("{:02d}".format(idx+1) for idx, job in enumerate(job_failed)
+        #                                if not job))
             exit()
         if all(job_completed):
             print("All jobs are completed, returning for the next step ...")
