@@ -639,7 +639,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                     else:
                         print("No error checking!")
                         job_completed[idx] = True
-                if need_to_check:
+                if need_to_check and not job_completed[idx]:
                     # TODO: check to make sure a CFL violation did not occur
 
                     # Check to see if all the appropriate output files have been written
