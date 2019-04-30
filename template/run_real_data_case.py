@@ -307,6 +307,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     kwargs['mult_inflat'] = 0
     kwargs['adapt_inflat'] = 0
     kwargs['relax_inflat'] = 0
+    kwargs['add_inflat'] = 0
 
     try:
         covariance_inflation = covariance_inflation.split(',')
@@ -333,10 +334,21 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                 kwargs['adapt_inflat'] = 1
                 kwargs['rlxf'] = inflation_factor
 
+            elif inflation_method == "adapt2":
+                # Relaxation to Prior Spread ("Adaptive") inflation, version 2
+                kwargs['adapt_inflat'] = 2
+                kwargs['rlxf'] = inflation_factor
+
             elif inflation_method == "relax":
                 # Relaxation to Prior Perturbation ("Relaxation") inflation
                 kwargs['relax_inflat'] = 1
                 kwargs['rlxf'] = inflation_factor
+        else:
+            inflation_method = cov_infl
+            if inflation_method == "add":
+                # Additive inflation. Perturbation standard deviations must be set up ahead of
+                # time in the arpsenkf.input template file
+                kwargs['add_inflat'] = 1
 
     if cm_args.algorithm == 'ensrf':
         kwargs['anaopt'] = 2
