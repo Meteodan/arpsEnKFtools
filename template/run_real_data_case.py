@@ -421,6 +421,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                                                enkf_input_file_name,
                                                enkf_debug_file_name),
         "mv *hdfwgt* %s/%s/" % (work_path, "wgt"),
+        "mv K* %s/%s/" % (work_path, "stats"),
         "cd -",
         "",
     ]
