@@ -822,6 +822,11 @@ def main():
         os.mkdir(batch_path, 0o755)
     if not os.path.exists(hx_path):
         os.mkdir(hx_path, 0o755)
+    if not os.path.exists(work_path + '/wgt'):
+        os.mkdir(work_path + '/wgt')
+    if not os.path.exists(work_path + '/stats'):
+        os.mkdir(work_path + '/stats')
+
 
     member_list = [m - 1 for m in args.members]
     if member_list == []:
