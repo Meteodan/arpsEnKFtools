@@ -3,25 +3,25 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - blas=1.1
-  - ca-certificates=2019.3.9
-  - certifi=2019.3.9
-  - libcxx=7.0.0
-  - libffi=3.2.1
-  - libgfortran=3.0.1
-  - llvm-meta=7.0.0
-  - ncurses=6.1
-  - numpy=1.16.2
-  - openblas=0.3.3
-  - openssl=1.1.1b
-  - pip=19.0.3
+  - blas
+  - ca-certificates
+  - certifi
+  - libcxx
+  - libffi
+  - libgfortran
+  - llvm-meta
+  - ncurses
+  - numpy
+  - openblas
+  - openssl
+  - pip
   - python=3.6.7
-  - readline=7.0
-  - setuptools=40.8.0
-  - sqlite=3.26.0
-  - tk=8.6.9
-  - wheel=0.33.1
-  - xz=5.2.4
-  - zlib=1.2.11
+  - readline
+  - setuptools
+  - sqlite
+  - tk
+  - wheel
+  - xz
+  - zlib
 prefix: /Users/dawson29/anaconda2/envs/arpsEnKFtools
 
