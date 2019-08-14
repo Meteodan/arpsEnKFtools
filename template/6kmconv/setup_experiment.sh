@@ -4,24 +4,25 @@
 SCRATCHBASE="/scratch/rice/d/dawson29/"
 DEPOTBASE="/depot/dawson29/"
 BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/"
-RUNNAMEBASE="3km153x153"
-RUNNAMETAG="_newse"
+RUNNAMEBASE="6kmconv"
+RUNNAMETAG=""
 RUNNAME=${RUNNAMEBASE}${RUNNAMETAG}
 TEMPLATEBASEDIR="${DEPOTBASE}apps/arpsEnKFtools/template/"
 TEMPLATEDIR="${TEMPLATEBASEDIR}${RUNNAME}"
-SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/${RUNNAMEBASE}.sfcdata"
-TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/${RUNNAMEBASE}.trndata"
-BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/${RUNNAMEBASE}_newseicbc/"
-RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
-SCATTDIR="/home/dawson29/arps5.4_main/data/scatt/"
+SFCDATA="${DEPOTBASE}data/Projects/VORTEXSE/simulations/ARPS/sfcdata/6km303x303.sfcdata"
+TRNDATA="${DEPOTBASE}data/Projects/VORTEXSE/simulations/ARPS/trndata/6km303x303.trndata"
+BOUNDARYDIR="${DEPOTBASE}data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6km033116NAM303x303bgandbc/"
+RADARDIR="${DEPOTBASE}data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
+CONVDATADIR="${DEPOTBASE}data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/convobsdata/"
+SCATTDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/scatt_6kmconv/"
 ARPSEXE="/home/dawson29/arps5.4_main/bin/arps_mpi"
 ARPSENKFICEXE="/home/dawson29/arps5.4_main/bin/arpsenkfic"
 ARPSENKFEXE="/home/dawson29/arps5.4_main/bin/arpsenkf_mpi"
-RADFLAG="2016_IOP3.radflag"
-PERTURBIC=0
+RADFLAG="template.radflag"
+PERTURBIC=1
 # The following are only needed when running arpsenkfic
-INIFILE="3km033116NAM107x107bgandbc.hdf010800"
-INIBASE="3km033116NAM107x107bgandbc.hdfgrdbas"
+INIFILE="6km033116NAMnoDA.hdf010800"
+INIBASE="6km033116NAMnoDA.hdfgrdbas"
 
 
 #Create base experiment directory and change directories to it
@@ -43,6 +44,7 @@ ln -sf ${ARPSENKFICEXE} arpsenkfic
 ln -sf ${ARPSENKFEXE} arpsenkf
 ln -sf ${RADARDIR} nexrad
 ln -sf ${SCATTDIR} scatt
+ln -sf ${CONVDATADIR} obs
 cp ${TEMPLATEBASEDIR}/run_real_data_case.py .
 cp ${TEMPLATEDIR}/run_real_data_case.csh .
 cp ${TEMPLATEDIR}/${RADFLAG} .
@@ -50,3 +52,4 @@ mkdir -p inputfiletemplates
 cp ${TEMPLATEDIR}/arps.input inputfiletemplates/
 cp ${TEMPLATEDIR}/arpsenkfic.input inputfiletemplates/
 cp ${TEMPLATEDIR}/arpsenkf.input inputfiletemplates/
+cp ${TEMPLATEDIR}/blacklist.sfc .
