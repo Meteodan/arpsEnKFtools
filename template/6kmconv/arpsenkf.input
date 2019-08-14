@@ -97,15 +97,15 @@
 !----------------------------------------------------------------------=*
 
  &arps_input
-   nproc_x_in = 6,
-   nproc_y_in = 5,
+   nproc_x_in = 5,
+   nproc_y_in = 3,
 
    modopt     = 1,
    magnitude_processor = 5,
    wrfoutopt  = 0,
      phupdtopt  = 0,
 
-   inidirname = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153//3km153x153//ENF%3N',
+   inidirname = './',
    nocolons = 0,
  /
 
@@ -546,7 +546,7 @@
 !----------------------------------------------------------------------=*
 
  &enkf_conventional
-   cvndatadir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newse//obs/',
+   cvndatadir = './data',
    innovcvn = 1,
 
    sfcassim = 0,
