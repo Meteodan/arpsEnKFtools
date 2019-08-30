@@ -1,0 +1,164 @@
+#!/bin/bash
+
+# Creates a set of radar remap input files for an ARPSENKF assimilation cycle
+
+DRYRUN=0			# 1 for a dry run (i.e. don't actually run 88d2arps, but see what it would do)
+BASEDIR="/home/sharm261/arpsEnKFtools/radremap_scripts/3km153x153_OK" # Base directory containing radar remapper script and templates
+RADNAME="KTLX"			# Radar name (4-character identifier)
+RUNNAME="3km153x153"		# Job runname
+RUNNAMETAG=""				#Additional runname "variation" identifier
+WORKDIR="/depot/dawson29/data/users/sharm261/processed_radar/${RADNAME}_153x153"
+EXE88D2ARPS="/home/sharm261/arps5.4/bin/88d2arps"
+NTHREADS=5             # Number of simultaneous jobs to run at a time
+
+NX=153					# Number of grid points in X direction
+NY=153					# Number of grid points in Y direction
+NZ=53					# Number of grid points in Z direction
+
+RES=3000					# Horizontal resolution of model grid (m)
+let RESKM=RES/1000
+
+XCTR1=234000.0
+YCTR1=240000.0
+
+XCTR1_2=900000.0
+YCTR1_2=857000.0
+CTRLAT=35.3331
+CTRLON=-97.2775
+
+DZ=400
+STRHOPT=1
+DZMIN=20
+STRHTUNE=0.2
+
+if [ "${RESKM}" -eq 0 ]
+then
+  TRNFILE="${RES}m${NX}x${NY}.trndata"
+  SFCFILE="${RES}m${NX}x${NY}.sfcdata"
+else
+  TRNFILE="${RESKM}km${NX}x${NY}.trndata"
+  SFCFILE="${RESKM}km${NX}x${NY}.sfcdata"
+fi
+
+TRNDIR="/home/sharm261/arpsenkf_trial/trndata/"
+SFCDIR="/home/sharm261/arpsenkf_trial/sfcdata/"
+
+DTBIG=2.0
+DTSML=1.0
+
+TKEOPT=3
+MPHYOPT=15
+N0RAIN=8.0e6
+NSTYP=1
+
+INPUTDIR="/home/sharm261/real_case_trial/3km051913NAM153x153bgandbc/bgandbc/"
+INPUTHDR="3km051913NAM153x153bgandbc"
+RADARDIR="/depot/dawson29/data/users/sharm261/May19_2013_KTLX/"
+
+year=2013
+month=5
+initday=19
+day=${initday}				#Initial day of cycle
+inithour=18                             #Initial hour of cycle
+hour=${inithour}
+initmin=0
+min=${initmin}
+timesec=0				#Initial time in input ARPS history dump
+
+time1=${year}$(printf "%02g" ${month})$(printf "%02g" ${day})$(printf "%02g" ${hour})$(printf "%02g" ${min})
+time2="${year}-$(printf "%02g" ${month})-$(printf "%02g" ${day}).$(printf "%02g" ${hour}):$(printf "%02g" ${min}):00"
+initime2=${time2}
+time3=$(printf "%06d" ${timesec})
+
+#radarfileprefix=${RADNAME}${year}$(printf "%02g" ${month})${initday}_${inithour}
+radarfileprefix=${RADNAME}
+
+cp ${BASEDIR}/radremap_88D.input_template ${WORKDIR}
+cp ${BASEDIR}/radarinfo.dat ${WORKDIR}
+
+for RADNAME in "KTLX" 
+do
+
+RADARDIR="/depot/dawson29/data/users/sharm261/May19_2013_${RADNAME}/"
+WORKDIR="/depot/dawson29/data/users/sharm261/processed_radar/${RADNAME}_${NX}x${NY}/"
+mkdir -p ${WORKDIR}
+
+cp radremap_88D.input_template ${WORKDIR}
+cp radarinfo.dat ${WORKDIR}
+
+radarfileprefix=${RADNAME}
+
+cd ${RADARDIR}
+FILENAMES=$(ls ${radarfileprefix}*)
+cd ${WORKDIR}
+
+count=0
+for file in ${FILENAMES}
+do
+  radtime=${file:13:6} # `expr substr $file 14 6`
+  grdbasfil="${INPUTDIR}${INPUTHDR}.hdfgrdbas"
+  hisfil="${INPUTDIR}${INPUTHDR}.hdf${time3}"
+
+  # Create the 88d2arps input file
+  echo ${file}
+  echo ${radtime}
+  curfil="radremap_88D.input_${radtime}"
+  cp radremap_88D.input_template ${curfil}
+
+  perl -pi -e "s/NXTMP/${NX}/g" ${curfil}
+  perl -pi -e "s/NYTMP/${NY}/g" ${curfil}
+  perl -pi -e "s/NZTMP/${NZ}/g" ${curfil}
+
+  perl -pi -e "s/TIME2/${time2}/g" ${curfil}
+  perl -pi -e "s!GRDBASTMP!${grdbasfil}!g" ${curfil}
+  perl -pi -e "s!HISFILTMP!${hisfil}!g" ${curfil}
+
+  perl -pi -e "s/DXTMP/${RES}.000/g" ${curfil}
+  perl -pi -e "s/DYTMP/${RES}.000/g" ${curfil}
+
+  perl -pi -e "s/DZTMP/${DZ}/g" ${curfil}
+  perl -pi -e "s/STRHOPTTMP/${STRHOPT}/g" ${curfil}
+  perl -pi -e "s/DZMINTMP/${DZMIN}/g" ${curfil}
+  perl -pi -e "s/STRHTUNETMP/${STRHTUNE}/g" ${curfil}
+
+  perl -pi -e "s/CTRLATTMP/${CTRLAT}/g" ${curfil}
+  perl -pi -e "s/CTRLONTMP/${CTRLON}/g" ${curfil}
+  perl -pi -e "s/RUNNAMETMP/${RUNNAME}/g" ${curfil}
+  perl -pi -e "s/OUTTIMETMP/${time3}/g" ${curfil}
+
+  perl -pi -e "s!RADNAMETMP!${RADNAME}!g" ${curfil}
+  perl -pi -e "s!RADFILTMP!${RADARDIR}${file}!g" ${curfil}
+
+  # Run 88d2arps for current volume
+  if [ "${DRYRUN}" -eq 1 ]
+  then
+    echo "I would have run: ${EXE88D2ARPS} < ${curfil} > radremap_88D.output_${radtime}"
+  else
+    ${EXE88D2ARPS} < ${curfil} > radremap_88D.output_${radtime} &
+  fi
+
+  # Create a directory for the current radar time and stuff the auxilliary files into it
+  #if [ -e "${INPUTHDR}.hdfrefl2d${time3}" ]
+  if [ -e *refl* ]
+  then
+    mkdir -p ${radtime}
+    mv *refl* ${radtime}/
+    mv *radv* ${radtime}/
+  fi
+
+  #if [ -e "${RADNAME}.${year}$(printf "%02g" ${month})$(printf "%02g" ${day}).${radtime}.tilts"]
+  if [ -e *tilts ]
+  then
+    mkdir -p tiltfiles
+    mv *tilts tiltfiles
+  fi
+
+  let count=count+1
+  if [ "${count}" -eq ${NTHREADS} ]
+  then
+    wait
+    count=0
+  fi
+
+done # Radar file loop
+done # Outer radar name loop
