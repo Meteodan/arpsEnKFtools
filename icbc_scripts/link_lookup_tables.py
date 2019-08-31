@@ -4,12 +4,12 @@
 import os
 
 # Absolute path to directory where lookup tables reside
-basedir = "/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/scatt_1km453x453/S-band/"
-category_names = ['RAIN', 'RIME']
+basedir = "/depot/dawson29/data/users/sharm261/scatt_3km153x153/S-band/"
+category_names = ['RAIN', 'SNOW', 'RIME']
 moment_names = ['Zh', 'Zhv', 'Zv', 'k']
 density_list = range(100, 1000, 100)
-nproc_x = 15
-nproc_y = 6
+nproc_x = 3
+nproc_y = 5
 
 # Construct the list of target lookup table file names
 target_filenames_by_category = []
