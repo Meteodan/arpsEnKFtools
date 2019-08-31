@@ -429,8 +429,8 @@
 
      inifmt   = 3,
      inisplited = 0,
-     inifile = './6km033116NAMnoDA.hdf010800',
-     inigbf = './6km033116NAMnoDA.hdfgrdbas',
+     inifile = './3km051913NAM153x153bgandbc.hdf000000',
+     inigbf = './3km051913NAM153x153bgandbc.hdfgrdbas',
      ensfile = 'may20.bin000000',
      ensgbf = 'may20.bingrdbas',
 

@@ -793,9 +793,10 @@ def main():
     ap.add_argument('--save-batch', dest='save_batch', action='store_true')
     ap.add_argument('--ppn', dest='ppn_req', default=-1, type=int)
     ap.add_argument('--error-check', dest='error_check', action='store_true')
+    ap.add_argument('--user-name', dest='user_name', default='dawson29')
 
     args = ap.parse_args()
-    batch = Batch('rice')  # stampede
+    batch = Batch('rice', username=args.user_name)  # stampede
 
 #   work_path = "%s/%s" % (args.base_path, args.job_name)
 #   input_path = "%s/input" % args.base_path
