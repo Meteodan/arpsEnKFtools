@@ -101,3 +101,5 @@ laiout = 1
 rfnsout = 1
 vegout = 1
 ndviout = 1
+
+arpssfc_output_dir = os.path.join(project_depot_dir, 'sfcdata')
