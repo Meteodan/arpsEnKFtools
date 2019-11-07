@@ -45,8 +45,6 @@ RUN_ARPSINTRP = 0
 mkdir -p ${BASEDIR} || exit 1
 cd ${BASEDIR}
 
-
-
 RADFLAG="template.radflag"
 PERTURBIC=1
 # The following are only needed when running arpsenkfic

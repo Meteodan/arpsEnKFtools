@@ -138,7 +138,7 @@ def editNamelistFile(file_name_src, file_name_dest, **kwargs):
 
         file_dest = open(file_name_dest, 'w', encoding='utf8')
         for line in buffer:
-            file.dest.write(line)
+            file_dest.write(line)
         file_dest.close()
 
     return
