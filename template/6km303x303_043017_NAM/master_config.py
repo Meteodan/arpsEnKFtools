@@ -2,6 +2,7 @@
 master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
+from datetime import datetime, timedelta
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
@@ -15,6 +16,8 @@ IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
 icbc_scr_dir = os.path.join(IOP_scr_dir, 'icbc')
+ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
+                                  IOP_name)
 
 # Experiment name and directories
 exp_name_base = '6km303x303_043017'
@@ -28,7 +31,7 @@ arps_base_dir = '/home/dawson29/arps5.4_main'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
-ext2arps_exe_path = os.path.join(arps_bin_dir, 'ext2arps_mpi')
+ext2arps_exe_path = os.path.join(arps_bin_dir, 'ext2arps')
 arps_exe_path = os.path.join(arps_bin_dir, 'arps_mpi')
 arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
@@ -42,7 +45,8 @@ arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
 # Basic experiment parameters
 num_ensemble_members = 40
 # Initial time of entire experiment
-initial_time = '201704300000'
+initial_time = '201704300600'
+initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
@@ -103,3 +107,60 @@ vegout = 1
 ndviout = 1
 
 arpssfc_output_dir = os.path.join(project_depot_dir, 'sfcdata')
+
+# EXT2ARPS parameters
+ext2arps_initime = initial_datetime.strftime('%Y-%m-%d.%H:%M:00')
+dmp_out_joined = 1,
+hdmpfmt = 3,
+hdfcompr = 2,
+exbcdmp = 3,
+exbchdfcompr = 2
+extdadmp = 1
+qcexout = 1
+qrexout = 1
+qiexout = 1
+qsexout = 1
+qhexout = 1
+qgexout = 1
+nqexout = 1
+zqexout = 1
+ext2arps_output_dir = os.path.join(IOP_depot_dir, exp_name+'_icbc')
+ternopt = 2
+terndta = os.path.join(arpstrn_output_dir, exp_name + '.trndata')
+ternfmt = 3
+extdopt = 116
+extdfmt = 3
+dir_extd = ext_model_data_dir
+extdname = 'nam_218'
+nextdfil = 18
+# Note, for now explicitly list each time string here. We can work on a more
+# compact solution later
+extdtimes = [
+    '2017-04-30.06:00:00+000:00:00',
+    '2017-04-30.06:00:00+001:00:00',
+    '2017-04-30.06:00:00+002:00:00',
+    '2017-04-30.06:00:00+003:00:00',
+    '2017-04-30.06:00:00+004:00:00',
+    '2017-04-30.06:00:00+005:00:00',
+    '2017-04-30.12:00:00+000:00:00',
+    '2017-04-30.12:00:00+001:00:00',
+    '2017-04-30.12:00:00+002:00:00',
+    '2017-04-30.12:00:00+003:00:00',
+    '2017-04-30.12:00:00+004:00:00',
+    '2017-04-30.12:00:00+005:00:00',
+    '2017-04-30.18:00:00+000:00:00',
+    '2017-04-30.18:00:00+001:00:00',
+    '2017-04-30.18:00:00+002:00:00',
+    '2017-04-30.18:00:00+003:00:00',
+    '2017-04-30.18:00:00+004:00:00',
+    '2017-04-30.18:00:00+005:00:00',
+]
+iorder = 3
+intropt = 1
+nsmooth = 1
+exttrnopt = 2
+extntmrg = 12
+extsfcopt = 0
+ext_lbc = 1
+ext_vbc = 1
+grdbasopt = 1
