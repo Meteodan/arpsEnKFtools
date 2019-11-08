@@ -23,8 +23,15 @@ ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_
 exp_name_base = '6km303x303_043017'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
+exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
+exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
 template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
+external_icbc_dir = os.path.join(IOP_depot_dir, exp_name+'_icbc')
+sfcdata_dir = os.path.join(project_depot_dir, 'sfcdata')
+sfcdata_path = os.path.join(sfcdata_dir, exp_name + '.sfcdata')
+trndata_dir = os.path.join(project_depot_dir, 'trndata')
+trndata_path = os.path.join(trndata_dir, exp_name + '.trndata')
 
 # Executable file names and directories
 arps_base_dir = '/home/dawson29/arps5.4_main'
@@ -51,6 +58,7 @@ initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
 external_run_name = '6km303x303_043017_NAM_icbc'
+perturb_ic = 1
 
 # ARPS comment_lines namelist parameters
 nocmnt = 2
@@ -87,7 +95,7 @@ arpstrn_param = {
     'lat_sample': 180,
     'lon_sample': 180,
     'trnanxopt': 2,
-    'dirname': os.path.join(project_depot_dir, 'trndata'),
+    'dirname': trndata_dir,
     'terndmp': 3
 }
 
@@ -114,7 +122,7 @@ arpssfc_param = {
     'rfnsout': 1,
     'vegout': 1,
     'ndviout': 1,
-    'dirname': os.path.join(project_depot_dir, 'sfcdata')
+    'dirname': sfcdata_dir
 }
 
 # EXT2ARPS parameters
@@ -134,9 +142,9 @@ ext2arps_param = {
     'qgexout': 1,
     'nqexout': 1,
     'zqexout': 1,
-    'dirname': os.path.join(IOP_depot_dir, exp_name+'_icbc'),
+    'dirname': external_icbc_dir,
     'ternopt': 2,
-    'terndta': os.path.join(arpstrn_param['dirname'], exp_name + '.trndata'),
+    'terndta': trndata_path,
     'ternfmt': 3,
     'extdopt': 116,
     'extdfmt': 3,
@@ -208,4 +216,53 @@ arps_param = {
     'dtsfc': 7.5,
     'hdmpfmt': 103,
     'thisdmp': 300.0
+}
+
+# ARPSENKFIC parameters
+arpsenkfic_param = {
+    'iniprtopt': 2,
+    'iniprt_ptprt': 2,
+    'iniprt_qv': 2,
+    'smoothopt': 2,
+    'lhor': 36000.0,
+    'lver': 7200.0,
+    'prtibgn': 3,
+    'prtiend': grid_param['nx'] - 2,
+    'prtjbgn': 3,
+    'prtjend': grid_param['ny'] - 2,
+    'prtkbgn': 3,
+    'prtkend': grid_param['nz'] - 2,
+    'prtibgnu': 3,
+    'prtiendu': grid_param['nx'] - 2,
+    'prtjbgnv': 3,
+    'prtjendv': grid_param['ny'] - 2,
+    'prtkbgnw': 3,
+    'prtkendw': grid_param['nz'] - 2,
+    'r0h_uv': 6000.0,
+    'r0v_uv': 3000.0,
+    'r0h_w': 6000.0,
+    'r0v_w': 3000.0,
+    'r0h_ptprt': 6000.0,
+    'r0v_ptprt': 3000.0,
+    'r0h_pprt': 6000.0,
+    'r0v_pprt': 3000.0,
+    'r0h_qv': 6000.0,
+    'r0v_qv': 3000.0,
+    'r0h_qli': 6000.0,
+    'r0v_qli': 3000.0,
+    'stdu': 2.0,
+    'stdv': 2.0,
+    'stdw': 0.0,
+    'stdptprt': 1.0,
+    'stdpprt': 0.0,
+    'stdqv': 0.0006,
+    'stdqrelative': 0.1,
+}
+
+# ARPSENKF parameters
+arpsenkf_param = {
+    'sfcweight': 2,
+    'sfcr0h': 300000.0,
+    'sfcr0h_meso': 50000.0,
+    'sfcr0v': 6000.0,
 }
