@@ -5,9 +5,7 @@ the (python) configuration file for that experiment, from which it imports the a
 
 import os
 import sys
-import shutil
 import subprocess
-from datetime import datetime, timedelta
 from arpsenkftools.editNamelist import editNamelistFile
 from arpsenkftools.io_utils import import_all_from
 
@@ -39,35 +37,16 @@ arpstrn_input_exp_path = os.path.join(arpstrn_work_dir,
 arpstrn_output_exp_path = os.path.join(arpstrn_work_dir,
                                        'arpstrn_{}.output'.format(config.exp_name))
 
-# Copy the arpstrn namelist template file to the working directory
-# shutil.copy(arpstrn_input_template_path, arpstrn_work_dir)
-
 # Edit the namelist file
 editNamelistFile(arpstrn_input_template_path,
                  arpstrn_input_exp_path,
                  runname=config.exp_name,
-                 nx=config.nx,
-                 ny=config.ny,
-                 nz=config.nz,
-                 dx=config.dx,
-                 dy=config.dy,
-                 ctrlat=config.ctrlat,
-                 ctrlon=config.ctrlon,
-                 mapproj=config.mapproj,
-                 trulat1=config.trulat1,
-                 trulat2=config.trulat2,
-                 trndataopt=config.trndataopt,
-                 dir_trndata=config.dir_trndata,
-                 nsmth=config.nsmth,
-                 lat_sample=config.lat_sample,
-                 lon_sample=config.lon_sample,
-                 trnanxopt=config.trnanxopt,
-                 dirname=config.arpstrn_output_dir,
-                 terndmp=config.terndmp)
+                 **config.grid_param,
+                 **config.arpstrn_param)
 
 # Run arpstrn
 
-with open(arpstrn_input_exp_path, 'r') as input, \
-     open(arpstrn_output_exp_path, 'w') as output:
+with open(arpstrn_input_exp_path, 'r') as input_file, \
+     open(arpstrn_output_exp_path, 'w') as output_file:
     print("Running {} for {}".format(config.arpstrn_exe_path, arpstrn_input_exp_path))
-    subprocess.call(config.arpstrn_exe_path, stdin=input, stdout=output, shell=True)
+    subprocess.call(config.arpstrn_exe_path, stdin=input_file, stdout=output_file, shell=True)

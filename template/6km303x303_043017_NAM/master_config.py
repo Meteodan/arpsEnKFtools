@@ -57,110 +57,155 @@ nocmnt = 2
 comments = ['ARPS 5.4', 'April 30th, 2017 VORTEX-SE IOP4C']
 
 # Grid and map projection parameters
-nx = 303
-ny = 303
-nz = 53
-dx = 6000.0
-dy = 6000.0
-ctrlat = 34.80
-ctrlon = -87.68
-mapproj = 2
-trulat1 = 33.0
-trulat2 = 36.0
+grid_param = {
+    'nx': 303,
+    'ny': 303,
+    'nz': 53,
+    'dx': 6000.0,
+    'dy': 6000.0,
+    'dz': 400.0,
+    'strhopt': 1,
+    'dzmin': 20.0,
+    'zrefsfc': 0.0,
+    'dlayer1': 0.0,
+    'dlayer2': 1.0e5,
+    'strhtune': 0.2,
+    'zflat': 1.0e5,
+    'ctrlat': 34.80,
+    'ctrlon': -87.68,
+    'mapproj': 2,
+    'trulat1': 33.0,
+    'trulat2': 36.0
+}
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
 # for the other terrain data source options later)
-trndataopt = 3
-dir_trndata = os.path.join(depot_base_dir, 'data/arpstopo30.data')
-nsmth = 2
-lat_sample = 180
-lon_sample = 180
-trnanxopt = 2
-arpstrn_output_dir = os.path.join(project_depot_dir, 'trndata')
-terndmp = 3
+arpstrn_param = {
+    'trndataopt': 3,
+    'dir_trndata': os.path.join(depot_base_dir, 'data/arpstopo30.data'),
+    'nsmth': 2,
+    'lat_sample': 180,
+    'lon_sample': 180,
+    'trnanxopt': 2,
+    'dirname': os.path.join(project_depot_dir, 'trndata'),
+    'terndmp': 3
+}
 
 # ARPSSFC parameters
-nstyp = 3
-sfcdmp = 3
-schmopt = 3
-sdatopt = 1
-fstypfl = os.path.join(depot_base_dir, 'data/arpssfc.data/soil_1km.data')
-bstypfl = os.path.join(depot_base_dir, 'data/arpssfc.data/whsoil_1deg.data')
-
-vdatopt = 1
-fvtypfl = os.path.join(depot_base_dir, 'data/arpssfc.data/naoge1_01l_1km.img')
-bvtypfl = os.path.join(depot_base_dir, 'data/arpssfc.data/owe14d_10min.data')
-
-ndatopt = 1
-fndvifl = os.path.join(depot_base_dir, 'data/arpssfc.data/namar93ndl_1km.img')
-bndvifl = os.path.join(depot_base_dir, 'data/arpssfc.data/ndvi9003_10min.data')
-
-vfrcopt = 1
-vfrcdr = os.path.join(depot_base_dir, 'data/arpssfc.data/')
-
-nsmthsl = 3
-stypout = 1
-vtypout = 1
-laiout = 1
-rfnsout = 1
-vegout = 1
-ndviout = 1
-
-arpssfc_output_dir = os.path.join(project_depot_dir, 'sfcdata')
+arpssfc_param = {
+    'nstyp': 3,
+    'sfcdmp': 3,
+    'schmopt': 3,
+    'sdatopt': 1,
+    'fstypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/soil_1km.data'),
+    'bstypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/whsoil_1deg.data'),
+    'vdatopt': 1,
+    'fvtypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/naoge1_01l_1km.img'),
+    'bvtypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/owe14d_10min.data'),
+    'ndatopt': 1,
+    'fndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/namar93ndl_1km.img'),
+    'bndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/ndvi9003_10min.data'),
+    'vfrcopt': 1,
+    'vfrcdr': os.path.join(depot_base_dir, 'data/arpssfc.data/'),
+    'nsmthsl': 3,
+    'stypout': 1,
+    'vtypout': 1,
+    'laiout': 1,
+    'rfnsout': 1,
+    'vegout': 1,
+    'ndviout': 1,
+    'dirname': os.path.join(project_depot_dir, 'sfcdata')
+}
 
 # EXT2ARPS parameters
-ext2arps_initime = initial_datetime.strftime('%Y-%m-%d.%H:%M:00')
-dmp_out_joined = 1,
-hdmpfmt = 3,
-hdfcompr = 2,
-exbcdmp = 3,
-exbchdfcompr = 2
-extdadmp = 1
-qcexout = 1
-qrexout = 1
-qiexout = 1
-qsexout = 1
-qhexout = 1
-qgexout = 1
-nqexout = 1
-zqexout = 1
-ext2arps_output_dir = os.path.join(IOP_depot_dir, exp_name+'_icbc')
-ternopt = 2
-terndta = os.path.join(arpstrn_output_dir, exp_name + '.trndata')
-ternfmt = 3
-extdopt = 116
-extdfmt = 3
-dir_extd = ext_model_data_dir
-extdname = 'nam_218'
-nextdfil = 18
-# Note, for now explicitly list each time string here. We can work on a more
-# compact solution later
-extdtimes = [
-    '2017-04-30.06:00:00+000:00:00',
-    '2017-04-30.06:00:00+001:00:00',
-    '2017-04-30.06:00:00+002:00:00',
-    '2017-04-30.06:00:00+003:00:00',
-    '2017-04-30.06:00:00+004:00:00',
-    '2017-04-30.06:00:00+005:00:00',
-    '2017-04-30.12:00:00+000:00:00',
-    '2017-04-30.12:00:00+001:00:00',
-    '2017-04-30.12:00:00+002:00:00',
-    '2017-04-30.12:00:00+003:00:00',
-    '2017-04-30.12:00:00+004:00:00',
-    '2017-04-30.12:00:00+005:00:00',
-    '2017-04-30.18:00:00+000:00:00',
-    '2017-04-30.18:00:00+001:00:00',
-    '2017-04-30.18:00:00+002:00:00',
-    '2017-04-30.18:00:00+003:00:00',
-    '2017-04-30.18:00:00+004:00:00',
-    '2017-04-30.18:00:00+005:00:00',
-]
-iorder = 3
-intropt = 1
-nsmooth = 1
-exttrnopt = 2
-extntmrg = 12
-extsfcopt = 0
-ext_lbc = 1
-ext_vbc = 1
-grdbasopt = 1
+ext2arps_param = {
+    'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
+    'dmp_out_joined': 1,
+    'hdmpfmt': 3,
+    'hdfcompr': 2,
+    'exbcdmp': 3,
+    'exbchdfcompr': 2,
+    'extdadmp': 1,
+    'qcexout': 1,
+    'qrexout': 1,
+    'qiexout': 1,
+    'qsexout': 1,
+    'qhexout': 1,
+    'qgexout': 1,
+    'nqexout': 1,
+    'zqexout': 1,
+    'dirname': os.path.join(IOP_depot_dir, exp_name+'_icbc'),
+    'ternopt': 2,
+    'terndta': os.path.join(arpstrn_param['dirname'], exp_name + '.trndata'),
+    'ternfmt': 3,
+    'extdopt': 116,
+    'extdfmt': 3,
+    'dir_extd': ext_model_data_dir,
+    'extdname': 'nam_218',
+    'nextdfil': 18,
+    # Note, for now explicitly list each time string here. We can work on a more
+    # compact solution later
+    'extdtimes': [
+        '2017-04-30.06:00:00+000:00:00',
+        '2017-04-30.06:00:00+001:00:00',
+        '2017-04-30.06:00:00+002:00:00',
+        '2017-04-30.06:00:00+003:00:00',
+        '2017-04-30.06:00:00+004:00:00',
+        '2017-04-30.06:00:00+005:00:00',
+        '2017-04-30.12:00:00+000:00:00',
+        '2017-04-30.12:00:00+001:00:00',
+        '2017-04-30.12:00:00+002:00:00',
+        '2017-04-30.12:00:00+003:00:00',
+        '2017-04-30.12:00:00+004:00:00',
+        '2017-04-30.12:00:00+005:00:00',
+        '2017-04-30.18:00:00+000:00:00',
+        '2017-04-30.18:00:00+001:00:00',
+        '2017-04-30.18:00:00+002:00:00',
+        '2017-04-30.18:00:00+003:00:00',
+        '2017-04-30.18:00:00+004:00:00',
+        '2017-04-30.18:00:00+005:00:00',
+    ],
+    'iorder': 3,
+    'intropt': 1,
+    'nsmooth': 1,
+    'exttrnopt': 2,
+    'extntmrg': 12,
+    'extsfcopt': 0,
+    'ext_lbc': 1,
+    'ext_vbc': 1,
+    'grdbasopt': 1
+}
+
+# ARPS parameters
+# Note that these include the comment, grid and map projection parameters already defined above
+# Also many of the parameters are shared with EXT2ARPS. So these are ones that are specific
+# to just the ARPS forward model component of the workflow. Parameters that aren't likely
+# to be changed very often but that are present in the namelist aren't included here, but can be
+# added as needed.
+
+arps_param = {
+    # Inifile and inigbf are only needed here for the arpsenkfic step. They are changed on the fly
+    # during the actual ensemble integration to the appropriate ensemble member names
+    'inifile': './{}.hdf{:06d}'.format(external_run_name, initial_time_sec),
+    'inigbf': './{}.hdfgrdbas'.format(external_run_name),
+    'dtbig': 7.5,
+    'dtsml': 1.5,
+    'tintegopt': 1,
+    'tintvebd': 3600.0,
+    'ngbrz': 10,
+    'brlxhw': 4,
+    'cbcdmp': 0.00555556,
+    'exbcfmt': 3,
+    'tmixopt': 5,
+    'trbisotp': 0,
+    'tkeopt': 3,
+    'trbvimp': 1,
+    'cfcm4h': 5.0e-4,
+    'cmix_opt': 1,
+    'mphyopt': 15,
+    'sfcdtfl': '{}.sfcdata'.format(exp_name),
+    'sfcfmt': 3,
+    'dtsfc': 7.5,
+    'hdmpfmt': 103,
+    'thisdmp': 300.0
+}
