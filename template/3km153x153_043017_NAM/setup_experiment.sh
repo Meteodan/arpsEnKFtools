@@ -1,23 +1,26 @@
 #!/bin/bash
-
+# This script sets up a working directory and copies and links all of the needed files and
+# directories for an ARPS-EnKF experiment
 # Define needed directories, files, etc.
 SCRATCHBASE="/scratch/rice/d/dawson29/"
 DEPOTBASE="/depot/dawson29/"
-BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/"
+IOPDIRNAME="2017_IOP4C"
+BASEDIR="${SCRATCHBASE}VORTEXSE/simulations/ARPS/${IOPDIRNAME}/EnKF/"
 RUNNAMEBASE="3km153x153"
-RUNNAMETAG="_newse"
+RUNNAMETAG="_043017_NAM"
 RUNNAME=${RUNNAMEBASE}${RUNNAMETAG}
 TEMPLATEBASEDIR="${DEPOTBASE}apps/arpsEnKFtools/template/"
 TEMPLATEDIR="${TEMPLATEBASEDIR}${RUNNAME}"
 SFCDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/sfcdata/${RUNNAMEBASE}.sfcdata"
 TRNDATA="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/trndata/${RUNNAMEBASE}.trndata"
-BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/${RUNNAMEBASE}_newseicbc/"
-RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/"
+BOUNDARYDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/${IOPDIRNAME}/EnKF/${RUNNAME}icbc/"
+RADARDIR="${DEPOTBASE}data/VORTEXSE/simulations/ARPS/${IOPDIRNAME}/processed_radar/"
 SCATTDIR="/home/dawson29/arps5.4_main/data/scatt/"
 ARPSEXE="/home/dawson29/arps5.4_main/bin/arps_mpi"
 ARPSENKFICEXE="/home/dawson29/arps5.4_main/bin/arpsenkfic"
 ARPSENKFEXE="/home/dawson29/arps5.4_main/bin/arpsenkf_mpi"
-RADFLAG="2016_IOP3.radflag"
+
+RADFLAG="${IOPDIRNAME}.radflag"
 PERTURBIC=0
 # The following are only needed when running arpsenkfic
 INIFILE="3km033116NAM107x107bgandbc.hdf010800"
