@@ -150,7 +150,25 @@ generate_namelist_input_file_template(arpsenkfic_input_path, namelist_input_temp
 generate_namelist_input_file_template(arpsenkf_input_path, namelist_input_template_dir,
                                       [config.grid_param, config.arpsenkf_param])
 
-# TODO: create/link scattering amplitude lookup tables
+# Link scattering amplitude lookup tables
+print("Linking scattering amplitude lookup tables...")
+scatt_dir = os.path.join(config.exp_scr_dir, 'scatt')
+if not os.path.exists(scatt_dir):
+    os.makedirs(scatt_dir)
+scatt_subdirs = glob.glob(config.arps_base_dir + '/data/scatt/*')
+for scatt_subdir in scatt_subdirs:
+    scatt_subdir_basename = os.path.basename(scatt_subdir)
+    scatt_subdir_target = os.path.join(scatt_dir, scatt_subdir_basename)
+    if not os.path.exists(scatt_subdir_target):
+        os.makedirs(scatt_subdir_target)
+    scatt_paths = glob.glob(scatt_subdir + '/*')
+    for scatt_path in scatt_paths:
+        scatt_file = os.path.basename(scatt_path)
+        scatt_target_path = os.path.join(scatt_subdir_target, scatt_file)
+        if os.path.lexists(scatt_target_path):
+            os.remove(scatt_target_path)
+        os.symlink(scatt_path, scatt_target_path)
+
 # TODO: link remapped radar data files
 print("Copying miscellaneous auxilliary files...")
 shutil.copy(config.radflag_path, config.exp_scr_dir)

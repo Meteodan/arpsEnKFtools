@@ -1,26 +1,9 @@
-"""
-This script runs arpsintrp to create initial and boundary conditions from a coarser-res ARPS-EnKF
-experiment. It takes one command-line argument,
-the (python) configuration file for that experiment, from which it imports the appropriate info
-"""
+#!/usr/bin/env python
+#
 
-# TODO: comment out this line when actually running the script. This is just to let the python
-# linter know about the various parameters in the config file
-# from arpsenkftools import master_config_default as config
-
-# import the experiment configuration file given by the first command-line argument
-if len(sys.argv) > 1:   # Try to import user-defined config file
-    config_file = sys.argv[1]
-    print("Config file is " + config_file)
-    try:
-        config = import_all_from(config_file)
-        print("Successfully imported experiment configuration.")
-    except Exception:
-        print("Unable to import experiment configuration. Exiting!")
-else:
-    print("Please provide an experiment configuration file on the command line! Exiting!")
-
-# STOPPED HERE!
+# This script parses all the ARPS history dumps in a user-specified
+# directory and produces arpsintrp.input files for each of them.
+# RLT 20110912
 
 ### USER SPECIFICATIONS ###
 # Absolute path to directory containing ARPS history files
@@ -133,7 +116,7 @@ if run_arpsintrp:
             lbc_interp_output_file_names):
 
         #command='exec %s %s %d %s' % (mpi_exe, mpi_nproc_flag, nproc_x*nproc_y, arpsintrp_exe)
-        command=[mpi_exe, mpi_nproc_flag, str(nproc_x*nproc_y), arpsintrp_exe]
+        command=[mpi_exe, mpi_nproc_flag, str(nproc_x*nproc_y), arpsintrp_exe]        
 
         if run_t0:
             with open(t0_interp_input_file_name, 'r') as inputfile, \
