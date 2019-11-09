@@ -975,7 +975,7 @@ def main():
             appendCommands(command_lines,
                            doForEnsemble(command, member_list)
                            )
-        else:
+        elif args.init_cond != "restart":
             print("Use supplied initial conditions ...")
             if args.subset:
                 print("Subset and perturb the domain ...")
@@ -1009,6 +1009,8 @@ def main():
                 appendCommands(command_lines,
                                doForEnsemble(command, member_list)
                                )
+        else:
+            print("Random initial conditions already computed. I hope you know what you are doing!")
 
     if args.free_forecast:
         if args.subset and args.t_ens_start == exp_start:

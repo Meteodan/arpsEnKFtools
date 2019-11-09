@@ -103,9 +103,9 @@ os.symlink(config.sfcdata_path, target_sfcdata_path)
 
 # Link exectuable files
 print("Linking executable files...")
-arps_exe_target = os.path.join(config.exp_scr_dir, 'arps_mpi')
+arps_exe_target = os.path.join(config.exp_scr_dir, 'arps')
 arpsenkfic_exe_target = os.path.join(config.exp_scr_dir, 'arpsenkfic')
-arpsenkf_exe_target = os.path.join(config.exp_scr_dir, 'arpsenkf_mpi')
+arpsenkf_exe_target = os.path.join(config.exp_scr_dir, 'arpsenkf')
 if os.path.lexists(arps_exe_target):
     os.remove(arps_exe_target)
 if os.path.lexists(arpsenkfic_exe_target):

@@ -29,7 +29,7 @@ else:
 ext2arps_input_template_path = os.path.join(config.template_exp_dir, 'ext2arps.input')
 
 # Create the ext2arps work directory in icbc scratch directory if it doesn't already exist.
-ext2arps_work_dir = os.path.join(config.icbc_scr_dir, 'ext2arps_work')
+ext2arps_work_dir = os.path.join(config.prep_work_dir, 'ext2arps_work')
 if not os.path.exists(ext2arps_work_dir):
     os.makedirs(ext2arps_work_dir)
 ext2arps_input_t0_exp_path = os.path.join(ext2arps_work_dir,
