@@ -18,6 +18,8 @@ IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
 icbc_scr_dir = os.path.join(IOP_scr_dir, 'icbc')
 ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
                                   IOP_name)
+sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
+# TODO: add other obs type directories here
 
 # Experiment name and directories
 exp_name_base = '6km303x303_043017'
@@ -29,9 +31,15 @@ template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
 external_icbc_dir = os.path.join(IOP_depot_dir, exp_name+'_icbc')
 sfcdata_dir = os.path.join(project_depot_dir, 'sfcdata')
-sfcdata_path = os.path.join(sfcdata_dir, exp_name + '.sfcdata')
+sfcdata_file = '{}.sfcdata'.format(exp_name)
+sfcdata_path = os.path.join(sfcdata_dir, sfcdata_file)
 trndata_dir = os.path.join(project_depot_dir, 'trndata')
-trndata_path = os.path.join(trndata_dir, exp_name + '.trndata')
+trndata_file = '{}.trndata'.format(exp_name)
+trndata_path = os.path.join(trndata_dir, trndata_file)
+radflag_file = 'template.radflag'
+radflag_path = os.path.join(template_exp_dir, radflag_file)
+blacklist_file = 'blacklist.sfc'
+blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 
 # Executable file names and directories
 arps_base_dir = '/home/dawson29/arps5.4_main'
@@ -57,8 +65,11 @@ initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
-external_run_name = '6km303x303_043017_NAM_icbc'
-perturb_ic = 1
+perturb_ic = True
+external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
+external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
+external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
 # ARPS comment_lines namelist parameters
 nocmnt = 2
@@ -194,8 +205,13 @@ ext2arps_param = {
 arps_param = {
     # Inifile and inigbf are only needed here for the arpsenkfic step. They are changed on the fly
     # during the actual ensemble integration to the appropriate ensemble member names
-    'inifile': './{}.hdf{:06d}'.format(external_run_name, initial_time_sec),
-    'inigbf': './{}.hdfgrdbas'.format(external_run_name),
+    'nocmnt': nocmnt,
+    'cmnt(1)': comments[0],
+    'cmnt(2)': comments[1],
+    'runname': exp_name,
+    'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
+    'inifile': './{}'.format(external_inifile),
+    'inigbf': './{}'.format(external_inigbf),
     'dtbig': 7.5,
     'dtsml': 1.5,
     'tintegopt': 1,
@@ -209,9 +225,10 @@ arps_param = {
     'tkeopt': 3,
     'trbvimp': 1,
     'cfcm4h': 5.0e-4,
+    'cfcm4v': 5.0e-4,
     'cmix_opt': 1,
     'mphyopt': 15,
-    'sfcdtfl': '{}.sfcdata'.format(exp_name),
+    'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 7.5,
     'hdmpfmt': 103,
