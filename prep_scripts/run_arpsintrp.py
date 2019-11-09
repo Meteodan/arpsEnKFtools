@@ -4,6 +4,12 @@ experiment. It takes one command-line argument,
 the (python) configuration file for that experiment, from which it imports the appropriate info
 """
 
+import os
+import sys
+import subprocess
+from arpsenkftools.editNamelist import editNamelistFile
+from arpsenkftools.io_utils import import_all_from
+
 # TODO: comment out this line when actually running the script. This is just to let the python
 # linter know about the various parameters in the config file
 # from arpsenkftools import master_config_default as config
@@ -19,6 +25,24 @@ if len(sys.argv) > 1:   # Try to import user-defined config file
         print("Unable to import experiment configuration. Exiting!")
 else:
     print("Please provide an experiment configuration file on the command line! Exiting!")
+
+# Set the path to the arpsintrp.input namelist template file
+arpsintrp_input_template_path = os.path.join(config.template_exp_dir, 'arpsintrp.input')
+
+# Create the arpsintrp work directory in icbc scratch directory if it doesn't already exist.
+arpsintrp_work_dir = os.path.join(config.prep_work_dir, 'arpsintrp_work')
+if not os.path.exists(arpsintrp_work_dir):
+    os.makedirs(arpsintrp_work_dir)
+arpsintrp_input_t0_exp_path = os.path.join(arpsintrp_work_dir,
+                                          'arpsintrp_{}_t0.input'.format(config.exp_name))
+arpsintrp_output_t0_exp_path = os.path.join(arpsintrp_work_dir,
+                                           'arpsintrp_{}_t0.output'.format(config.exp_name))
+arpsintrp_input_lbc_exp_path = os.path.join(arpsintrp_work_dir,
+                                           'arpsintrp_{}_lbc.input'.format(config.exp_name))
+arpsintrp_output_lbc_exp_path = os.path.join(arpsintrp_work_dir,
+                                            'arpsintrp_{}_lbc.output'.format(config.exp_name))
+
+ens_member_list = range(1, config.num_ensemble_members + 1)
 
 # STOPPED HERE!
 
