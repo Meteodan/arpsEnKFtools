@@ -139,6 +139,8 @@ arpssfc_param = {
 # EXT2ARPS parameters
 ext2arps_param = {
     'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
+    'tstart': float(initial_time_sec),
+    'tstop': float(initial_time_sec),
     'dmp_out_joined': 1,
     'hdmpfmt': 3,
     'hdfcompr': 2,
@@ -213,6 +215,8 @@ arps_param = {
     'inifile': './{}'.format(external_inifile),
     'inigbf': './{}'.format(external_inigbf),
     'dtbig': 7.5,
+    'tstart': float(initial_time_sec),
+    'tstop': float(initial_time_sec),
     'dtsml': 1.5,
     'tintegopt': 1,
     'tintvebd': 3600.0,

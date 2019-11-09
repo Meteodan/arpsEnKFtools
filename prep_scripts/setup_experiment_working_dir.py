@@ -155,11 +155,12 @@ generate_namelist_input_file_template(arpsenkf_input_path, namelist_input_templa
 print("Copying miscellaneous auxilliary files...")
 shutil.copy(config.radflag_path, config.exp_scr_dir)
 shutil.copy(config.blacklist_file_path, config.exp_scr_dir)
+shutil.copy(config.template_base_dir + '/startup_anaconda', config.exp_scr_dir)
 
 # Finally copy the run_real_data_case.py and run_real_data_case.csh scripts
 print("Copying run scripts...")
 shutil.copy(os.path.join(config.template_base_dir, 'run_real_data_case.py'), config.exp_scr_dir)
-shutil.copy(os.path.join(config.template_exp_dir, 'run_real_data_case.csh'), config.exp_scr_dir)
+shutil.copy(os.path.join(config.template_exp_dir, 'run_real_data_case.sh'), config.exp_scr_dir)
 
 print("Successfully set up experiment working directory for {}".format(config.exp_name))
 print("Just wanted to let you know: Good luck, we're all counting on you!")
