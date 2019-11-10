@@ -145,6 +145,8 @@ arpssfc_param = {
 
 # ARPSINTRP parameters
 arpsintrp_param = {
+    'nproc_x': 3,
+    'nproc_y': 5,
     'nproc_x_in': 3,
     'nproc_y_in': 5,
     'nproc_x_out': 1,
@@ -152,6 +154,21 @@ arpsintrp_param = {
     'inisplited': 1,
     'dmp_out_joined': 1111111,
     'dirname': external_icbc_dir,
+    'terndta1': trndata_path,
+    'xy_or_ll': 2,
+    'ctrlat1': grid_param['ctrlat'],
+    'ctrlon1': grid_param['ctrlon'],
+    'dx1': grid_param['dx'],
+    'dy1': grid_param['dy'],
+    'dz1': grid_param['dz'],
+    'strhopt1': grid_param['strhopt'],
+    'dzmin1': grid_param['dzmin'],
+    'zrefsfc1': grid_param['zrefsfc'],
+    'dlayer11': grid_param['dlayer1'],
+    'dlayer21': grid_param['dlayer2'],
+    'strhtune1': grid_param['strhtune'],
+    'zflat1': grid_param['zflat'],
+    'nstyp1': arpssfc_param['nstyp'],
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed

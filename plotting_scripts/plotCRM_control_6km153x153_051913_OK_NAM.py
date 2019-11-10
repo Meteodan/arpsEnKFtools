@@ -45,13 +45,13 @@ ovrwind = True              # Overlay wind vectors on plots?
 storm_u = 0.0 #-9.75 # -9.75 # -11.69 # 0.0
 storm_v = 0.0 #-2.80 # -2.80 # -1.41 # 0.0
 
-windintv_horz = 5               # Grid interval for wind vector plotting
-windintv_vert = 5
+windintv_horz = 2               # Grid interval for wind vector plotting
+windintv_vert = 2
 wind_standard_value = 20
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = True
+tmat_opt = False
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
 dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
@@ -60,8 +60,8 @@ dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
 
 ovrmap = True
 gis_info = None # ["Moore OK", 35.3387, -97.4864]  # Plot location of a town, radar, etc
-county_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/county/countyp020'
-urban_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/urban2/tl_2008_us_cbsa'
+county_shapefile_location = '/home/dawson29/Projects/pyCRMtools/data/shapefiles/county/countyp020'
+urban_shapefile_location = '/home/dawson29/Projects/pyCRMtools/data/shapefiles/urban2/tl_2008_us_cbsa'
 
 draw_counties = 0
 draw_urban = 0
@@ -93,8 +93,8 @@ plotztickintv = 1000.
 savefigopt = 1
 figfmt = 'png'              # Format of figures (e.g., .png, .pdf, .jpg, .eps, etc.)
 
-nproc_x_in = 10             # Number of patches for split history files.
-nproc_y_in = 6
+nproc_x_in = 3             # Number of patches for split history files.
+nproc_y_in = 5
 
 # Misc section (incomplete or unimplemented stuff)
 ovrtrajc = False
@@ -129,9 +129,9 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6kmconv/6kmconv/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/6km153x153_051913_OK_NAM/6km153x153_051913_OK_NAM/' # Base directory name where individual
                                                                 # run folders reside
-outdirname = './plots/' # The directory name where the simulated dual-pol data will be saved.
+outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [True,True]
 dir_list = ['./ENamean/','./ENfmean/']
 dir_extra_list = ['./','./']
@@ -139,15 +139,15 @@ runname_list = ['enmean','efmean']
 runlabel_list = ['enmean','efmean']
 trailer_list = ['','']
 mphyopt_list = [15,15]
-plotlim_list = [[650000., 1200000., 700000., 1150000.], [650000., 1200000., 700000., 1150000.]]
-master_time_list = [N.arange(15300.,54000.0+900.,900.), N.arange(15300.,54000.0+900.0,900.0)]
-start_timestamp_list = ['20160331161500', '20160331161500']
+plotlim_list = [None,None]
+master_time_list = [N.arange(21600.0,64800.0+3600.0,3600.0), N.arange(21600.0,64800.0+3600.0,3600.0)]
+start_timestamp_list = ['20130519060000', '20130519060000']
 arbfile_list = [None,None]
 
 # Variables to plot
 
 fieldname = "pte"
-fieldlevels = N.arange(320.0,360.0+1.0,1.0)
+fieldlevels = N.arange(320.0,370.0+1.0,1.0)
 clvls = matplotlib.ticker.MultipleLocator(base=5.0)
 clabel = r'$\theta_e$'
 cformat = None
@@ -157,8 +157,8 @@ plabel = None
 slice1 = 1
 stag = 's'
 
-fieldovername = "dBZ"
-fieldoverlevels = N.arange(20.0,80.0+20.0,20.0)
+fieldovername = "none"
+fieldoverlevels = N.arange(10.0,80.0+10.0,10.0)
 fieldovercolor = 'k'
 slice2 = 1
 stagovr = 's'

@@ -422,6 +422,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                                                enkf_debug_file_name),
         "mv *hdfwgt* %s/%s/" % (work_path, "wgt"),
         "mv K* %s/%s/" % (work_path, "stats"),
+        "rename .txt _%d.txt dif_*" % (assim_time),
         "cd -",
         "",
     ]
@@ -827,6 +828,8 @@ def main():
         os.mkdir(work_path + '/wgt')
     if not os.path.exists(work_path + '/stats'):
         os.mkdir(work_path + '/stats')
+    if not os.path.exists(work_path + '/difobs'):
+        os.mkdir(work_path + '/difobs')
 
 
     member_list = [m - 1 for m in args.members]
