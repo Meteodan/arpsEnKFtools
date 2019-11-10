@@ -127,6 +127,8 @@ if not os.path.exists(obs_dir):
 asos5min_paths = glob.glob(config.sfc_obs_dir + '/asos5min*lso')
 asos5min_files = [os.path.basename(asos5min_path) for asos5min_path in asos5min_paths]
 target_files = [asos5min_file.replace('asos5min', '') for asos5min_file in asos5min_files]
+# Lame. We need to add an additional "00" for the seconds field.
+target_files = [target_file.replace('.lso', '00.lso') for target_file in target_files]
 target_paths = [os.path.join(obs_dir, target_file) for target_file in target_files]
 
 for asos5min_path, asos5min_target_path in zip(asos5min_paths, target_paths):
