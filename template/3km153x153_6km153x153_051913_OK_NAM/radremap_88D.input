@@ -60,9 +60,9 @@
 !-----------------------------------------------------------------------
 
  &grid_dims
-   nx   = NXTMP,
-   ny   = NYTMP,
-   nz   = NZTMP,
+   nx   = 0,
+   ny   = 0,
+   nz   = 0,
  /
 
 !-----------------------------------------------------------------------
@@ -264,18 +264,18 @@
 !-----------------------------------------------------------------------
 
  &grid
-   dx       =  DXTMP,
-   dy       =  DYTMP,
-   dz       =   DZTMP,
-   strhopt  = STRHOPTTMP,
-     dzmin    =   DZMINTMP.000,
+   dx       =  0,
+   dy       =  0,
+   dz       =   0,
+   strhopt  = 0,
+     dzmin    =   0.000,
      zrefsfc  =     0.0,
      dlayer1  =     0.0,
      dlayer2  =     1.0e5,
-     strhtune =     STRHTUNETMP,
+     strhtune =     0,
    zflat    =     1.0e5,
-   ctrlat   =    CTRLATTMP,
-   ctrlon   =    CTRLONTMP,
+   ctrlat   =    0,
+   ctrlon   =    0,
    crdorgnopt = 0,
 
  /
@@ -663,9 +663,9 @@
    wtgrdtiltopt= 1,
    grdtiltver  = 2,
    grdtiltdp = 0,
-   wtsoloopt   = 3,
+   wtsoloopt   = 103,
    runname   = 'RUNNAMETMP',
-   outtime   = OUTTIMETMP,
+   outtime   = 0,
 /
 
 !-----------------------------------------------------------------------

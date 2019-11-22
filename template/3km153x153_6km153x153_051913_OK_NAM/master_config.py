@@ -39,6 +39,8 @@ trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
 radflag_file = 'template.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
+radarinfo_file = 'radarinfo.dat'
+radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
 blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 remapped_radar_dir = os.path.join(project_depot_dir, 'remapped_radar/{}'.format(exp_name))
@@ -71,8 +73,12 @@ initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 43200
 perturb_ic = False
-external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
-external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+if perturb_ic:
+    external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
+    external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+else:
+    external_inifile = 'ena001.hdf{:06d}'.format(initial_time_sec)
+    external_inigbf = 'ena001.hdfgrdbas'
 external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
 external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
