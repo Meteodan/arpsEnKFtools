@@ -19,7 +19,7 @@ prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_051913_OK_NAM/6km153x153_051913_OK_NAM',
                                   IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
-radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad')
+radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
@@ -41,6 +41,7 @@ radflag_file = 'template.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
 blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
+remapped_radar_dir = os.path.join(project_depot_dir, 'remapped_radar/{}'.format(exp_name))
 
 # Executable file names and directories
 arps_base_dir = '/home/dawson29/arps5.4_main'
@@ -175,6 +176,14 @@ arpsintrp_param = {
     'start_time': 43200.0,
     'end_time': 64800.0,
     'step_time': 300.0
+}
+
+# Radar remapper parameters
+radremap_param = {
+    'radar_list': ['KTLX'],
+    'start_timestamp': '20130519194000',
+    'end_timestamp': '20130519230000',
+    'interval_seconds': 900
 }
 
 # EXT2ARPS parameters
