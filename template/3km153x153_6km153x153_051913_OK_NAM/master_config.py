@@ -187,9 +187,10 @@ arpsintrp_param = {
 # Radar remapper parameters
 radremap_param = {
     'radar_list': ['KTLX'],
-    'start_timestamp': '20130519194000',
+    'start_timestamp': '20130519194500',
     'end_timestamp': '20130519230000',
-    'interval_seconds': 900
+    'interval_seconds': 900,
+    'tolerance': 300
 }
 
 # EXT2ARPS parameters
@@ -241,6 +242,7 @@ arps_param = {
 # ARPSENKFIC parameters
 arpsenkfic_param = {
 }
+
 
 # ARPSENKF parameters. TODO: update for 3-km with radar assimilation
 arpsenkf_param = {

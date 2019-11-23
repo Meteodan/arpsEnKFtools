@@ -1,10 +1,12 @@
-#!/usr/bin/env python2.7
-## This script takes a generates soft links to radar files given a user defined time and interval.
-## RLT 20110606
+# This script takes a generates soft links to radar files given a user defined time and interval.
+# RLT 20110606
 
-import os, glob
+import os
+import sys
+import glob
 from datetime import datetime, timedelta
 import numpy as np
+from arpsenkftools.io_utils import import_all_from
 
 # From https://stackoverflow.com/questions/10688006/generate-a-list-of-datetimes-between-an-interval
 def perdelta(start, end, delta):
@@ -12,6 +14,7 @@ def perdelta(start, end, delta):
     while curr < end:
         yield curr
         curr += delta
+
 
 # import the experiment configuration file given by the first command-line argument
 if len(sys.argv) > 1:   # Try to import user-defined config file
@@ -31,20 +34,20 @@ else:
 # Absolute path to directory where gridtilt files reside.
 basedir = "/depot/dawson29/data/users/sharm261/processed_radar/"
 radnames = ['KTLX']
-startTime = D.datetime(2013, 5, 19, 20, 00, 00)
-endTime = D.datetime(2013, 5, 19, 23, 00, 00)
+startTime = datetime(2013, 5, 19, 20, 00, 00)
+endTime = datetime(2013, 5, 19, 23, 00, 00)
 # Time interval as a timedelta object
 # Note that the constructor has the form timedelta(days, seconds, microseconds).
 # e.g., 5 min could be given as timedelta(0,300).
 # See http://docs.python.org/library/datetime.html
-interval = D.timedelta(0, 300)
+interval = timedelta(0, 300)
 # Turn this flag on to print out some extra output for debugging
 debug = 0
 ### END OF USER SPECIFICATIONS ###
 
 # Generate a list of datetime objects corresponding to the desired times.
-start_datetime = datetime.strptime(config.radremap_param['start_timestamp'], '%Y%m%d%H%M')
-end_datetime = datetime.strptime(config.radremap_param['end_timestamp'], '%Y%m%d%H%M')
+start_datetime = datetime.strptime(config.radremap_param['start_timestamp'], '%Y%m%d%H%M%S')
+end_datetime = datetime.strptime(config.radremap_param['end_timestamp'], '%Y%m%d%H%M%S')
 interval = timedelta(seconds=config.radremap_param['interval_seconds'])
 timeList = list(perdelta(start_datetime, end_datetime + interval, interval))
 # timeList = [];
@@ -56,54 +59,43 @@ timeList = list(perdelta(start_datetime, end_datetime + interval, interval))
 if debug:
     print(timeList)
 
-# STOPPED HERE!
+radar_list = config.radremap_param.pop('radar_list')
+print(radar_list)
+print(config.remapped_radar_dir)
 
 # Outer loop through radars
-for radname in config.radremap_param['radar_list']:
-    inDir = os.path.join(basedir, radname+"_153x153/")
+for radname in radar_list:
+    # Get list of remapped radar files
+    remapped_file_paths = glob.glob(config.remapped_radar_dir + '/{}.*.*'.format(radname))
+    remapped_file_names = [os.path.basename(remapped_file_path) for remapped_file_path in
+                           remapped_file_paths]
+    # Extract the time stamps from the file names
+    file_times = [remapped_file_name.replace('{}.'.format(radname), '') for remapped_file_name in
+                  remapped_file_names]
+    # Create datetime objects out of the timestamps
+    file_datetimes = [datetime.strptime(file_time, '%Y%m%d.%H%M%S') for file_time in file_times]
 
-    # Generate a list of times corresponding to files in the directory.
-    gtFile = glob.glob(inDir+"/"+radname+".*")
+    # For each time in the desired range, find the closest matching remapped file and create the
+    # link
 
-    # Get rid of softlinks (TODO: may just want to ignore the soft links)
-    for i in range(len(gtFile)):
-        if os.path.islink(gtFile[i]):
-            os.unlink(gtFile[i])
-
-    gtFile = glob.glob(inDir+"/"+radname+".*")
-
-    timeFile = []
-    if debug:
-        print(gtFile)
-    for i in range(len(gtFile)):
-        gtFilename = os.path.split(gtFile[i])[1]
-        if debug:
-            print(i, gtFile[i],gtFilename)
-        timeFile.append(D.datetime(int(gtFilename[5:9]),int(gtFilename[9:11]),
-                        int(gtFilename[11:13]),int(gtFilename[14:16]),int(gtFilename[16:18]),int(gtFilename[18:20])))
-    #     timeFile.append(D.datetime(int("2"+gtFile[i][-14:-11]),int(gtFile[i][-11:-9]),int(gtFile[i][-9:-7]),
-    #                                int(gtFile[i][-6:-4]),int(gtFile[i][-4:-2]),int(gtFile[i][-2:])))
-
-    timeFile = N.array(timeFile)
-    if debug:
-        print(timeFile)
-
-    # Find the closest file time to each cycle time
-    if debug:
-        print("Generating soft links")
     for t in timeList:
-        # Calculate difference between desired time and file times
-        temp = abs(timeFile - t)
-        # Find index where this difference is minimized.
-        tind = N.min(N.nonzero(temp==N.min(temp))).squeeze()
-        gtFilename = os.path.split(gtFile[tind])[1]
-        if debug:
-            print(tind)
-            print(gtFilename)
-        # Now, link the closest file with the desired time
-        #cmd = "ln -sf " + gtFile[tind][-20:] + " " +  gtFile[tind][-20:-15] + t.strftime("%Y%m%d.%H%M%S")
-        #cmd = "ln -sf " + inDir + gtFile[tind][-20:] + " " +  gtFile[tind][-20:-15] + t.strftime("%Y%m%d.%H%M%S")
-        cmd = "ln -sf " + gtFile[tind] + " " + os.path.join(basedir, gtFilename[:4] + "." + t.strftime("%Y%m%d.%H%M%S"))
-        #cmd = "rm " + gtFilename[:4] + "." + t.strftime("%Y%m%d.%H%M%S")
-        print(cmd)
-        os.system(cmd)
+        diff = np.array([np.abs((file_dt - t).total_seconds()) for file_dt in file_datetimes])
+        closest = diff.min()
+        # Only do the linking if the time difference is greater than zero and less than the
+        # desired tolerance (if the difference is zero, then just use the file itself,
+        # silly)
+        if closest <= config.radremap_param['tolerance'] and closest > 0:
+            closest_index = diff.argmin()
+            closest_file_path = remapped_file_paths[closest_index]
+            print(t, closest_file_path)
+            link_name = t.strftime('{}.%Y%m%d.%H%M%S'.format(radname))
+            link_path = os.path.join(config.remapped_radar_dir, link_name)
+            # Remove existing link
+            if os.path.lexists(link_path):
+                os.remove(link_path)
+            os.symlink(remapped_file_paths[closest_index], link_path)
+        elif closest >  config.radremap_param['tolerance']:
+            print('For time ', t)
+            print('No time within tolerance ({:d} s)'.format(config.radremap_param['tolerance']))
+            print('Closest is {:d} s'.format(int(closest)))
+
