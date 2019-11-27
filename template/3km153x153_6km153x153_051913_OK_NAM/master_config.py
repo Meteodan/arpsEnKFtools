@@ -37,7 +37,7 @@ sfcdata_path = os.path.join(sfcdata_dir, sfcdata_file)
 trndata_dir = os.path.join(project_depot_dir, 'trndata')
 trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
-radflag_file = 'template.radflag'
+radflag_file = '2013_0519.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
 radarinfo_file = 'radarinfo.dat'
 radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
@@ -66,8 +66,9 @@ mpi_nproc_flag = '-n'
 
 # Basic experiment parameters
 num_ensemble_members = 40
-# Initial time of entire experiment
-initial_time = '201305191800'
+# Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
+# initial time of the original parent experiment!
+initial_time = '201305190600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
@@ -236,7 +237,9 @@ arps_param = {
     'sfcfmt': 3,
     'dtsfc': 4.0,
     'hdmpfmt': 103,
-    'thisdmp': 300.0
+    'thisdmp': 300.0,
+    'rfopt': 3,
+    'sv_lkup_tble': 1
 }
 
 # ARPSENKFIC parameters

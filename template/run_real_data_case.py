@@ -83,7 +83,7 @@ def getPaths(base_path, job_name, **kwargs):
 
 
 def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
-                                dump_time, split_files='neither', move_for_assim=True):
+                                dump_time, split_files='neither', move_for_assim=True, **kwargs):
     work_path, input_path, debug_path, bc_path, hx_path = \
         getPaths(
             cm_args.base_path,
@@ -129,6 +129,15 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
     else:
         epilogue = []
 
+    # Move batch output files to a subdirectory to get them out of the way
+    batch_output_dir = os.path.join(cm_args.base_path, 'batch_output')
+    if not os.path.exists(batch_output_dir):
+        os.makedirs(batch_output_dir)
+    epilogue.extend([
+        "mv *.e* {}/".format(batch_output_dir),
+        "mv *.o* {}/".format(batch_output_dir)
+    ])
+
     arps_input_file_name = "%s/%s.%d-%d.arps.input" % (
         input_path, 'ena%(ens)03d', start_time, end_time)
     arps_debug_file_name = "%s/%s.%d-%d.arps.debug" % (
@@ -164,7 +173,9 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
         else:
             out_dir = "%s/" % work_path
 
-        kwargs = {'hxopt': 0, 'tstop': end_time}
+        # kwargs = {'hxopt': 0, 'tstop': end_time}
+        kwargs['hxopt'] = 0
+        kwargs['tstop'] = end_time
         if cm_args.algorithm == '4densrf':
             kwargs['memid'] = n_ens + 1
             kwargs['hxopt'] = 1
@@ -795,6 +806,7 @@ def main():
     ap.add_argument('--ppn', dest='ppn_req', default=-1, type=int)
     ap.add_argument('--error-check', dest='error_check', action='store_true')
     ap.add_argument('--user-name', dest='user_name', default='dawson29')
+    ap.add_argument('--save-lookup', dest='save_lookup', action='store_true')
 
     args = ap.parse_args()
     batch = Batch('rice', username=args.user_name)  # stampede
@@ -898,7 +910,7 @@ def main():
             args.arps_template,
             args.arpsenkf_template,
             args.arpsenkfic_template]]
-    config_files.extend(['run_real_data_case.py', 'run_real_data_case.csh'])
+    config_files.extend(['run_real_data_case.py', 'run_real_data_case.sh'])
 
     for file in config_files:
         subprocess.Popen(['cp', file, "%s/." % work_path])
@@ -1094,9 +1106,18 @@ def main():
 
             # TODO: insert logic to generate lookup tables if needed at the beginning of an
             # experiment. For now, just manually do so.
-            # if t_ens == args.t_ens_start and not args.restart:
-            #     print("This is the beginning of the experiment, we need to generate lookup"
-            #           "tables for rfopt = 3!")
+            if t_ens == args.t_ens_start and not args.restart and args.save_lookup:
+                print("This is the beginning of the experiment, we need to generate lookup"
+                      "tables for rfopt = 3!")
+                kwargs = {
+                    'sv_lkup_tble': 1,
+                    'rd_lkup_tble': 0
+                    }
+            else:
+                kwargs = {
+                    'sv_lkup_tble': 0,
+                    'rd_lkup_tble': 1
+                }
 
             start_time = t_ens
             end_time = t_ens + args.dt_assim_step
@@ -1156,7 +1177,8 @@ def main():
                                        args.dt_ens_step,
                                        split_files=which_split,
                                        move_for_assim=(
-                                           chunk_end == end_time))
+                                           chunk_end == end_time),
+                                       **kwargs)
                                    )
 
                     if args.split_files and t_chunk == exp_start:

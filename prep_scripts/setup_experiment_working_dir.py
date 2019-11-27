@@ -64,9 +64,9 @@ if not os.path.exists(config.exp_scr_dir):
 
 print("Linking initial and boundary condition files...")
 boundary_dir = os.path.join(config.exp_scr_dir, 'boundary')
+if not os.path.exists(boundary_dir):
+    os.makedirs(boundary_dir)
 if config.perturb_ic:
-    if not os.path.exists(boundary_dir):
-        os.makedirs(boundary_dir)
     boundary_files = glob.glob(config.external_icbc_dir + '/{}.*.*'.format(config.exp_name))
 
     for boundary_file in boundary_files:
@@ -88,7 +88,13 @@ if config.perturb_ic:
     os.symlink(config.external_inifile_path, target_inifile)
     os.symlink(config.external_inigbf_path, target_inigbf)
 else:
-    print("Not yet implemented for perturb_ic = False!")
+    all_icbc_paths = glob.glob(config.external_icbc_dir + '/*')
+    for icbc_path in all_icbc_paths:
+        icbc_file = os.path.basename(icbc_path)
+        target_path = os.path.join(boundary_dir, icbc_file)
+        if os.path.lexists(target_path):
+            os.remove(target_path)
+        os.symlink(icbc_path, target_path)
 
 # Link terrain and surface characteristic files
 print("Linking terrain and surface characteristic files...")
@@ -101,7 +107,7 @@ if os.path.lexists(target_sfcdata_path):
 os.symlink(config.trndata_path, target_trndata_path)
 os.symlink(config.sfcdata_path, target_sfcdata_path)
 
-# Link exectuable files
+# Link executable files
 print("Linking executable files...")
 arps_exe_target = os.path.join(config.exp_scr_dir, 'arps')
 arpsenkfic_exe_target = os.path.join(config.exp_scr_dir, 'arpsenkfic')
@@ -171,11 +177,22 @@ for scatt_subdir in scatt_subdirs:
             os.remove(scatt_target_path)
         os.symlink(scatt_path, scatt_target_path)
 
-# TODO: link remapped radar data files
+# Link remapped radar data files
+# For now just link the entire directory. ARPSENKF will just read the needed files from there.
+# Assumes the remapped radar files have already been created with run_radremap.py and links have
+# been made to the times that ARPSENKF is expecting (with link_radremap.py).
+print("Linking remapped radar files...")
+radar_dir = os.path.join(config.exp_scr_dir, 'nexrad')
+if os.path.lexists(radar_dir):
+    os.remove(radar_dir)
+os.symlink(config.remapped_radar_dir, radar_dir)
+
+# Copy some miscellaneous files
 print("Copying miscellaneous auxilliary files...")
 shutil.copy(config.radflag_path, config.exp_scr_dir)
 shutil.copy(config.blacklist_file_path, config.exp_scr_dir)
 shutil.copy(config.template_base_dir + '/startup_anaconda', config.exp_scr_dir)
+shutil.copy(config.radarinfo_path, config.exp_scr_dir)
 
 # Finally copy the run_real_data_case.py and run_real_data_case.csh scripts
 print("Copying run scripts...")

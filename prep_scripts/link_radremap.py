@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from arpsenkftools.io_utils import import_all_from
 
+
 # From https://stackoverflow.com/questions/10688006/generate-a-list-of-datetimes-between-an-interval
 def perdelta(start, end, delta):
     curr = start
@@ -28,22 +29,8 @@ if len(sys.argv) > 1:   # Try to import user-defined config file
 else:
     print("Please provide an experiment configuration file on the command line! Exiting!")
 
-
-
-### USER SPECIFICATIONS ###
-# Absolute path to directory where gridtilt files reside.
-basedir = "/depot/dawson29/data/users/sharm261/processed_radar/"
-radnames = ['KTLX']
-startTime = datetime(2013, 5, 19, 20, 00, 00)
-endTime = datetime(2013, 5, 19, 23, 00, 00)
-# Time interval as a timedelta object
-# Note that the constructor has the form timedelta(days, seconds, microseconds).
-# e.g., 5 min could be given as timedelta(0,300).
-# See http://docs.python.org/library/datetime.html
-interval = timedelta(0, 300)
 # Turn this flag on to print out some extra output for debugging
 debug = 0
-### END OF USER SPECIFICATIONS ###
 
 # Generate a list of datetime objects corresponding to the desired times.
 start_datetime = datetime.strptime(config.radremap_param['start_timestamp'], '%Y%m%d%H%M%S')
@@ -94,8 +81,7 @@ for radname in radar_list:
             if os.path.lexists(link_path):
                 os.remove(link_path)
             os.symlink(remapped_file_paths[closest_index], link_path)
-        elif closest >  config.radremap_param['tolerance']:
+        elif closest > config.radremap_param['tolerance']:
             print('For time ', t)
             print('No time within tolerance ({:d} s)'.format(config.radremap_param['tolerance']))
             print('Closest is {:d} s'.format(int(closest)))
-
