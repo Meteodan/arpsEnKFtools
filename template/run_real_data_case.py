@@ -410,6 +410,8 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                      dmp_out_joined=joined,
                      inisplited=3 * (1 - joined),
                      sfcdat=3,
+                     sv_lkup_tble=0,
+                     rd_lkup_tble=1,
                      **kwargs
                      )
 
