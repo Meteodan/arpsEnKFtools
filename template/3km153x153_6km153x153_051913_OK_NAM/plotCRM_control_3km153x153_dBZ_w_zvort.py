@@ -51,7 +51,7 @@ wind_standard_value = 20
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = True
+tmat_opt = False
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
 dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
@@ -119,7 +119,7 @@ ovrquad = False  # Overlay quadrants for tornado analysis?
 tor_x = 106875.0+trajxoffset # 4860 s
 tor_y = 113125.0+trajyoffset
 
-ovrxz = False               # Overlay location of vertical cross section on some plots?
+ovrxzslice = False               # Overlay location of vertical cross section on some plots?
 xzslice = 50
 ovryzslice = False
 yzslice = 50
@@ -129,24 +129,25 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_newse/3km153x153_newse/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_6km153x153_051913_OK_NAM/3km153x153_6km153x153_051913_OK_NAM/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [True,True,False,False]
-dir_list = ['./ENamean/','./ENfmean/','./EN001/','./ENF001/']
-dir_extra_list = ['./','./','./','./']
-runname_list = ['enmean','efmean','ena001','enf001']
-runlabel_list = ['enmean','efmean','ena001','enf001']
-trailer_list = ['','','','']
-mphyopt_list = [15,15,15,15]
-plotlim_list = [None,None,None,None]
-master_time_list = [N.arange(900.0,6300.0+900.0,900.0), N.arange(900.0,6300.0+900.0,900.0),
-                    N.arange(7500.0,14400.0+300.0,300.0), N.arange(0.0,7200.0+300.0,300.0)]
-arbfile_list = [None,None,None,None]
+toPlot_list = [False, False, True, False]
+dir_list = ['./ENamean/', './ENfmean/', './EN001/', './ENF001/']
+dir_extra_list = ['./', './', './', './']
+runname_list = ['enmean', 'efmean', 'ena001', 'enf001']
+runlabel_list = ['enmean', 'efmean', 'ena001', 'enf001']
+trailer_list = ['', '', '', '']
+mphyopt_list = [15, 15, 15, 15]
+plotlim_list = [None, None, None, None]
+master_time_list = [N.arange(49500.0, 60300.0+900.0, 900.0), N.arange(49500.0, 60300.0+900.0, 900.0),
+                    N.arange(49500.0, 60300.0+900.0, 900.0), N.arange(49500.0, 60300.0+900.0, 900.0)]
+start_timestamp_list = ['20130519060000', '20130519060000', '20130519060000', '20130519060000']
+arbfile_list = [None, None, None, None]
 
 # Variables to plot
 
-fieldname = "dBZ"
+fieldname = "dBZmod"
 fieldlevels = N.arange(5.0,85.0+5.0,5.0)
 clvls = matplotlib.ticker.MultipleLocator(base=10.0)
 clabel = r'dBZ'
@@ -163,7 +164,7 @@ fieldovercolor = 'k'
 slice2 = 14
 stagovr = 's'
 
-fieldover2name = "zvort"
+fieldover2name = "vortz"
 fieldover2levels = N.arange(1.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
 fieldover2color = 'purple'
 slice3 = 14 # 14

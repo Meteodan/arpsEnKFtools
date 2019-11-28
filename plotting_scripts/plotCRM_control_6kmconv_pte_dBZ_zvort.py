@@ -13,7 +13,7 @@
 import numpy as N
 import matplotlib
 import matplotlib.cm as cm
-from metpy.plots import ctables
+
 
 #-----------------------------------------------------------------------------------------
 # Section 1.
