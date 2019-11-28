@@ -29,7 +29,7 @@ else:
 arpstrn_input_template_path = os.path.join(config.template_exp_dir, 'arpstrn.input')
 
 # Create the arpstrn work directory in icbc scratch directory if it doesn't already exist.
-arpstrn_work_dir = os.path.join(config.icbc_scr_dir, 'arpstrn_work')
+arpstrn_work_dir = os.path.join(config.prep_work_dir, 'arpstrn_work')
 if not os.path.exists(arpstrn_work_dir):
     os.makedirs(arpstrn_work_dir)
 arpstrn_input_exp_path = os.path.join(arpstrn_work_dir,
@@ -44,8 +44,11 @@ editNamelistFile(arpstrn_input_template_path,
                  **config.grid_param,
                  **config.arpstrn_param)
 
-# Run arpstrn
+# Create the output directory if it doesn't already exist
+if not os.path.exists(config.trndata_dir):
+    os.makedirs(config.trndata_dir)
 
+# Run arpstrn
 with open(arpstrn_input_exp_path, 'r') as input_file, \
      open(arpstrn_output_exp_path, 'w') as output_file:
     print("Running {} for {}".format(config.arpstrn_exe_path, arpstrn_input_exp_path))

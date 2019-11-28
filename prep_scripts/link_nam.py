@@ -10,7 +10,7 @@ from arpsenkftools.io_utils import import_all_from
 
 # TODO: comment out this line when actually running the script. This is just to let the python
 # linter know about the various parameters in the config file
-from arpsenkftools import master_config_default as config
+# from arpsenkftools import master_config_default as config
 
 # import the experiment configuration file given by the first command-line argument
 if len(sys.argv) > 1:   # Try to import user-defined config file

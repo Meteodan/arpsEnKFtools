@@ -29,7 +29,7 @@ else:
 arpssfc_input_template_path = os.path.join(config.template_exp_dir, 'arpssfc.input')
 
 # Create the arpssfc work directory in icbc scratch directory if it doesn't already exist.
-arpssfc_work_dir = os.path.join(config.icbc_scr_dir, 'arpssfc_work')
+arpssfc_work_dir = os.path.join(config.prep_work_dir, 'arpssfc_work')
 if not os.path.exists(arpssfc_work_dir):
     os.makedirs(arpssfc_work_dir)
 arpssfc_input_exp_path = os.path.join(arpssfc_work_dir,
@@ -47,8 +47,11 @@ editNamelistFile(arpssfc_input_template_path,
                  **config.grid_param,
                  **config.arpssfc_param)
 
-# Run arpssfc
+# Create the output directory if it doesn't already exist
+if not os.path.exists(config.sfcdata_dir):
+    os.makedirs(config.sfcdata_dir)
 
+# Run arpssfc
 with open(arpssfc_input_exp_path, 'r') as input_file, \
      open(arpssfc_output_exp_path, 'w') as output_file:
     print("Running {} for {}".format(config.arpssfc_exe_path, arpssfc_input_exp_path))

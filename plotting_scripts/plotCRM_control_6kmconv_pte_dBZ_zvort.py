@@ -13,7 +13,7 @@
 import numpy as N
 import matplotlib
 import matplotlib.cm as cm
-import modules.ctablesfrompyesviewer as ctables
+
 
 #-----------------------------------------------------------------------------------------
 # Section 1.
@@ -51,10 +51,10 @@ wind_standard_value = 20
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = False
+tmat_opt = True
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
-dirscatt = '/home/dawson29/pyCRMplot/tmatrix/S-band/MFflg1/'
+dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
 
 # Map and GIS overlay stuff
 
@@ -71,7 +71,8 @@ draw_radar = 0
 refl_colors = ['#00FFFF', '#6495ED', '#000090', '#00FF00', '#00BB00', '#008800', '#FFFF00',
                '#FFDD00', '#DAA520', '#FF0000', '#B21111', '#990000', '#FF00FF', '#BB55DD']
 
-cmapdBZ = ctables.__getattribute__('NWSRef')
+# cmapdBZ = ctables.__getattribute__('NWSReflectivity')
+normdBZ, cmapdBZ = ctables.registry.get_with_steps('NWSReflectivity', 5., 5.)
 
 #Slice control parameters
 
@@ -118,7 +119,7 @@ ovrquad = False  # Overlay quadrants for tornado analysis?
 tor_x = 106875.0+trajxoffset # 4860 s
 tor_y = 113125.0+trajyoffset
 
-ovrxz = False               # Overlay location of vertical cross section on some plots?
+ovrxzslice = False               # Overlay location of vertical cross section on some plots?
 xzslice = 50
 ovryzslice = False
 yzslice = 50
@@ -130,7 +131,7 @@ yzslice = 50
 
 basedir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6kmconv/6kmconv/' # Base directory name where individual
                                                                 # run folders reside
-outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
+outdirname = './plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [True,True]
 dir_list = ['./ENamean/','./ENfmean/']
 dir_extra_list = ['./','./']
@@ -138,8 +139,9 @@ runname_list = ['enmean','efmean']
 runlabel_list = ['enmean','efmean']
 trailer_list = ['','']
 mphyopt_list = [15,15]
-plotlim_list = [None,None]
-master_time_list = [N.arange(14400.0,32400.0+3600.0,3600.0), N.arange(14400.0,32400.0+3600.0,3600.0)]
+plotlim_list = [[650000., 1200000., 700000., 1150000.], [650000., 1200000., 700000., 1150000.]]
+master_time_list = [N.arange(15300.,54000.0+900.,900.), N.arange(15300.,54000.0+900.0,900.0)]
+start_timestamp_list = ['20160331161500', '20160331161500']
 arbfile_list = [None,None]
 
 # Variables to plot
@@ -156,7 +158,7 @@ slice1 = 1
 stag = 's'
 
 fieldovername = "dBZ"
-fieldoverlevels = N.arange(10.0,80.0+10.0,10.0)
+fieldoverlevels = N.arange(20.0,80.0+20.0,20.0)
 fieldovercolor = 'k'
 slice2 = 1
 stagovr = 's'
