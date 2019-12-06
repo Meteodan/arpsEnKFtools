@@ -23,5 +23,8 @@ dependencies:
   - wheel
   - xz
   - zlib
+  - siphon
+  - pip:
+    - nexradaws
 prefix: /Users/dawson29/anaconda2/envs/arpsEnKFtools
 

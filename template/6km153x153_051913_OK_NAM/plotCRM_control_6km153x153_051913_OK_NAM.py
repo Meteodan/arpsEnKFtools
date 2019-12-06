@@ -140,7 +140,7 @@ runlabel_list = ['enmean','efmean']
 trailer_list = ['','']
 mphyopt_list = [15,15]
 plotlim_list = [None,None]
-master_time_list = [N.arange(21600.0,64800.0+3600.0,3600.0), N.arange(21600.0,64800.0+3600.0,3600.0)]
+master_time_list = [N.arange(64800.0,75600.0+3600.0,3600.0), N.arange(64800.0,75600.0+3600.0,3600.0)]
 start_timestamp_list = ['20130519060000', '20130519060000']
 arbfile_list = [None,None]
 

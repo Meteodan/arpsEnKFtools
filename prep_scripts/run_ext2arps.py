@@ -45,8 +45,10 @@ ext2arps_output_lbc_exp_path = os.path.join(ext2arps_work_dir,
 # shutil.copy(ext2arps_input_template_path, ext2arps_work_dir)
 
 # Edit the namelist files
-
 ext2arps_param = config.ext2arps_param.copy()
+# Pop the t0 and lbc run flags from the dictionary
+run_t0 = ext2arps_param.pop('run_t0', True)
+run_lbc = ext2arps_param.pop('run_lbc', True)
 extdtimes = ext2arps_param.pop('extdtimes')
 # Now loop through the times in the "extdtimes" list from the master_config.py and create
 # the appropriate key-value pairs for passing to the editNamelistFile function below
@@ -56,35 +58,37 @@ for i in range(1, ext2arps_param['nextdfil'] + 1):
 
 # Additional parameters for initial condition (t0) run
 
-extdfile_t0_args = ext2arps_param.copy()
-new_args = {
-    'hdmpopt': 1,
-    'exbcdmp': 0,
-    'nextdfil': 1
-}
-extdfile_t0_args.update(new_args)
+if run_t0:
+    extdfile_t0_args = ext2arps_param.copy()
+    new_args = {
+        'hdmpopt': 1,
+        'exbcdmp': 0,
+        'nextdfil': 1
+    }
+    extdfile_t0_args.update(new_args)
 
-# Create namelist file for t0 run
-editNamelistFile(ext2arps_input_template_path,
-                 ext2arps_input_t0_exp_path,
-                 runname=config.exp_name,
-                 **config.grid_param,
-                 **extdfile_t0_args)
+    # Create namelist file for t0 run
+    editNamelistFile(ext2arps_input_template_path,
+                    ext2arps_input_t0_exp_path,
+                    runname=config.exp_name,
+                    **config.grid_param,
+                    **extdfile_t0_args)
 
 # Additional parameters for lateral boundary condition (lbc) run
 
-extdfile_lbc_args = ext2arps_param.copy()
-new_args = {
-    'hdmpfmt': 0
-}
-extdfile_lbc_args.update(new_args)
+if run_lbc:
+    extdfile_lbc_args = ext2arps_param.copy()
+    new_args = {
+        'hdmpfmt': 0
+    }
+    extdfile_lbc_args.update(new_args)
 
-# Create namelist file for lbc run
-editNamelistFile(ext2arps_input_template_path,
-                 ext2arps_input_lbc_exp_path,
-                 runname=config.exp_name,
-                 **config.grid_param,
-                 **extdfile_lbc_args)
+    # Create namelist file for lbc run
+    editNamelistFile(ext2arps_input_template_path,
+                    ext2arps_input_lbc_exp_path,
+                    runname=config.exp_name,
+                    **config.grid_param,
+                    **extdfile_lbc_args)
 
 # # Run ext2arps
 
@@ -92,12 +96,14 @@ editNamelistFile(ext2arps_input_template_path,
 if not os.path.exists(ext2arps_param['dirname']):
     os.makedirs(ext2arps_param['dirname'])
 
-with open(ext2arps_input_t0_exp_path, 'r') as input_file, \
-     open(ext2arps_output_t0_exp_path, 'w') as output_file:
-    print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_t0_exp_path))
-    subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)
+if run_t0:
+    with open(ext2arps_input_t0_exp_path, 'r') as input_file, \
+        open(ext2arps_output_t0_exp_path, 'w') as output_file:
+        print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_t0_exp_path))
+        subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)
 
-with open(ext2arps_input_lbc_exp_path, 'r') as input_file, \
-     open(ext2arps_output_lbc_exp_path, 'w') as output_file:
-    print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_lbc_exp_path))
-    subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)
+if run_lbc:
+    with open(ext2arps_input_lbc_exp_path, 'r') as input_file, \
+        open(ext2arps_output_lbc_exp_path, 'w') as output_file:
+        print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_lbc_exp_path))
+        subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)

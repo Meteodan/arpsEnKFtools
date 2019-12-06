@@ -23,11 +23,11 @@ python run_real_data_case.py  \
     --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
     --split-init auto --debug --save-batch --error-check
 
-# Then, 15-min cycle assimilating ASOS 5-min obs until 2300 UTC 13 May 2013
+# Then, 15-min cycle assimilating ASOS 5-min obs until 0300 UTC 20 May 2013
 python run_real_data_case.py  \
     --base-path $BASEPATH  --job-name $JOBNAME                                        \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
-    --ens-start 21600  --ens-end 61200  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --ens-start 21600  --ens-end 75600  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar no  --assim-prof no  --assim-surf yes  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \

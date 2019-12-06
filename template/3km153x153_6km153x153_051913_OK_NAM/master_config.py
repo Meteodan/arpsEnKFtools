@@ -180,8 +180,8 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
-    'start_time': 43200.0,
-    'end_time': 64800.0,
+    'start_time': 65100.0,
+    'end_time': 75600.0,
     'step_time': 300.0
 }
 
@@ -189,8 +189,8 @@ arpsintrp_param = {
 radremap_param = {
     'radar_list': ['KTLX'],
     'start_timestamp': '20130519194500',
-    'end_timestamp': '20130519230000',
-    'interval_seconds': 900,
+    'end_timestamp': '20130520020000',
+    'interval_seconds': 300,
     'tolerance': 300
 }
 
@@ -247,10 +247,11 @@ arpsenkfic_param = {
 }
 
 
-# ARPSENKF parameters. TODO: update for 3-km with radar assimilation
+# ARPSENKF parameters.
 arpsenkf_param = {
-    'sfcweight': 2,
-    'sfcr0h': 300000.0,
-    'sfcr0h_meso': 50000.0,
-    'sfcr0v': 6000.0,
+    'nrdrused': 1,
+    'radarname': ['KTLX', 'KFDR'],
+    'ntwtype': [1, 1],
+    'vcpmode': [11, 11],
+    'rdrlocopt': [1, 1]
 }

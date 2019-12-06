@@ -21,15 +21,15 @@ python run_real_data_case.py  \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
     --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
-    --split-init auto --debug --save-batch --error-check --initial-conditions yes
+    --split-init auto --debug --save-batch --error-check --initial-conditions yes --save-lookup
 
-# Then, 15-min cycle assimilating radar obs until 2245 UTC 13 May 2013
-# python run_real_data_case.py  \
-#     --base-path $BASEPATH  --job-name $JOBNAME                                        \
-#     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
-#     --ens-start 49500  --ens-end 60300  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
-#     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
-#     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
-#     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-#     --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
-#     --split-init auto --debug --save-batch --error-check --restart
+# Then, 15-min cycle assimilating radar obs until 0200 UTC 13 May 2013
+python run_real_data_case.py  \
+    --base-path $BASEPATH  --job-name $JOBNAME                                        \
+    --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
+    --ens-start 49500  --ens-end 72000  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
+    --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
+    --covariance-inflation 0:mults=1.20,adapt=0.90 \
+    --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
+    --split-init auto --debug --save-batch --error-check --restart

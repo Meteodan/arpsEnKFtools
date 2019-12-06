@@ -436,6 +436,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         "mv *hdfwgt* %s/%s/" % (work_path, "wgt"),
         "mv K* %s/%s/" % (work_path, "stats"),
         "rename .txt _%d.txt dif_*" % (assim_time),
+        "mv dif_* {}/{}/".format(work_path, 'difobs'),
         "cd -",
         "",
     ]

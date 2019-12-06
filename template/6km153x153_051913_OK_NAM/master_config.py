@@ -165,7 +165,7 @@ ext2arps_param = {
     'extdfmt': 3,
     'dir_extd': ext_model_data_dir,
     'extdname': 'nam_218',
-    'nextdfil': 18,
+    'nextdfil': 22,
     # Note, for now explicitly list each time string here. We can work on a more
     # compact solution later
     'extdtimes': [
@@ -187,6 +187,10 @@ ext2arps_param = {
         '2013-05-19.18:00:00+003:00:00',
         '2013-05-19.18:00:00+004:00:00',
         '2013-05-19.18:00:00+005:00:00',
+        '2013-05-20.00:00:00+000:00:00',
+        '2013-05-20.00:00:00+001:00:00',
+        '2013-05-20.00:00:00+002:00:00',
+        '2013-05-20.00:00:00+003:00:00'
     ],
     'iorder': 3,
     'intropt': 1,
