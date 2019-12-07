@@ -181,11 +181,14 @@ for scatt_subdir in scatt_subdirs:
 # For now just link the entire directory. ARPSENKF will just read the needed files from there.
 # Assumes the remapped radar files have already been created with run_radremap.py and links have
 # been made to the times that ARPSENKF is expecting (with link_radremap.py).
-print("Linking remapped radar files...")
-radar_dir = os.path.join(config.exp_scr_dir, 'nexrad')
-if os.path.lexists(radar_dir):
-    os.remove(radar_dir)
-os.symlink(config.remapped_radar_dir, radar_dir)
+try:
+    print("Linking remapped radar files...")
+    radar_dir = os.path.join(config.exp_scr_dir, 'nexrad')
+    if os.path.lexists(radar_dir):
+        os.remove(radar_dir)
+    os.symlink(config.remapped_radar_dir, radar_dir)
+except:
+    print("Linking remapped radar files failed!")
 
 # Copy some miscellaneous files
 print("Copying miscellaneous auxilliary files...")
