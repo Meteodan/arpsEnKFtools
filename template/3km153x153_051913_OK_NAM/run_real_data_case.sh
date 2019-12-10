@@ -16,7 +16,7 @@ conda activate arpsEnKFtools
 python run_real_data_case.py  \
     --base-path $BASEPATH  --job-name $JOBNAME                                        \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
-    --ens-start 43200 --ens-end 49500  --ens-step 300  --assim-step 6300  --chunk-size 6300                                   \
+    --ens-start 0 --ens-end 6300  --ens-step 300  --assim-step 6300  --chunk-size 6300                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
@@ -27,7 +27,7 @@ python run_real_data_case.py  \
 python run_real_data_case.py  \
     --base-path $BASEPATH  --job-name $JOBNAME                                        \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
-    --ens-start 49500  --ens-end 72000  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --ens-start 6300  --ens-end 28800  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \

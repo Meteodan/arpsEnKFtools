@@ -69,10 +69,10 @@ if run_t0:
 
     # Create namelist file for t0 run
     editNamelistFile(ext2arps_input_template_path,
-                    ext2arps_input_t0_exp_path,
-                    runname=config.exp_name,
-                    **config.grid_param,
-                    **extdfile_t0_args)
+                     ext2arps_input_t0_exp_path,
+                     runname=config.exp_name,
+                     **config.grid_param,
+                     **extdfile_t0_args)
 
 # Additional parameters for lateral boundary condition (lbc) run
 
@@ -85,10 +85,10 @@ if run_lbc:
 
     # Create namelist file for lbc run
     editNamelistFile(ext2arps_input_template_path,
-                    ext2arps_input_lbc_exp_path,
-                    runname=config.exp_name,
-                    **config.grid_param,
-                    **extdfile_lbc_args)
+                     ext2arps_input_lbc_exp_path,
+                     runname=config.exp_name,
+                     **config.grid_param,
+                     **extdfile_lbc_args)
 
 # # Run ext2arps
 
@@ -98,12 +98,12 @@ if not os.path.exists(ext2arps_param['dirname']):
 
 if run_t0:
     with open(ext2arps_input_t0_exp_path, 'r') as input_file, \
-        open(ext2arps_output_t0_exp_path, 'w') as output_file:
+            open(ext2arps_output_t0_exp_path, 'w') as output_file:
         print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_t0_exp_path))
         subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)
 
 if run_lbc:
     with open(ext2arps_input_lbc_exp_path, 'r') as input_file, \
-        open(ext2arps_output_lbc_exp_path, 'w') as output_file:
+            open(ext2arps_output_lbc_exp_path, 'w') as output_file:
         print("Running {} for {}".format(config.ext2arps_exe_path, ext2arps_input_lbc_exp_path))
         subprocess.call(config.ext2arps_exe_path, stdin=input_file, stdout=output_file, shell=True)

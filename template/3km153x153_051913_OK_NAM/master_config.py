@@ -68,7 +68,7 @@ mpi_nproc_flag = '-n'
 num_ensemble_members = 40
 # Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
 # initial time of the original parent experiment!
-initial_time = '201305191900'
+initial_time = '201305191800'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
@@ -147,23 +147,8 @@ arpssfc_param = {
     'dirname': sfcdata_dir
 }
 
-# STOPPED HERE!
-
 # WRF2ARPS parameters
 wrf2arps_param = {
-    'run_mpi': True,
-    'batch': True,
-    'history_interval_sec': 600,
-    'history_interval': '00_00:10:00',
-    'init_timestamp': initial_time,
-    'end_timestamp': '2013052000',
-    'subdir_template': 'wrf-s4ekm{:02d}',
-    'dmp_out_joined': 1111111,
-    'wrfexttrnopt': 3,
-    'terndta': trndata_path,
-    'ternfmt': 3,
-    'extntmrg': 7,
-    'dirname': external_icbc_dir
 }
 
 # ARPSINTRP parameters
@@ -206,22 +191,10 @@ ext2arps_param = {
     'extdfmt': 3,
     'dir_extd': ext_model_data_dir,
     'extdname': 'nam_218',
-    'nextdfil': 22,
+    'nextdfil': 10,
     # Note, for now explicitly list each time string here. We can work on a more
     # compact solution later
     'extdtimes': [
-        '2013-05-19.06:00:00+000:00:00',
-        '2013-05-19.06:00:00+001:00:00',
-        '2013-05-19.06:00:00+002:00:00',
-        '2013-05-19.06:00:00+003:00:00',
-        '2013-05-19.06:00:00+004:00:00',
-        '2013-05-19.06:00:00+005:00:00',
-        '2013-05-19.12:00:00+000:00:00',
-        '2013-05-19.12:00:00+001:00:00',
-        '2013-05-19.12:00:00+002:00:00',
-        '2013-05-19.12:00:00+003:00:00',
-        '2013-05-19.12:00:00+004:00:00',
-        '2013-05-19.12:00:00+005:00:00',
         '2013-05-19.18:00:00+000:00:00',
         '2013-05-19.18:00:00+001:00:00',
         '2013-05-19.18:00:00+002:00:00',
