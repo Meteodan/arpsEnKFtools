@@ -73,7 +73,7 @@ initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
-perturb_ic = False
+perturb_ic = True
 external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
 external_inigbf = '{}.hdfgrdbas'.format(exp_name)
 external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
