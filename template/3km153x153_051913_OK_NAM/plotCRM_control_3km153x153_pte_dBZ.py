@@ -129,7 +129,7 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_6km153x153_051913_OK_NAM/3km153x153_6km153x153_051913_OK_NAM/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_051913_OK_NAM/3km153x153_051913_OK_NAM/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [False, False, True, False]
@@ -141,14 +141,14 @@ trailer_list = ['', '', '', '']
 mphyopt_list = [15, 15, 15, 15]
 plotlim_list = [None, None, None, None]
 master_time_list = [N.arange(49500.0, 72000.0+900.0, 900.0), N.arange(49500.0, 72000.0+900.0, 900.0),
-                    N.arange(60300.0, 72000.0+900.0, 900.0), N.arange(49500.0, 60300.0+900.0, 900.0)]
-start_timestamp_list = ['20130519060000', '20130519060000', '20130519060000', '20130519060000']
+                    N.arange(6300.0, 12600.0+300.0, 300.0), N.arange(49500.0, 60300.0+900.0, 900.0)]
+start_timestamp_list = ['20130519060000', '20130519180000', '20130519180000', '20130519060000']
 arbfile_list = [None, None, None, None]
 
 # Variables to plot
 
 fieldname = "pte"
-fieldlevels = N.arange(320.0,370.0+1.0,1.0)
+fieldlevels = N.arange(320.0,390.0+1.0,1.0)
 clvls = matplotlib.ticker.MultipleLocator(base=5.0)
 clabel = r'$\theta_e$'
 cformat = None
