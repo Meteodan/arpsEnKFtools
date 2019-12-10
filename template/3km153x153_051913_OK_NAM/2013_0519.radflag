@@ -1,44 +1,44 @@
-all_radars      = ['KTLX']
-radars_not_MPAR = ['KTLX']
+all_radars      = ['KTLX'] 
+radars_not_MPAR = ['KTLX'] 
 radars_not_KOUN = ['KTLX']
 wsr_88ds        = ['KTLX']
 
 radar_data_flag = {
-    43200:    {True:[],              False:[]      }, #1800:00
-    44100:    {True:[],              False:[]      }, #1815:00
-    45000:    {True:[],              False:[]      }, #1830:00
-    45900:    {True:[],              False:[]      }, #1845:00
-    46800:    {True:[],              False:[]      }, #1900:00
-    47700:    {True:[],              False:[]      }, #1915:00
-    48600:    {True:[],              False:[]      }, #1930:00
-    49500:    {True:all_radars,              False:[]      }, #1945:00
-    50400:    {True:all_radars,              False:[]      }, #2000:00
-    51300:    {True:all_radars,              False:[]      }, #2015:00
-    52200:    {True:all_radars,              False:[]      }, #2030:00
-    53100:    {True:all_radars,              False:[]      }, #2045:00
-    54000:    {True:all_radars,              False:[]      }, #2100:00
-    54900:    {True:all_radars,              False:[]      }, #2115:00
-    55800:    {True:all_radars,              False:[]      }, #2130:00
-    56700:    {True:all_radars,              False:[]      }, #2145:00
-    57600:    {True:all_radars,              False:[]      }, #2200:00
-    58500:    {True:all_radars,              False:[]      }, #2215:00
-    59400:    {True:all_radars,              False:[]      }, #2230:00
-    60300:    {True:all_radars,              False:[]      }, #2245:00
-    61200:    {True:all_radars,              False:[]      }, #2300:00
-    62100:    {True:all_radars,              False:[]      }, #2315:00
-    63000:    {True:all_radars,              False:[]      }, #2330:00
-    63900:    {True:all_radars,              False:[]      }, #2345:00
-    64800:    {True:all_radars,              False:[]      }, #0000:00
-    65700:    {True:all_radars,              False:[]      }, #0015:00
-    66600:    {True:all_radars,              False:[]      }, #0030:00
-    67500:    {True:all_radars,              False:[]      }, #0045:00
-    68400:    {True:all_radars,              False:[]      }, #0100:00
-    69300:    {True:all_radars,              False:[]      }, #0115:00
-    70200:    {True:all_radars,              False:[]      }, #0130:00
-    71100:    {True:all_radars,              False:[]      }, #0145:00
-    72000:    {True:all_radars,              False:[]      }, #0200:00
-    72900:    {True:all_radars,              False:[]      }, #0215:00
-    73800:    {True:all_radars,              False:[]      }, #0230:00
-    74700:    {True:all_radars,              False:[]      }, #0245:00
-    75600:    {True:all_radars,              False:[]      }, #0300:00
+        0:    {True:[],              False:[]      }, #1800:00
+      900:    {True:[],              False:[]      }, #1815:00
+     1800:    {True:[],              False:[]      }, #1830:00
+     2700:    {True:[],              False:[]      }, #1845:00
+     3600:    {True:[],              False:[]      }, #1900:00
+     4500:    {True:[],              False:[]      }, #1915:00
+     5400:    {True:[],              False:[]      }, #1930:00
+     6300:    {True:[],              False:[]      }, #1945:00
+     7200:    {True:all_radars,              False:[]      }, #2000:00
+     8100:    {True:all_radars,              False:[]      }, #2015:00
+     9000:    {True:all_radars,              False:[]      }, #2030:00
+     9900:    {True:all_radars,              False:[]      }, #2045:00
+    10800:    {True:all_radars,              False:[]      }, #2100:00
+    11700:    {True:all_radars,              False:[]      }, #2115:00
+    12600:    {True:all_radars,              False:[]      }, #2130:00
+    13500:    {True:all_radars,              False:[]      }, #2145:00
+    14400:    {True:all_radars,              False:[]      }, #2200:00
+    15300:    {True:all_radars,              False:[]      }, #2215:00
+    16200:    {True:all_radars,              False:[]      }, #2230:00
+    17100:    {True:all_radars,              False:[]      }, #2245:00
+    18000:    {True:all_radars,              False:[]      }, #2300:00
+    18900:    {True:all_radars,              False:[]      }, #2315:00
+    19800:    {True:all_radars,              False:[]      }, #2330:00
+    20700:    {True:all_radars,              False:[]      }, #2345:00
+    21600:    {True:all_radars,              False:[]      }, #0000:00
+    22500:    {True:all_radars,              False:[]      }, #0015:00
+    23400:    {True:all_radars,              False:[]      }, #0030:00
+    24300:    {True:all_radars,              False:[]      }, #0045:00
+    25200:    {True:all_radars,              False:[]      }, #0100:00
+    26100:    {True:all_radars,              False:[]      }, #0115:00
+    27000:    {True:all_radars,              False:[]      }, #0130:00
+    27900:    {True:all_radars,              False:[]      }, #0145:00
+    28800:    {True:all_radars,              False:[]      }, #0200:00
+    29700:    {True:all_radars,              False:[]      }, #0215:00
+    30600:    {True:all_radars,              False:[]      }, #0230:00
+    31500:    {True:all_radars,              False:[]      }, #0245:00
+    32400:    {True:all_radars,              False:[]      }, #0300:00
 }

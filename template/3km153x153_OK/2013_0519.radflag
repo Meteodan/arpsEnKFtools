@@ -1,5 +1,5 @@
-all_radars      = ['KTLX'] 
-radars_not_MPAR = ['KTLX'] 
+all_radars      = ['KTLX']
+radars_not_MPAR = ['KTLX']
 radars_not_KOUN = ['KTLX']
 wsr_88ds        = ['KTLX']
 
@@ -11,7 +11,7 @@ radar_data_flag = {
      3600:    {True:[],              False:[]      }, #1900:00
      4500:    {True:[],              False:[]      }, #1915:00
      5400:    {True:[],              False:[]      }, #1930:00
-     6300:    {True:[],              False:[]      }, #1945:00
+     6300:    {True:all_radars,              False:[]      }, #1945:00
      7200:    {True:all_radars,              False:[]      }, #2000:00
      8100:    {True:all_radars,              False:[]      }, #2015:00
      9000:    {True:all_radars,              False:[]      }, #2030:00
