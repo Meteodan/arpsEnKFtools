@@ -51,7 +51,7 @@ wind_standard_value = 20
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = True
+tmat_opt = False
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
 dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
@@ -129,7 +129,7 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_6km153x153_051913_OK_NAM/3km153x153_6km153x153_051913_OK_NAM_LIN_AI/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_6km153x153_051913_OK_NAM/3km153x153_6km153x153_051913_OK_NAM/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [False, False, True, False]
@@ -141,31 +141,31 @@ trailer_list = ['', '', '', '']
 mphyopt_list = [15, 15, 15, 15]
 plotlim_list = [None, None, None, None]
 master_time_list = [N.arange(49500.0, 72000.0+900.0, 900.0), N.arange(49500.0, 72000.0+900.0, 900.0),
-                    N.arange(49500.0, 72000.0+900.0, 900.0), N.arange(49500.0, 72000.0+900.0, 900.0)]
+                    N.arange(60300.0, 72000.0+900.0, 900.0), N.arange(49500.0, 60300.0+900.0, 900.0)]
 start_timestamp_list = ['20130519060000', '20130519060000', '20130519060000', '20130519060000']
 arbfile_list = [None, None, None, None]
 
 # Variables to plot
 
-fieldname = "dBZmod"
-fieldlevels = N.arange(5.0,85.0+5.0,5.0)
-clvls = matplotlib.ticker.MultipleLocator(base=10.0)
-clabel = r'dBZ'
+fieldname = "pte"
+fieldlevels = N.arange(320.0,370.0+1.0,1.0)
+clvls = matplotlib.ticker.MultipleLocator(base=5.0)
+clabel = r'$\theta_e$'
 cformat = None
-fieldcm = cmapdBZ
+fieldcm = cm.viridis
 norm = matplotlib.colors.BoundaryNorm(fieldlevels,fieldcm.N)
 plabel = None
-slice1 = 10
+slice1 = 1
 stag = 's'
 
-fieldovername = "w"
-fieldoverlevels = N.arange(5.0,60.0+5.0,5.0)
+fieldovername = "dBZmod"
+fieldoverlevels = N.arange(5.0,85.0+5.0,5.0)
 fieldovercolor = 'k'
-slice2 = 14
+slice2 = 1
 stagovr = 's'
 
-fieldover2name = "vortz"
-fieldover2levels = N.arange(3.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
+fieldover2name = "none"
+fieldover2levels = N.arange(1.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
 fieldover2color = 'purple'
 slice3 = 14 # 14
 stagovr2 = 's'

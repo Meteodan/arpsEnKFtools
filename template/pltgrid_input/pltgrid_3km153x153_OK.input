@@ -150,9 +150,9 @@
    mapgrid = 0,
       latgrid = -5., longrid = -5., mapgridcol =10,
    nmapfile = 2,
-     mapfile(1) = '/home/sharm261/arps5.4/data/arpsplt/us_county.mapdata',  mapcol(1)=1, mapline_style(1)=1,
-     mapfile(2) = '/home/sharm261/arps5.4/data/arpsplt/us_state.mapdata',     mapcol(2)=2, mapline_style(2)=3,
-     mapfile(3) = '/home/sharm261/arps5.4/data/arpsplt/world_coast.mapdata',  mapcol(3)=1, mapline_style(3)=1,
+     mapfile(1) = '/home/dawson29/arps5.4_main/data/arpsplt/us_county.mapdata',  mapcol(1)=1, mapline_style(1)=1,
+     mapfile(2) = '/home/dawson29/arps5.4_main/data/arpsplt/us_state.mapdata',     mapcol(2)=2, mapline_style(2)=3,
+     mapfile(3) = '/home/dawson29/arps5.4_main/data/arpsplt/world_coast.mapdata',  mapcol(3)=1, mapline_style(3)=1,
  /
 
 !
