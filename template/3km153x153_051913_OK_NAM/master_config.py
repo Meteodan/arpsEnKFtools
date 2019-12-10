@@ -16,15 +16,15 @@ IOP_name = ''  # Not needed for this experiment
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
 prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
-ext_model_data_dir = os.path.join(scratch_base_dir,
-                                  'Projects/051913_OK/model_data/SSEF/temp/wrf_finalized')
+ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/model_data/NAM',
+                                  IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
 exp_name_base = '3km153x153_051913_OK'
-exp_name_tag = '_SSEF'
+exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
 exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
@@ -65,7 +65,7 @@ mpi_nproc_flag = '-n'
 # documentation in the various namelist input files for details on their meanings.
 
 # Basic experiment parameters
-num_ensemble_members = 39
+num_ensemble_members = 40
 # Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
 # initial time of the original parent experiment!
 initial_time = '201305191900'
@@ -74,12 +74,8 @@ initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
 perturb_ic = False
-if perturb_ic:
-    external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
-    external_inigbf = '{}.hdfgrdbas'.format(exp_name)
-else:
-    external_inifile = 'ena001.hdf{:06d}'.format(initial_time_sec)
-    external_inigbf = 'ena001.hdfgrdbas'
+external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
+external_inigbf = '{}.hdfgrdbas'.format(exp_name)
 external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
 external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
@@ -109,7 +105,7 @@ grid_param = {
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -97.2275,
+    'trulon': -97.2275
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -185,6 +181,67 @@ radremap_param = {
 
 # EXT2ARPS parameters
 ext2arps_param = {
+    'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
+    'tstart': float(initial_time_sec),
+    'tstop': float(initial_time_sec),
+    'dmp_out_joined': 1,
+    'hdmpfmt': 3,
+    'hdfcompr': 2,
+    'exbcdmp': 3,
+    'exbchdfcompr': 2,
+    'extdadmp': 1,
+    'qcexout': 1,
+    'qrexout': 1,
+    'qiexout': 1,
+    'qsexout': 1,
+    'qhexout': 1,
+    'qgexout': 1,
+    'nqexout': 1,
+    'zqexout': 1,
+    'dirname': external_icbc_dir,
+    'ternopt': 2,
+    'terndta': trndata_path,
+    'ternfmt': 3,
+    'extdopt': 116,
+    'extdfmt': 3,
+    'dir_extd': ext_model_data_dir,
+    'extdname': 'nam_218',
+    'nextdfil': 22,
+    # Note, for now explicitly list each time string here. We can work on a more
+    # compact solution later
+    'extdtimes': [
+        '2013-05-19.06:00:00+000:00:00',
+        '2013-05-19.06:00:00+001:00:00',
+        '2013-05-19.06:00:00+002:00:00',
+        '2013-05-19.06:00:00+003:00:00',
+        '2013-05-19.06:00:00+004:00:00',
+        '2013-05-19.06:00:00+005:00:00',
+        '2013-05-19.12:00:00+000:00:00',
+        '2013-05-19.12:00:00+001:00:00',
+        '2013-05-19.12:00:00+002:00:00',
+        '2013-05-19.12:00:00+003:00:00',
+        '2013-05-19.12:00:00+004:00:00',
+        '2013-05-19.12:00:00+005:00:00',
+        '2013-05-19.18:00:00+000:00:00',
+        '2013-05-19.18:00:00+001:00:00',
+        '2013-05-19.18:00:00+002:00:00',
+        '2013-05-19.18:00:00+003:00:00',
+        '2013-05-19.18:00:00+004:00:00',
+        '2013-05-19.18:00:00+005:00:00',
+        '2013-05-20.00:00:00+000:00:00',
+        '2013-05-20.00:00:00+001:00:00',
+        '2013-05-20.00:00:00+002:00:00',
+        '2013-05-20.00:00:00+003:00:00'
+    ],
+    'iorder': 3,
+    'intropt': 1,
+    'nsmooth': 1,
+    'exttrnopt': 2,
+    'extntmrg': 12,
+    'extsfcopt': 0,
+    'ext_lbc': 1,
+    'ext_vbc': 1,
+    'grdbasopt': 1
 }
 
 # ARPS parameters
@@ -233,6 +290,43 @@ arps_param = {
 
 # ARPSENKFIC parameters
 arpsenkfic_param = {
+    'iniprtopt': 2,
+    'iniprt_ptprt': 2,
+    'iniprt_qv': 2,
+    'smoothopt': 2,
+    'lhor': 36000.0,
+    'lver': 7200.0,
+    'prtibgn': 3,
+    'prtiend': grid_param['nx'] - 2,
+    'prtjbgn': 3,
+    'prtjend': grid_param['ny'] - 2,
+    'prtkbgn': 3,
+    'prtkend': grid_param['nz'] - 2,
+    'prtibgnu': 3,
+    'prtiendu': grid_param['nx'] - 2,
+    'prtjbgnv': 3,
+    'prtjendv': grid_param['ny'] - 2,
+    'prtkbgnw': 3,
+    'prtkendw': grid_param['nz'] - 2,
+    'r0h_uv': 6000.0,
+    'r0v_uv': 3000.0,
+    'r0h_w': 6000.0,
+    'r0v_w': 3000.0,
+    'r0h_ptprt': 6000.0,
+    'r0v_ptprt': 3000.0,
+    'r0h_pprt': 6000.0,
+    'r0v_pprt': 3000.0,
+    'r0h_qv': 6000.0,
+    'r0v_qv': 3000.0,
+    'r0h_qli': 6000.0,
+    'r0v_qli': 3000.0,
+    'stdu': 2.0,
+    'stdv': 2.0,
+    'stdw': 0.0,
+    'stdptprt': 1.0,
+    'stdpprt': 0.0,
+    'stdqv': 0.0006,
+    'stdqrelative': 0.1,
 }
 
 
