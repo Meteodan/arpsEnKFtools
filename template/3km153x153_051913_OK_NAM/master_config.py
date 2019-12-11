@@ -263,12 +263,12 @@ arps_param = {
 
 # ARPSENKFIC parameters
 arpsenkfic_param = {
-    'iniprtopt': 2,
-    'iniprt_ptprt': 2,
-    'iniprt_qv': 2,
+    'iniprtopt': 3,
+    'iniprt_ptprt': 3,
+    'iniprt_qv': 3,
     'smoothopt': 2,
-    'lhor': 36000.0,
-    'lver': 7200.0,
+    'lhor': 6000.0,
+    'lver': 6000.0,
     'prtibgn': 3,
     'prtiend': grid_param['nx'] - 2,
     'prtjbgn': 3,
