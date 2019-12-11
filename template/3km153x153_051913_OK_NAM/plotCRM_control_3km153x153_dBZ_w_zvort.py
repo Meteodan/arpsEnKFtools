@@ -141,7 +141,7 @@ trailer_list = ['', '', '', '']
 mphyopt_list = [15, 15, 15, 15]
 plotlim_list = [None, None, None, None]
 master_time_list = [N.arange(49500.0, 72000.0+900.0, 900.0), N.arange(6300.0, 6300.0+900.0, 900.0),
-                    N.arange(12600.0, 15300.0+300.0, 300.0), N.arange(49500.0, 72000.0+900.0, 900.0)]
+                    N.arange(17400.0, 18000.0+300.0, 300.0), N.arange(49500.0, 72000.0+900.0, 900.0)]
 start_timestamp_list = ['20130519180000', '20130519180000', '20130519180000', '20130519180000']
 arbfile_list = [None, None, None, None]
 
