@@ -90,7 +90,7 @@ for wrf_timestring in wrf_timestrings:
                              wrf_timestring=wrf_timestring)
         wrf2arps_dict_list.append(wrf2arps_dict)
 
-for i, wrf2arps_dict in enumerate(wrf2arps_dict_list[:1]):
+for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
 
     t0_input_file_name = wrf2arps_dict['t0_input_file_name']
     t0_output_file_name = wrf2arps_dict['t0_output_file_name']
@@ -150,16 +150,14 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list[:1]):
     else:
         command = '{}'.format(config.wrf2arps_exe_path)
 
-    # Just test for first member and time
-    if i == 0:
-        with open(t0_input_file_name, 'r') as inputfile, \
-                open(t0_output_file_name, 'w') as outputfile:
-            print("Running {} for {}".format(config.wrf2arps_exe_path, t0_input_file_name))
-            subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
-        with open(lbc_input_file_name, 'r') as inputfile, \
-                open(lbc_output_file_name, 'w') as outputfile:
-            print("Running {} for {}".format(config.wrf2arps_exe_path, lbc_input_file_name))
-            subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
+    with open(t0_input_file_name, 'r') as inputfile, \
+            open(t0_output_file_name, 'w') as outputfile:
+        print("Running {} for {}".format(config.wrf2arps_exe_path, t0_input_file_name))
+        subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
+    with open(lbc_input_file_name, 'r') as inputfile, \
+            open(lbc_output_file_name, 'w') as outputfile:
+        print("Running {} for {}".format(config.wrf2arps_exe_path, lbc_input_file_name))
+        subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
 
     # Now remove the softlink if needed
     if subdir_template is None:

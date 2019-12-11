@@ -54,7 +54,7 @@ ext2arps_exe_path = os.path.join(arps_bin_dir, 'ext2arps')
 arps_exe_path = os.path.join(arps_bin_dir, 'arps_mpi')
 arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
-wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps_mpi')
+wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps')
 arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
 radremap_exe_path = os.path.join(arps_bin_dir, '88d2arps')
 mpi_exe = 'mpiexec'
@@ -155,8 +155,7 @@ arpssfc_param = {
 
 # WRF2ARPS parameters
 wrf2arps_param = {
-    'run_mpi': True,
-    'batch': True,
+    'run_mpi': False,
     'history_interval_sec': 600,
     'history_interval': '00_00:10:00',
     'init_timestamp': initial_time,
