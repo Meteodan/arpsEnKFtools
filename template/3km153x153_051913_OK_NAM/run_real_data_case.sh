@@ -20,8 +20,8 @@ python run_real_data_case.py  \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-    --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
-    --split-init auto --debug --save-batch --error-check --initial-conditions yes --save-lookup
+    --fcst-req 0:30  --init-fcst-req 0:30 --assim-on-req 0:30                                                              \
+    --split-init auto --debug --save-batch --error-check --save-lookup
 
 # Then, 15-min cycle assimilating radar obs until 0200 UTC 13 May 2013
 python run_real_data_case.py  \
@@ -31,5 +31,5 @@ python run_real_data_case.py  \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-    --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45                                                              \
+    --fcst-req 0:15  --init-fcst-req 0:15  --assim-on-req 0:30                                                              \
     --split-init auto --debug --save-batch --error-check --restart

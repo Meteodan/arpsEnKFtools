@@ -15,7 +15,7 @@ project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-prep_work_dir = os.path.join(IOP_scr_dir, 'icbc')
+prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
                                   IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
