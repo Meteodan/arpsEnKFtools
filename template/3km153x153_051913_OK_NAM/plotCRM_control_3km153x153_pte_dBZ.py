@@ -51,7 +51,7 @@ wind_standard_value = 20
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = False
+tmat_opt = True
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
 dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
@@ -133,16 +133,16 @@ basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_0519
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [False, False, True, False]
-dir_list = ['./ENamean/', './ENfmean/', './EN001/', './ENF001/']
+dir_list = ['./ENamean/', './ENfmean/', './EN002/', './ENF002/']
 dir_extra_list = ['./', './', './', './']
-runname_list = ['enmean', 'efmean', 'ena001', 'enf001']
-runlabel_list = ['enmean', 'efmean', 'ena001', 'enf001']
+runname_list = ['enmean', 'efmean', 'ena002', 'enf002']
+runlabel_list = ['enmean', 'efmean', 'ena002', 'enf002']
 trailer_list = ['', '', '', '']
 mphyopt_list = [15, 15, 15, 15]
 plotlim_list = [None, None, None, None]
-master_time_list = [N.arange(49500.0, 72000.0+900.0, 900.0), N.arange(49500.0, 72000.0+900.0, 900.0),
-                    N.arange(6300.0, 12600.0+300.0, 300.0), N.arange(49500.0, 60300.0+900.0, 900.0)]
-start_timestamp_list = ['20130519060000', '20130519180000', '20130519180000', '20130519060000']
+master_time_list = [N.arange(6300.0, 28800.0+900.0, 900.0), N.arange(49500.0, 72000.0+900.0, 900.0),
+                    N.arange(0.0, 6300.0+300.0, 300.0), N.arange(6300.0, 6300.0+900.0, 900.0)]
+start_timestamp_list = ['20130519060000', '20130519180000', '20130519180000', '20130519180000']
 arbfile_list = [None, None, None, None]
 
 # Variables to plot

@@ -27,6 +27,11 @@ if len(sys.argv) > 1:   # Try to import user-defined config file
 else:
     print("Please provide an experiment configuration file on the command line! Exiting!")
 
+# Pop the nproc_x, nproc_y from the grid_param dictionary, since we want to use the ones
+# in the wrf2arps_param dictionary
+config.grid_param.pop('nproc_x')
+config.grid_param.pop('nproc_y')
+
 # Set the path to the wrf2arps.input namelist template file
 wrf2arps_input_template_path = os.path.join(config.template_exp_dir, 'wrf2arps.input')
 
@@ -90,7 +95,7 @@ for wrf_timestring in wrf_timestrings:
                              wrf_timestring=wrf_timestring)
         wrf2arps_dict_list.append(wrf2arps_dict)
 
-for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
+for i, wrf2arps_dict in enumerate(wrf2arps_dict_list[:1]):
 
     t0_input_file_name = wrf2arps_dict['t0_input_file_name']
     t0_output_file_name = wrf2arps_dict['t0_output_file_name']
@@ -109,23 +114,21 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
                      init_time_str=wrf_timestrings[0],
                      start_time_str=wrf_timestring,
                      end_time_str=wrf_timestring,
-                     hdmpfmt=3,
-                     exbcdmp=0,
                      **config.wrf2arps_param,
                      **config.grid_param)
 
     # Boundary conditions
-    editNamelistFile("{}".format(wrf2arps_input_template_path),
-                     lbc_input_file_name,
-                     dir_extd=ens_member_dirs[ens_member - 1],
-                     runname=ens_member_name,
-                     init_time_str=wrf_timestrings[0],
-                     start_time_str=wrf_timestring,
-                     end_time_str=wrf_timestring,
-                     hdmpfmt=0,
-                     exbcdmp=3,
-                     **config.wrf2arps_param,
-                     **config.grid_param)
+    # editNamelistFile("{}".format(wrf2arps_input_template_path),
+    #                  lbc_input_file_name,
+    #                  dir_extd=ens_member_dirs[ens_member - 1],
+    #                  runname=ens_member_name,
+    #                  init_time_str=wrf_timestrings[0],
+    #                  start_time_str=wrf_timestring,
+    #                  end_time_str=wrf_timestring,
+    #                  hdmpfmt=0,
+    #                  exbcdmp=3,
+    #                  **config.wrf2arps_param,
+    #                  **config.grid_param)
 
     # If wrfout files are not in separate subdirectories for each ensemble member, we need to make a
     # temporary softlink to the correct wrfout file but removing the ensemble member from the end,
@@ -143,21 +146,25 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
         wrfout_file_link_path = wrfout_file_path
 
     if config.wrf2arps_param['run_mpi']:
+        wrf2arps_exe_path = config.wrf2arps_exe_path
         command = '{} {} {:d} {}'.format(config.mpi_exe, config.mpi_nproc_flag,
-                                         config.grid_param['nproc_x'] *
-                                         config.grid_param['nproc_y'],
-                                         config.wrf2arps_exe_path)
+                                         config.wrf2arps_param['nproc_x'] *
+                                         config.wrf2arps_param['nproc_y'],
+                                         wrf2arps_exe_path)
     else:
-        command = '{}'.format(config.wrf2arps_exe_path)
+        # Get rid of "_mpi" from exe file if it is there
+        wrf2arps_exe = os.path.basename(config.wrf2arps_exe_path).replace("_mpi", "")
+        wrf2arps_exe_path = os.path.join(os.path.dirname(config.wrf2arps_exe_path), wrf2arps_exe)
+        command = '{}'.format(wrf2arps_exe_path)
 
     with open(t0_input_file_name, 'r') as inputfile, \
             open(t0_output_file_name, 'w') as outputfile:
-        print("Running {} for {}".format(config.wrf2arps_exe_path, t0_input_file_name))
+        print("Running {} for {}".format(wrf2arps_exe_path, t0_input_file_name))
         subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
-    with open(lbc_input_file_name, 'r') as inputfile, \
-            open(lbc_output_file_name, 'w') as outputfile:
-        print("Running {} for {}".format(config.wrf2arps_exe_path, lbc_input_file_name))
-        subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
+    # with open(lbc_input_file_name, 'r') as inputfile, \
+    #         open(lbc_output_file_name, 'w') as outputfile:
+    #     print("Running {} for {}".format(config.wrf2arps_exe_path, lbc_input_file_name))
+    #     subprocess.call(command, stdin=inputfile, stdout=outputfile, shell=True)
 
     # Now remove the softlink if needed
     if subdir_template is None:

@@ -54,7 +54,7 @@ ext2arps_exe_path = os.path.join(arps_bin_dir, 'ext2arps')
 arps_exe_path = os.path.join(arps_bin_dir, 'arps_mpi')
 arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
-wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps')
+wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps_mpi')
 arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
 radremap_exe_path = os.path.join(arps_bin_dir, '88d2arps')
 mpi_exe = 'mpiexec'
@@ -151,16 +151,18 @@ arpssfc_param = {
     'dirname': sfcdata_dir
 }
 
-# STOPPED HERE!
-
 # WRF2ARPS parameters
 wrf2arps_param = {
-    'run_mpi': False,
+    'run_mpi': True,
+    'nproc_x': 2,
+    'nproc_y': 2,
     'history_interval_sec': 600,
     'history_interval': '00_00:10:00',
     'init_timestamp': initial_time,
     'end_timestamp': '2013052000',
     'subdir_template': 'wrf-s4ekm{:02d}',
+    'hdmpfmt': 3,
+    'exbcdmp': 3,
     'dmp_out_joined': 1111111,
     'wrfexttrnopt': 3,
     'terndta': trndata_path,

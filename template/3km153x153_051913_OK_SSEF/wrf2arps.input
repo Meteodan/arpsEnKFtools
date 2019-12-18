@@ -589,7 +589,7 @@
    soildmp  = 0,
    terndmp  = 0,
 
-   hdmpfmt  = 3,
+   hdmpfmt  = 7,
    hdfcompr = 2,
      basout   = 1,
      grdout   = 1,
