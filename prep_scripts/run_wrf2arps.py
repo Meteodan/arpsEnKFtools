@@ -95,7 +95,7 @@ for wrf_timestring in wrf_timestrings:
                              wrf_timestring=wrf_timestring)
         wrf2arps_dict_list.append(wrf2arps_dict)
 
-for i, wrf2arps_dict in enumerate(wrf2arps_dict_list[:1]):
+for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
 
     t0_input_file_name = wrf2arps_dict['t0_input_file_name']
     t0_output_file_name = wrf2arps_dict['t0_output_file_name']
