@@ -11,6 +11,10 @@ arpsEnKFtools
 .. image:: https://codecov.io/gh/Meteodan/arpsEnKFtools/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/Meteodan/arpsEnKFtools
 
+.. image:: https://api.codeclimate.com/v1/badges/b8941ef41a53e55ee4aa/maintainability
+   :target: https://codeclimate.com/github/Meteodan/arpsEnKFtools/maintainability
+   :alt: Maintainability
+
 .. image:: https://api.codeclimate.com/v1/badges/b8941ef41a53e55ee4aa/test_coverage
         :target: https://codeclimate.com/github/Meteodan/arpsEnKFtools/test_coverage
         :alt: Test Coverage
