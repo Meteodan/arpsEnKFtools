@@ -2,11 +2,11 @@
 arpsEnKFtools
 ===============================
 
-.. image:: https://img.shields.io/travis/Meteodan/arpsenkftools.svg
-        :target: https://travis-ci.org/Meteodan/arpsenkftools
+.. image:: https://img.shields.io/travis/Meteodan/arpsEnKFtools.svg
+        :target: https://travis-ci.org/Meteodan/arpsEnKFtools
 
-.. image:: https://img.shields.io/pypi/v/arpsenkftools.svg
-        :target: https://pypi.python.org/pypi/arpsenkftools
+.. image:: https://img.shields.io/pypi/v/arpsEnKFtools.svg
+        :target: https://pypi.python.org/pypi/arpsEnKFtools
 
 
 A collection of modules and scripts for setting up and running ARPS-EnKF simulations
