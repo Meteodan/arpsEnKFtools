@@ -8,7 +8,8 @@ arpsEnKFtools
 .. image:: https://img.shields.io/pypi/v/arpsEnKFtools.svg
         :target: https://pypi.python.org/pypi/arpsEnKFtools
 
-.. image:: https://img.shields.io/codecov/c/github/Meteodan/arpsEnKFtools/master   :alt: Codecov branch
+.. image:: https://codecov.io/gh/Meteodan/arpsEnKFtools/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/Meteodan/arpsEnKFtools
 
 A collection of modules and scripts for setting up and running ARPS-EnKF simulations
 
