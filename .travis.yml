@@ -18,3 +18,14 @@ script:
   - codecov  # Upload the report to codecov.
   - flake8 --max-line-length=115  # Enforce code style (but relax line length limit a bit).
 #  - make -C docs html  # Build the documentation.
+
+env:
+  global:
+    # Doctr deploy key for Meteodan/arpsEnKFtools
+    - secure: "ac0hB63cGEirnbYfS0M8IVh8w8Wlrt7RttTXWOZx8kyls/dWPs2Dp4ImTA+JdAcKNxYR/XQoZBR0f74nRZ1ebaCFyV6UAit1Et7QXS6N4Zv63iqTUIcH2HGb8Dmk3mZhu5T/2xQB4BQ5xyvndafOhebe5p6sa66ZufQQgIapn6SGfYPlL8r/ueIpWJ2DWOKkPpx6EG6HikK7BjeExlSQbE5ecjLaiqTErs5TScUN/57OYzTs2j/jzQJWU488bEqrxe9AVDgRnWktgpCIKra1cGSYxEmgdpf3SwHq7o7PC7/LxE4KrE6rd61h0ZycdDX2fWd/fdVzweGHl5iexHJQIhHyG9pnsOajIaNVW32/LqSO7fxMxA/JVeZDnzEUAK9VPjG3kjWCBstHnrmnjN2AtBq1NgiouH5EwT47NqMEJL4LgcpIsjy1WgMwbEX3igKzNkq/phq00Vk+hfo5iTJgNdeuPsJRex0Gba7so1A7YW1J3QPESTwEPxb3WDVAhYA9Xz23ZrvOxQ0cW4yt7Sjy3186KIUVrQ5zhABQyikzUIG0MasdEgKLdHy2Sa2y6zWDVHpvvtWsi6aZdOzPoGxr4kPgQkQL3g/Fqhm8A9pYK48PJNVtAnflFmjXb+6U0ysikvJ7g0mcDq1ZCLVOpAW1UWeRC4M6rKfv6eAJ/gYJX94="
+
+script:
+  - set -e
+  - <Command to build your docs>
+  - pip install doctr
+  - doctr deploy --built-docs
