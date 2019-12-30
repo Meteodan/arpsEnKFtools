@@ -26,4 +26,4 @@ script:
   - set -e
   - <Command to build your docs>
   - pip install doctr
-  - doctr deploy --built-docs
+  - doctr deploy --built-docs docs/build/html/
