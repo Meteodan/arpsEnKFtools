@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Usage &mdash; arpsEnKFtools 0.post99+g15b886c documentation</title>
+  <title>Usage &mdash; arpsEnKFtools 0.post100+g7f22a3b documentation</title>
   
 
   
@@ -39,7 +39,6 @@
   <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Release History" href="release-history.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                0.post99+g15b886c
+                0.post100+g7f22a3b
               </div>
             
           
@@ -92,7 +91,6 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="release-history.html">Release History</a></li>
 </ul>
 
             
@@ -160,10 +158,104 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p>Start by importing arpsEnKFtools.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arpsenkftools</span>
+<p>arpsEnKFtools is a work in progress. Some features may not be working and there are
+likely many bugs. It is helpful to first take a look at the directory structure:</p>
+<p>
+<a href="arpsEnKFtools">arpsEnKFtools</a><br>
+├── <a href="arpsEnKFtools/arpsenkftools/">arpsenkftools</a><br>
+├── <a href="arpsEnKFtools/docs/">docs</a><br>
+├── <a href="arpsEnKFtools/legacy/">legacy</a><br>
+├── <a href="arpsEnKFtools/notebooks/">notebooks</a><br>
+├── <a href="arpsEnKFtools/plotting_scripts/">plotting_scripts</a><br>
+├── <a href="arpsEnKFtools/prep_scripts/">prep_scripts</a><br>
+├── <a href="arpsEnKFtools/radremap_scripts/">radremap_scripts</a><br>
+├── <a href="arpsEnKFtools/template/">template</a><br>
+└── <a href="arpsEnKFtools/utility_scripts/">utility_scripts</a><br>
+<br><br>
+</p><p>For now, we will focus on just a few of these directories. The project structure is
+changing quickly and some of these directories may be renamed or removed altogether.
+Pay attention to this documentation.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">arpsenkftools/</span></code> subdirectory contains code for editing the FORTRAN namelist files
+and generating batch scripts for the HPC system as well as several utility functions.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">prep_scripts/</span></code> directory contains several scripts to generate the needed input
+data and configuration files, as well as to generate the main working directory for a
+given ARPS-EnKF experiment:</p>
+<p>
+<a href="prep_scripts">prep_scripts</a><br>
+├── <a href="prep_scripts/link_lookup_tables.py">link_lookup_tables.py</a><br>
+├── <a href="prep_scripts/link_nam.py">link_nam.py</a><br>
+├── <a href="prep_scripts/link_radremap.py">link_radremap.py</a><br>
+├── <a href="prep_scripts/radarinfo.dat">radarinfo.dat</a><br>
+├── <a href="prep_scripts/run_arpsintrp.py">run_arpsintrp.py</a><br>
+├── <a href="prep_scripts/run_arpssfc.py">run_arpssfc.py</a><br>
+├── <a href="prep_scripts/run_arpstrn.py">run_arpstrn.py</a><br>
+├── <a href="prep_scripts/run_ext2arps.py">run_ext2arps.py</a><br>
+├── <a href="prep_scripts/run_radremap.py">run_radremap.py</a><br>
+├── <a href="prep_scripts/run_wrf2arps.py">run_wrf2arps.py</a><br>
+└── <a href="prep_scripts/setup_experiment_working_dir.py">setup_experiment_working_dir.py</a><br>
+<br><br>
+</p><p>Before getting into their function, we note that each of the <code class="docutils literal notranslate"><span class="pre">run_&lt;arps_exectuable&gt;.py</span></code>,
+as well as the <code class="docutils literal notranslate"><span class="pre">link_&lt;name&gt;.py</span></code> and <code class="docutils literal notranslate"><span class="pre">setup_experiment_working_dir.py</span></code> take one
+command line argument each. This command line argument is the path to a python configuration
+file for a given experiment, typically named <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code>. Several examples are
+in the <code class="docutils literal notranslate"><span class="pre">template/</span></code> subdirectory. This directory contains subdirectories with descriptive
+names of a particular experiment that contain template input files and a <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code>
+script. The various driver scripts in the <code class="docutils literal notranslate"><span class="pre">prep_scripts/</span></code> directory import the configuration
+in <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code> for that experiment, and uses the template’s namelist input files for
+the purpose of running one of the preparation programs. For example, the directory
+<code class="docutils literal notranslate"><span class="pre">template/3km153x153_051913_OK_NAM/</span></code> contains the template for a small 3-km domain centered
+on central OK for the 19 May 2013 tornadic supercell case. the <code class="docutils literal notranslate"><span class="pre">_NAM</span></code> in the name signifies
+that it uses the NAM model forecast/analyses as the initial and boundary conditions. The
+directory tree for this template looks like this:</p>
+<p>
+<a href="3km153x153_051913_OK_NAM">3km153x153_051913_OK_NAM</a><br>
+├── <a href="3km153x153_051913_OK_NAM/2013_0519.radflag">2013_0519.radflag</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arps.input">arps.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arpsenkf.input">arpsenkf.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arpsenkfic.input">arpsenkfic.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arpsintrp.input">arpsintrp.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arpssfc.input">arpssfc.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/arpstrn.input">arpstrn.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/blacklist.sfc">blacklist.sfc</a><br>
+├── <a href="3km153x153_051913_OK_NAM/ext2arps.input">ext2arps.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/master_config.py">master_config.py</a><br>
+├── <a href="3km153x153_051913_OK_NAM/plotCRM_control_3km153x153_dBZ_w_zvort.py">plotCRM_control_3km153x153_dBZ_w_zvort.py</a><br>
+├── <a href="3km153x153_051913_OK_NAM/plotCRM_control_3km153x153_pte_dBZ.py">plotCRM_control_3km153x153_pte_dBZ.py</a><br>
+├── <a href="3km153x153_051913_OK_NAM/radremap_88D.input">radremap_88D.input</a><br>
+├── <a href="3km153x153_051913_OK_NAM/run_real_data_case.sh">run_real_data_case.sh</a><br>
+└── <a href="3km153x153_051913_OK_NAM/wrf2arps.input">wrf2arps.input</a><br>
+<br><br>
+</p><p>If you are familiar with the ARPS model ecosystem, you will recognize many of the
+<code class="docutils literal notranslate"><span class="pre">*.input</span></code> files as being FORTRAN namelist files that control various programs. At this
+point it is a good idea to open up the <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code> file. This file sets various
+parameters, including the paths to various input, output, and executable files.
+There are several dictionaries encapsulating namelist input parameters that will be
+copied into the template namelist input files to control the behavior of the different programs.
+These include grid and map projection parameters, frequency of boundary conditions, number of
+cores for MPI jobs, parameters controlling the behavior of the EnKF assimilation, and so on.</p>
+<p>As a quick example, to run the program <code class="docutils literal notranslate"><span class="pre">arpstrn</span></code> that generates the terrain file for the
+ARPS domain, you would do the following on the command line, assuming you are starting in
+the root directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd prep_scripts
+$ python run_arpstrn.py ../template/3km153x153_051913_OK_NAM/master_config.py
 </pre></div>
 </div>
+<p>This will create a working directory, copy <code class="docutils literal notranslate"><span class="pre">arpstrn.input</span></code> into it, automatically edit
+it with the appropriate parameters as defined in <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code> and finally execute
+<code class="docutils literal notranslate"><span class="pre">arpstrn</span></code>. Output from the program will be placed in a directory that is also specified
+in <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code>.</p>
+<p>Similarly, one would also run <code class="docutils literal notranslate"><span class="pre">ext2arps</span></code> to generate the initial and boundary conditions
+as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python run_ext2arps.py ../template/3km153x153_051913_OK_NAM/master_config.py
+</pre></div>
+</div>
+<p>The use of a single <code class="docutils literal notranslate"><span class="pre">master_config.py</span></code> as input for these scripts greatly simplifies
+what otherwise would be a difficult and error-prone workflow by ensuring that each program
+that is needed to orchestrate a full experiment is working with the same experiment structure.
+This, among other things, obviates the need to manually edit several namelist input files and
+manually having to keep track of the same parameters across them.</p>
+<p>TODO: continue documentation to explain the other prep scripts and then on to the main
+experiment script. Watch this space!</p>
 </div>
 
 
@@ -173,8 +265,6 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="release-history.html" class="btn btn-neutral float-right" title="Release History" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

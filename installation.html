@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; arpsEnKFtools 0.post99+g15b886c documentation</title>
+  <title>Installation &mdash; arpsEnKFtools 0.post100+g7f22a3b documentation</title>
   
 
   
@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
-    <link rel="prev" title="arpsEnKFtools Documentation" href="index.html" /> 
+    <link rel="prev" title="arpsEnKFtools" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.post99+g15b886c
+                0.post100+g7f22a3b
               </div>
             
           
@@ -92,7 +92,6 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="release-history.html">Release History</a></li>
 </ul>
 
             
@@ -160,10 +159,30 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>At the command line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install arpsenkftools
+<p>The current preferred way to install arpsEnKFtools is using a combination of conda
+environments and pip to install the package locally in “editable” mode. Make sure you
+first have <a class="reference external" href="https://conda.io/en/latest/">Conda</a> installed on your system.</p>
+<p>Currently, arpsEnKFtools is set up to work on the <a class="reference external" href="rice.rcac.purdue.edu">Rice</a> cluster at
+Purdue’s <a class="reference external" href="rcac.purdue.edu">Rosen Center for Advanced Computing (RCAC)</a>. Adaptation for other systems
+should be reasonably straightforward and is accomplished by appropriately editing <code class="docutils literal notranslate"><span class="pre">batch.py</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">arpsenkftools/</span></code> subdirectory of the repository.</p>
+<p>On Rice, it is necessary to first make sure you have the conda module loaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ module load anaconda
 </pre></div>
 </div>
+<p>To install arpsEnKFtools, at the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/Meteodan/arpsEnKFtools.git
+$ cd arpsEnKFtools
+$ conda env create -f environment.yml
+$ pip install -e .
+</pre></div>
+</div>
+<p>This will create a conda environment called <code class="docutils literal notranslate"><span class="pre">arpsenkftools</span></code>. To activate this
+environment type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda activate arpsEnKFtools
+</pre></div>
+</div>
+<p>After this, you should be able to run the scripts.</p>
 </div>
 
 
@@ -177,7 +196,7 @@
         <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="arpsEnKFtools Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="arpsEnKFtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
