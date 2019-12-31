@@ -2,6 +2,7 @@
 master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
+import numpy as np
 from datetime import datetime
 
 # Define needed directories and experiment names/tags
@@ -246,7 +247,6 @@ arps_param = {
 arpsenkfic_param = {
 }
 
-
 # ARPSENKF parameters.
 arpsenkf_param = {
     'nrdrused': 1,
@@ -255,3 +255,14 @@ arpsenkf_param = {
     'vcpmode': [11, 11],
     'rdrlocopt': [1, 1]
 }
+
+# Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
+radflag_param = {
+    # Add appropriate "radar groups" (i.e. all radars, only WSR-88Ds, only mobile, etc.)
+    # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
+    # that there is no overlap between the times for each radar group.
+    'radar_groups': {
+        'all_radars': (arpsenkf_param['radarname'], np.arange(49500., 75600. + 900., 900.))
+    },
+}
+
