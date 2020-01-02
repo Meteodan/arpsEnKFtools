@@ -65,9 +65,18 @@ for radname in radar_list:
     # For each time in the desired range, find the closest matching remapped file and create the
     # link
 
+    closest_before = config.radremap_param['closest_before']
+
     for t in timeList:
-        diff = np.array([np.abs((file_dt - t).total_seconds()) for file_dt in file_datetimes])
-        closest = diff.min()
+        diff = np.array([(file_dt - t).total_seconds() for file_dt in file_datetimes])
+        if closest_before:
+            # Set all positive differences to infinity to guarantee that the minimum
+            # difference is negative (file time comes *before* the target time), and
+            # then take the absolute value of the array of differences
+            diff = np.abs(np.where(diff > 0, np.inf, diff))
+        else:
+            # Just find the closest file time to the target time, regardless of sign
+            closest = np.abs(diff).min()
         # Only do the linking if the time difference is greater than zero and less than the
         # desired tolerance (if the difference is zero, then just use the file itself,
         # silly)

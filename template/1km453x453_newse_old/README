@@ -1,2 +1,0 @@
-These are several scripts and template files for use in an ARPS-EnKF experiment. setup_experiment script will copy the needed files out of here to the experiment working directory of your choice.
-Note that you may have to edit the copied files for the specific configuration you need for your experiment.

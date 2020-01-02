@@ -9,13 +9,12 @@ from datetime import datetime
 scratch_base_dir = '/scratch/rice/d/dawson29'
 depot_base_dir = '/depot/dawson29'
 arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
-project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
+project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
-IOP_name = ''  # Not needed for this experiment
+IOP_name = '2016_IOP3'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(scratch_base_dir,
                                   'Projects/051913_OK/model_data/SSEF/temp/wrf_finalized')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
@@ -23,10 +22,11 @@ radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/ne
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '3km153x153_051913_OK'
-exp_name_tag = '_SSEF'
+exp_name_base = '1km453x453_033116'
+exp_name_tag = '_newse'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
+prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
 exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
 template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
@@ -37,7 +37,7 @@ sfcdata_path = os.path.join(sfcdata_dir, sfcdata_file)
 trndata_dir = os.path.join(project_depot_dir, 'trndata')
 trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
-radflag_file = '2013_0519.radflag'
+radflag_file = '2016_IOP3.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
 radarinfo_file = 'radarinfo.dat'
 radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
@@ -65,10 +65,10 @@ mpi_nproc_flag = '-n'
 # documentation in the various namelist input files for details on their meanings.
 
 # Basic experiment parameters
-num_ensemble_members = 39
+num_ensemble_members = 36
 # Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
 # initial time of the original parent experiment!
-initial_time = '201305191900'
+initial_time = '201603311800'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
@@ -85,17 +85,17 @@ external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
 # ARPS comment_lines namelist parameters
 nocmnt = 2
-comments = ['ARPS 5.4', 'May 19th, 2013 OK outbreak']
+comments = ['ARPS 5.4', 'March 31st, 2016 VSE IOP3']
 
 # Grid and map projection parameters
 grid_param = {
-    'nx': 153,
-    'ny': 153,
+    'nx': 453,
+    'ny': 453,
     'nz': 53,
-    'nproc_x': 3,
-    'nproc_y': 5,
-    'dx': 3000.0,
-    'dy': 3000.0,
+    'nproc_x': 15,
+    'nproc_y': 6,
+    'dx': 1000.0,
+    'dy': 1000.0,
     'dz': 400.0,
     'strhopt': 1,
     'dzmin': 20.0,
@@ -104,12 +104,12 @@ grid_param = {
     'dlayer2': 1.0e5,
     'strhtune': 0.2,
     'zflat': 1.0e5,
-    'ctrlat': 35.3331,
-    'ctrlon': -97.2775,
+    'ctrlat': 34.799999,
+    'ctrlon': -87.680000,
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -97.2275,
+    'trulon': -87.680000,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -118,8 +118,8 @@ arpstrn_param = {
     'trndataopt': 3,
     'dir_trndata': os.path.join(depot_base_dir, 'data/arpstopo30.data'),
     'nsmth': 2,
-    'lat_sample': 90,
-    'lon_sample': 90,
+    'lat_sample': 30,
+    'lon_sample': 30,
     'trnanxopt': 2,
     'dirname': trndata_dir,
     'terndmp': 3
@@ -154,13 +154,13 @@ arpssfc_param = {
 # WRF2ARPS parameters
 wrf2arps_param = {
     'run_mpi': True,
-    'nproc_x': 2,
+    'nproc_x': ,
     'nproc_y': 2,
-    'history_interval_sec': 600,
-    'history_interval': '00_00:10:00',
+    'history_interval_sec': 900,
+    'history_interval': '00_00:15:00',
     'init_timestamp': initial_time,
-    'end_timestamp': '2013052000',
-    'subdir_template': 'wrf-s4ekm{:02d}',
+    'end_timestamp': '201604010245',
+    'subdir_template': None,
     'hdmpfmt': 3,
     'exbcdmp': 3,
     'dmp_out_joined': 1111111,
@@ -177,11 +177,12 @@ arpsintrp_param = {
 
 # Radar remapper parameters
 radremap_param = {
-    'radar_list': ['KTLX'],
-    'start_timestamp': '20130519194500',
-    'end_timestamp': '20130520020000',
+    'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
+    'start_timestamp': '20160331180000',
+    'end_timestamp': '20160401030000',
     'interval_seconds': 300,
     'tolerance': 300
+    'closest_before': True
 }
 
 # EXT2ARPS parameters
@@ -205,17 +206,17 @@ arps_param = {
     'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
     'inifile': './{}'.format(external_inifile),
     'inigbf': './{}'.format(external_inigbf),
-    'dtbig': 4.0,
+    'dtbig': 2.0,
     'tstart': float(initial_time_sec),
     'tstop': float(initial_time_sec),
     'dtsml': 1.0,
     'tintegopt': 1,
-    'tintvebd': 300.0,
+    'tintvebd': 900.0,
     'ngbrz': 10,
     'brlxhw': 4,
-    'cbcdmp': 0.00555556,
+    'cbcdmp': 0.05,
     'exbcfmt': 3,
-    'tmixopt': 5,
+    'tmixopt': 4,
     'trbisotp': 0,
     'tkeopt': 3,
     'trbvimp': 1,
@@ -225,7 +226,7 @@ arps_param = {
     'mphyopt': 15,
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
-    'dtsfc': 4.0,
+    'dtsfc': 2.0,
     'hdmpfmt': 103,
     'thisdmp': 300.0,
     'rfopt': 3,
@@ -236,12 +237,11 @@ arps_param = {
 arpsenkfic_param = {
 }
 
-
 # ARPSENKF parameters.
 arpsenkf_param = {
     'nrdrused': 1,
-    'radarname': ['KTLX', 'KFDR'],
-    'ntwtype': [1, 1],
-    'vcpmode': [11, 11],
-    'rdrlocopt': [1, 1]
+    'radarname': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
+    'ntwtype': [1, 1, 1, 1, 1, 1, 1],
+    'vcpmode': [11, 11, 11, 11, 11, 11, 11],
+    'rdrlocopt': [1, 1, 1, 1, 1, 1, 1]
 }
