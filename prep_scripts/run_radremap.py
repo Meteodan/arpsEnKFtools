@@ -9,8 +9,25 @@ import sys
 import glob
 import shutil
 import subprocess
+import threading
 from arpsenkftools.editNamelist import editNamelistFile
 from arpsenkftools.io_utils import import_all_from
+
+
+def run_remapper(command_arg_list):
+    """Runs the radar remapper"""
+    exe_path = command_arg_list[0]
+    input_file_path = command_arg_list[1]
+    output_file_path = command_arg_list[2]
+    input_file = open(input_file_path, 'r')
+    output_file = open(output_file_path, 'w')
+    p = subprocess.Popen([exe_path], stdin=input_file, stdout=output_file)
+    p.wait()
+    print("Job {} for {} completed, return code: {}".format(exe_path, input_file_path,
+                                                            str(p.returncode)))
+    input_file.close()
+    output_file.close()
+
 
 # TODO: comment out this line when actually running the script. This is just to let the python
 # linter know about the various parameters in the config file
@@ -41,7 +58,7 @@ radar_list = config.radremap_param.pop('radar_list')
 # Loop through radars
 for radname in radar_list:
     # Get the list of level-2 radar data files
-    level2_paths = glob.glob(os.path.join(config.radar_obs_dir, radname, 'level2') + '/*')
+    level2_paths = glob.glob(config.radar_obs_dir + '/{}*'.format(radname))
     level2_file_names = [os.path.basename(level2_path) for level2_path in level2_paths]
     level2_file_times = []
     # Create working subdirectory for the current radar
@@ -84,18 +101,36 @@ for radname in radar_list:
                          dirname=config.remapped_radar_dir + '/')
 
     # Run the radar remapper for each file
-    for level2_file_name, level2_path, radremap_input_file_path, radremap_output_file_path in \
-            zip(level2_file_names, level2_paths, radremap_input_file_paths,
-                radremap_output_file_paths):
+    count = 0
+    commands = []
+    nthreads = config.radremap_param.get('nthreads', 1)
+    nfiles = len(level2_file_names)
+    for i, level2_file_name, level2_path, radremap_input_file_path, radremap_output_file_path in \
+            zip(range(nfiles), level2_file_names, level2_paths,
+                radremap_input_file_paths, radremap_output_file_paths):
         radar_time = level2_file_name[4:19]
         radar_time_subdir = os.path.join(config.remapped_radar_dir, radar_time)
         if not os.path.exists(radar_time_subdir):
             os.makedirs(radar_time_subdir)
-        with open(radremap_input_file_path, 'r') as input_file, \
-                open(radremap_output_file_path, 'w') as output_file:
-            print("Running {} for {}".format(config.radremap_exe_path, radremap_input_file_path))
-            subprocess.call(config.radremap_exe_path, stdin=input_file, stdout=output_file,
-                            shell=True)
+
+        if count < nthreads:
+            commands.append([config.radremap_exe_path, radremap_input_file_path,
+                             radremap_output_file_path])
+        count += 1
+        if count == nthreads or i == nfiles - 1:
+            proc = [threading.Thread(target=run_remapper, kwargs={'command_arg_list': cmd})
+                    for cmd in commands]
+            [p.start() for p in proc]
+            [p.join() for p in proc]
+            print("Done with batch!")
+            count = 0
+            commands = []
+
+        # with open(radremap_input_file_path, 'r') as input_file, \
+        #         open(radremap_output_file_path, 'w') as output_file:
+        #     print("Running {} for {}".format(config.radremap_exe_path, radremap_input_file_path))
+        #     subprocess.call(config.radremap_exe_path, stdin=input_file, stdout=output_file,
+        #                     shell=True)
 
         # Check for auxilliary files and move them into an appropriate subdirectory
         refl_files = glob.glob(config.remapped_radar_dir + '/*refl*')
