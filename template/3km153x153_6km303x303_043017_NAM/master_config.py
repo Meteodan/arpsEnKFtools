@@ -15,7 +15,6 @@ project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_043017_NAM/6km153x153_043017_NAM',
                                   IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
@@ -27,6 +26,7 @@ exp_name_base = '3km153x153_6km303x303_043017'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
+prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
 exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
 template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
@@ -43,7 +43,7 @@ radarinfo_file = 'radarinfo.dat'
 radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
 blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
-remapped_radar_dir = os.path.join(project_depot_dir, 'remapped_radar/{}'.format(exp_name))
+remapped_radar_dir = os.path.join(project_depot_dir, '{}/remapped_radar/{}'.format(IOP_name, exp_name))
 
 # Executable file names and directories
 arps_base_dir = '/home/dawson29/arps5.4_main'
@@ -191,7 +191,9 @@ radremap_param = {
     'start_timestamp': '20170430170000',
     'end_timestamp': '201704300220000',
     'interval_seconds': 300,
-    'tolerance': 300
+    'tolerance': 900,
+    'closest_before': True,
+    'nthreads': 10
 }
 
 # EXT2ARPS parameters
@@ -223,9 +225,9 @@ arps_param = {
     'tintvebd': 300.0,
     'ngbrz': 10,
     'brlxhw': 4,
-    'cbcdmp': 0.00555556,
+    'cbcdmp': 0.05,
     'exbcfmt': 3,
-    'tmixopt': 5,
+    'tmixopt': 4,
     'trbisotp': 0,
     'tkeopt': 3,
     'trbvimp': 1,
