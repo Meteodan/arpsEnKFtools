@@ -132,18 +132,18 @@ yzslice = 50
 basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_033116_newse/3km153x153_033116_newse/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [False, False, True, False]
-dir_list = ['./ENamean/', './ENfmean/', './EN020/', './ENF001/']
-dir_extra_list = ['./', './', './', './']
-runname_list = ['enmean', 'efmean', 'ena020', 'enf001']
-runlabel_list = ['enmean', 'efmean', 'ena020', 'enf001']
-trailer_list = ['', '', '', '']
-mphyopt_list = [15, 15, 15, 15]
-plotlim_list = [None, None, None, None]
-master_time_list = [N.arange(0.0, 3600.0+300.0, 300.0), N.arange(0.0, 3600.0+300.0, 300.0),
-                    N.arange(3900.0, 4500.0+300.0, 300.0), N.arange(49500.0, 72000.0+900.0, 900.0)]
-start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20130519060000']
-arbfile_list = [None, None, None, None]
+
+toPlot_list = [True] * 36
+dir_list = ['./EN{:03d}'.format(member) for member in range(1, 37)]
+dir_extra_list = ['./'] * 36
+runname_list = ['ena{:03d}'.format(member) for member in range(1, 37)]
+runlabel_list = ['ena{:03d}'.format(member) for member in range(1, 37)]
+trailer_list = [''] * 36
+mphyopt_list = [15] * 36
+plotlim_list = [None] * 36
+master_time_list = [N.arange(9900., 28800.+300., 300.)] * 36
+start_timestamp_list = ['20160331180000'] * 36
+arbfile_list = [None] * 36
 
 # Variables to plot
 
