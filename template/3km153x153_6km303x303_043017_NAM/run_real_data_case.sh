@@ -13,7 +13,7 @@ conda activate arpsEnKFtools
 # 3-km 30 April 2017 radar data
 # 15-min cycle assimilating radar obs from 1700-2200 UTC 30 April 2017
 python run_real_data_case.py  \
-    --base-path $BASEPATH  --job-name $JOBNAME                                        \
+    --base-path $BASEPATH  --job-name $JOBNAME --user cbelak                                        \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
     --ens-start 39600  --ens-end 59600  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \

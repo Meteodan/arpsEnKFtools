@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
+scratch_base_dir = '/scratch/rice/c/cbelak'
 depot_base_dir = '/depot/dawson29'
 arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
 project_dir = 'Projects/VORTEXSE/simulations/ARPS'
@@ -46,7 +46,7 @@ blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 remapped_radar_dir = os.path.join(project_depot_dir, '{}/remapped_radar/{}'.format(IOP_name, exp_name))
 
 # Executable file names and directories
-arps_base_dir = '/home/dawson29/arps5.4_main'
+arps_base_dir = '/home/cbelak/arps5.4'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
@@ -122,7 +122,9 @@ arpstrn_param = {
     'lon_sample': 90,
     'trnanxopt': 2,
     'dirname': trndata_dir,
-    'terndmp': 3
+    'terndmp': 3,
+    'mapfile(1)': os.path.join(arps_base_dir, 'data/arpsplt/us_state.mapdata'),
+    'mapfile(2)': os.path.join(arps_base_dir, 'data/arpsplt/world_us_country.mapdata'), 
 }
 
 # ARPSSFC parameters
