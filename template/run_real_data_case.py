@@ -944,7 +944,7 @@ def main():
             all_ena_exist = all(ena_exist)
             all_enf_exist = all(enf_exist)
 
-            if all_ena_exist:
+            if all_ena_exist and not args.free_forecast:
                 args.t_ens_start = t_ens
                 ens_chunk_start = t_ens
             elif all_enf_exist and not all_ena_exist:
@@ -963,7 +963,7 @@ def main():
                             "%s/ena%03d.hdf%06d" %
                             (work_path, n_ens + 1, t_chunk)) for n_ens in member_list]
 
-                if all(ena_exist):
+                if all(ena_exist) and not args.free_forecast:
                     ens_chunk_start = t_chunk
 
         if do_first_integration:
@@ -1056,6 +1056,20 @@ def main():
 
         n_chunk_start = (ens_chunk_start - args.t_ens_start) / args.chunk_size
 
+        # TODO: insert logic to generate lookup tables if needed at the beginning of an
+        # experiment. For now, just manually do so.
+        if t_ens == args.t_ens_start and not args.restart and args.save_lookup:
+            print("This is the beginning of the experiment, we need to generate lookup"
+                  "tables for rfopt = 3!")
+            kwargs = {
+                'sv_lkup_tble': 1,
+                'rd_lkup_tble': 0
+            }
+        else:
+            kwargs = {
+                'sv_lkup_tble': 0,
+                'rd_lkup_tble': 1
+            }
         for n_chunk, t_chunk in enumerate(range(ens_chunk_start, args.t_ens_end, args.chunk_size)):
             print("Generating free forecast from %d to %d (chunk %d of %d) ..." %
                   (args.t_ens_start, args.t_ens_end, n_chunk + n_chunk_start + 1, n_chunks))
@@ -1079,7 +1093,8 @@ def main():
                                chunk_end,
                                args.dt_ens_step,
                                split_files=which_split,
-                               move_for_assim=False)
+                               move_for_assim=False,
+                               **kwargs)
                            )
 
             req_time = args.free_fcst_req
