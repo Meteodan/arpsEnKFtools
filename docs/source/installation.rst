@@ -20,10 +20,11 @@ To install arpsEnKFtools, at the command line::
     $ git clone https://github.com/Meteodan/arpsEnKFtools.git
     $ cd arpsEnKFtools
     $ conda env create -f environment.yml
+    $ conda activate arpsEnKFtools
     $ pip install -e .
 
-This will create a conda environment called ``arpsenkftools``. To activate this
-environment type::
+This will create a conda environment called ``arpsenkftools``. If it is not already active, activate this
+environment by typing::
 
     $ conda activate arpsEnKFtools
 
