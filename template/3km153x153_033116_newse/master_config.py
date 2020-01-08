@@ -22,7 +22,7 @@ radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/201
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '1km453x453_033116'
+exp_name_base = '3km153x153_033116'
 exp_name_tag = '_newse'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
@@ -89,13 +89,13 @@ comments = ['ARPS 5.4', 'March 31st, 2016 VSE IOP3']
 
 # Grid and map projection parameters
 grid_param = {
-    'nx': 453,
-    'ny': 453,
+    'nx': 153,
+    'ny': 153,
     'nz': 53,
-    'nproc_x': 15,
-    'nproc_y': 6,
-    'dx': 1000.0,
-    'dy': 1000.0,
+    'nproc_x': 3,
+    'nproc_y': 5,
+    'dx': 3000.0,
+    'dy': 3000.0,
     'dz': 400.0,
     'strhopt': 1,
     'dzmin': 20.0,
@@ -104,12 +104,12 @@ grid_param = {
     'dlayer2': 1.0e5,
     'strhtune': 0.2,
     'zflat': 1.0e5,
-    'ctrlat': 34.799999,
-    'ctrlon': -87.680000,
+    'ctrlat': 34.80,
+    'ctrlon': -87.68,
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -87.680000,
+    'trulon': -87.68,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -118,8 +118,8 @@ arpstrn_param = {
     'trndataopt': 3,
     'dir_trndata': os.path.join(depot_base_dir, 'data/arpstopo30.data'),
     'nsmth': 2,
-    'lat_sample': 30,
-    'lon_sample': 30,
+    'lat_sample': 90,
+    'lon_sample': 90,
     'trnanxopt': 2,
     'dirname': trndata_dir,
     'terndmp': 3
@@ -207,7 +207,7 @@ arps_param = {
     'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
     'inifile': './{}'.format(external_inifile),
     'inigbf': './{}'.format(external_inigbf),
-    'dtbig': 2.0,
+    'dtbig': 4.0,
     'tstart': float(initial_time_sec),
     'tstop': float(initial_time_sec),
     'dtsml': 1.0,

@@ -54,6 +54,11 @@ print(config.remapped_radar_dir)
 for radname in radar_list:
     # Get list of remapped radar files
     remapped_file_paths = glob.glob(config.remapped_radar_dir + '/{}.*.*'.format(radname))
+    # Remove any that are links and reglob
+    for remapped_file_path in remapped_file_paths:
+        if os.path.islink(remapped_file_path):
+            os.remove(remapped_file_path)
+    remapped_file_paths = glob.glob(config.remapped_radar_dir + '/{}.*.*'.format(radname))
     remapped_file_names = [os.path.basename(remapped_file_path) for remapped_file_path in
                            remapped_file_paths]
     # Extract the time stamps from the file names
@@ -73,24 +78,28 @@ for radname in radar_list:
             # Set all positive differences to infinity to guarantee that the minimum
             # difference is negative (file time comes *before* the target time), and
             # then take the absolute value of the array of differences
-            diff = np.abs(np.where(diff > 0, np.inf, diff))
-        else:
-            # Just find the closest file time to the target time, regardless of sign
-            closest = np.abs(diff).min()
+            diff = np.where(diff > 0, np.inf, diff)
+        closest = np.abs(diff).min()
         # Only do the linking if the time difference is greater than zero and less than the
         # desired tolerance (if the difference is zero, then just use the file itself,
         # silly)
         if closest <= config.radremap_param['tolerance'] and closest > 0:
-            closest_index = diff.argmin()
+            closest_index = np.abs(diff).argmin()
             closest_file_path = remapped_file_paths[closest_index]
-            print(t, closest_file_path)
             link_name = t.strftime('{}.%Y%m%d.%H%M%S'.format(radname))
             link_path = os.path.join(config.remapped_radar_dir, link_name)
             # Remove existing link
-            if os.path.lexists(link_path):
+            if os.path.islink(link_path):
                 os.remove(link_path)
             os.symlink(remapped_file_paths[closest_index], link_path)
         elif closest > config.radremap_param['tolerance']:
             print('For time ', t)
-            print('No time within tolerance ({:d} s)'.format(config.radremap_param['tolerance']))
-            print('Closest is {:d} s'.format(int(closest)))
+            if not closest_before:
+                print('No time within tolerance ({:d} s)'.format(
+                    config.radremap_param['tolerance']))
+                print('Closest is {:d} s'.format(int(closest)))
+            else:
+                print('No time within tolerance ({:d} s) prior to requested time.'.format(
+                    config.radremap_param['tolerance']))
+                if np.isfinite(closest):
+                    print('Closest is {:d} s'.format(int(closest)))

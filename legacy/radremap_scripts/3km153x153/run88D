@@ -3,12 +3,12 @@
 # Creates a set of radar remap input files for an ARPSENKF assimilation cycle
 
 DRYRUN=0			# 1 for a dry run (i.e. don't actually run 88d2arps, but see what it would do)
-BASEDIR="/Volumes/depot/dawson29/apps/radremap_scripts/" # Base directory containing radar remapper script and templates
-RADNAME="KGWX"			# Radar name (4-character identifier)
-RUNNAME="1km153x153"		# Job runname
+BASEDIR="/depot/dawson29/apps/Projects/arpsEnKFtools/legacy/radremap_scripts/3km153x153" # Base directory containing radar remapper script and templates
+RADNAME="KBMX"			# Radar name (4-character identifier)
+RUNNAME="3km153x153"		# Job runname
 RUNNAMETAG=""				#Additional runname "variation" identifier
-WORKDIR="/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/KGWX_153x153"
-EXE88D2ARPS="/Users/dawson29/arps5.4/bin/88d2arps"
+WORKDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/remapped_radar/"
+EXE88D2ARPS="/home/dawson29/arps5.4_main/bin/88d2arps"
 NTHREADS=10             # Number of simultaneous jobs to run at a time
 
 NX=153					# Number of grid points in X direction
@@ -40,8 +40,8 @@ else
   SFCFILE="${RESKM}km${NX}x${NY}.sfcdata"
 fi
 
-TRNDIR="/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/trndata/"
-SFCDIR="/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/sfcdata/"
+TRNDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/trndata/"
+SFCDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/sfcdata/"
 
 DTBIG=2.0
 DTSML=1.0
@@ -51,9 +51,9 @@ MPHYOPT=15
 N0RAIN=8.0e6
 NSTYP=1
 
-INPUTDIR="/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6kmconvicbc/"
+INPUTDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6kmconvicbc/"
 INPUTHDR="ena001"
-RADARDIR="/Volumes/depot/dawson29/data/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/KGWX/level2/"
+RADARDIR="/depot/dawson29/data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/KGWX/level2/"
 
 year=2016
 month=3
@@ -76,11 +76,12 @@ radarfileprefix=${RADNAME}
 cp ${BASEDIR}/radremap_88D.input_template ${WORKDIR}
 cp ${BASEDIR}/radarinfo.dat ${WORKDIR}
 
-for RADNAME in "KBMX" "KGWX" "KHPX" "KHTX" "KNQA" "KOHX" "KPAH"
+#for RADNAME in "KBMX" "KGWX" "KHPX" "KHTX" "KNQA" "KOHX" "KPAH"
+for RADNAME in "KBMX"
 do
 
-RADARDIR="/Volumes/depot/dawson29/data/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/${RADNAME}/level2/"
-WORKDIR="/Volumes/depot/dawson29/data/VORTEXSE/simulations/ARPS/2016_IOP3/processed_radar/${RADNAME}_153x153"
+RADARDIR="/depot/dawson29/data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/level2/"
+WORKDIR="/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/remapped_radar/"
 mkdir -p ${WORKDIR}
 
 cp radremap_88D.input_template ${WORKDIR}
@@ -89,7 +90,7 @@ cp radarinfo.dat ${WORKDIR}
 radarfileprefix=${RADNAME}
 
 cd ${RADARDIR}
-FILENAMES=$(ls ${radarfileprefix}*)
+FILENAMES=$(ls ${radarfileprefix}20160331_20*)
 cd ${WORKDIR}
 
 count=0

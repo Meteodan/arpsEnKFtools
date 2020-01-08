@@ -1,3 +1,4 @@
 ignore:
   - "legacy/"
   - "template/"
+  - "plotting_scripts/"
