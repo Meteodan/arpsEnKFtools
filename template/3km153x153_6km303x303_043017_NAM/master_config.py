@@ -8,15 +8,14 @@ from datetime import datetime
 # Base project names and directories
 scratch_base_dir = '/scratch/rice/c/cbelak'
 depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+arpsenkftools_base_dir = '/home/cbelak/arpsEnKFtools'
 project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_043017_NAM/6km153x153_043017_NAM',
-                                  IOP_name)
+ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM/6km303x303_043017_NAM')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/NEXRAD/IOP_4C/level2/')
 # TODO: add other obs type directories here
