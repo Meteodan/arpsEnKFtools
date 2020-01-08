@@ -141,7 +141,7 @@ runlabel_list = ['ena{:03d}'.format(member) for member in range(1, 37)]
 trailer_list = [''] * 36
 mphyopt_list = [15] * 36
 plotlim_list = [None] * 36
-master_time_list = [N.arange(0., 17100.+300., 300.)] * 36
+master_time_list = [N.arange(17400., 28800.+300., 300.)] * 36
 start_timestamp_list = ['20160331180000'] * 36
 arbfile_list = [None] * 36
 
