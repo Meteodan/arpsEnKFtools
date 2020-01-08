@@ -123,7 +123,7 @@ arpstrn_param = {
     'dirname': trndata_dir,
     'terndmp': 3,
     'mapfile(1)': os.path.join(arps_base_dir, 'data/arpsplt/us_state.mapdata'),
-    'mapfile(2)': os.path.join(arps_base_dir, 'data/arpsplt/world_us_country.mapdata'), 
+    'mapfile(2)': os.path.join(arps_base_dir, 'data/arpsplt/world_us_country.mapdata'),
 }
 
 # ARPSSFC parameters
@@ -154,12 +154,12 @@ arpssfc_param = {
 
 # ARPSINTRP parameters
 arpsintrp_param = {
-    'nproc_x': 3,
-    'nproc_y': 5,
-    'nproc_x_in': 3,
-    'nproc_y_in': 5,
-    'nproc_x_out': 1,
-    'nproc_y_out': 1,
+    'nproc_x': 10,
+    'nproc_y': 6,
+    'nproc_x_in': 10,
+    'nproc_y_in': 6,
+    'nproc_x_out': 3,
+    'nproc_y_out': 5,
     'inisplited': 1,
     'dmp_out_joined': 1111111,
     'dirname': external_icbc_dir,
@@ -181,6 +181,7 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
+    'use_mpi': False,
     'start_time': 39600.0,
     'end_time': 57600.0,
     'step_time': 300.0
@@ -248,7 +249,6 @@ arps_param = {
 # ARPSENKFIC parameters
 arpsenkfic_param = {
 }
-
 
 # ARPSENKF parameters.
 arpsenkf_param = {
