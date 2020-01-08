@@ -54,7 +54,7 @@ arps_exe_path = os.path.join(arps_bin_dir, 'arps_mpi')
 arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
 wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps_mpi')
-arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
+arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp')
 radremap_exe_path = os.path.join(arps_bin_dir, '88d2arps')
 mpi_exe = 'mpiexec'
 mpi_nproc_flag = '-n'
@@ -158,8 +158,8 @@ arpsintrp_param = {
     'nproc_y': 6,
     'nproc_x_in': 10,
     'nproc_y_in': 6,
-    'nproc_x_out': 3,
-    'nproc_y_out': 5,
+    'nproc_x_out': 1,
+    'nproc_y_out': 1,
     'inisplited': 1,
     'dmp_out_joined': 1111111,
     'dirname': external_icbc_dir,
