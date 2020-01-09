@@ -5,7 +5,6 @@ import nexradaws
 
 conn = nexradaws.NexradAwsInterface()
 
-
 # TODO: make these command-line arguments
 timestamp_start = '20130519225500'
 timestamp_stop = '20130520030000'

@@ -97,15 +97,15 @@
 !----------------------------------------------------------------------=*
 
  &arps_input
-   nproc_x_in = 6,
-   nproc_y_in = 5,
+   nproc_x_in = 5,
+   nproc_y_in = 3,
 
    modopt     = 1,
    magnitude_processor = 5,
    wrfoutopt  = 0,
      phupdtopt  = 0,
 
-   inidirname = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153//3km153x153//ENF%3N',
+   inidirname = './',
    nocolons = 0,
  /
 
@@ -546,7 +546,7 @@
 !----------------------------------------------------------------------=*
 
  &enkf_conventional
-   cvndatadir = '/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153//obs/',
+   cvndatadir = './data',
    innovcvn = 1,
 
    sfcassim = 0,
@@ -1061,8 +1061,8 @@
 
    loc_rdrinfo = 'data/adas',
 
-   nrdrused = 7,
-     radarname= 'KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH',
+   nrdrused = 1,
+     radarname= 'KTLX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH',
      ntwtype  =      1,      1,      1,      1,      1,      1,      1,
      vcpmode  =     11,     11,     11,     11,     11,     11,     11, 
 
@@ -1078,10 +1078,10 @@
    rdrfmt    = 1,
      numrdra = 8,
 
-     ngridx=2, 2, 2, 2, 2, 2, 2,
-     ngridy=2, 2, 2, 2, 2, 2, 2,
-     nzlwx =2, 2, 2, 2, 2, 2, 2,
-     nzlwy =2, 2, 2, 2, 2, 2, 2,
+     ngridx=1, 1, 1, 1, 1, 1, 1,
+     ngridy=1, 1, 1, 1, 1, 1, 1,
+     nzlwx =1, 1, 1, 1, 1, 1, 1,
+     nzlwy =1, 1, 1, 1, 1, 1, 1,
 
      rdrdaopt1 = 1, 1, 1, 1, 1, 1, 1,
      rdrdaopt2 = 1, 1, 1, 1, 1, 1, 1,
