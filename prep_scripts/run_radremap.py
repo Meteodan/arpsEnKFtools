@@ -58,7 +58,8 @@ radar_list = config.radremap_param.pop('radar_list')
 # Loop through radars
 for radname in radar_list:
     # Get the list of level-2 radar data files
-    level2_paths = glob.glob(config.radar_obs_dir + '/{}*'.format(radname))
+    level2_paths = sorted(glob.glob(config.radar_obs_dir + '/{}' +'/level2/*_V06'.format(radname)))
+
     level2_file_names = [os.path.basename(level2_path) for level2_path in level2_paths]
     level2_file_times = []
     # Create working subdirectory for the current radar
@@ -66,7 +67,7 @@ for radname in radar_list:
     if not os.path.exists(radar_work_dir):
         os.makedirs(radar_work_dir)
     # Link the radarinfo.dat file
-    if not os.path.lexists(os.path.join(radar_work_dir, 'radarinfo.dat')):
+    if not os.path.exists(os.path.join(radar_work_dir, 'radarinfo.dat')):
         os.symlink(config.template_base_dir + '/radarinfo.dat', radar_work_dir + '/radarinfo.dat')
 
     # create the list of radremap input and output file names
@@ -99,7 +100,6 @@ for radname in radar_list:
                          radname=radname,
                          radfname=level2_path,
                          dirname=config.remapped_radar_dir + '/')
-
     # Run the radar remapper for each file
     count = 0
     commands = []
@@ -125,8 +125,7 @@ for radname in radar_list:
             print("Done with batch!")
             count = 0
             commands = []
-
-        # with open(radremap_input_file_path, 'r') as input_file, \
+	# with open(radremap_input_file_path, 'r') as input_file, \
         #         open(radremap_output_file_path, 'w') as output_file:
         #     print("Running {} for {}".format(config.radremap_exe_path, radremap_input_file_path))
         #     subprocess.call(config.radremap_exe_path, stdin=input_file, stdout=output_file,
