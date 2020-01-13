@@ -1,6 +1,6 @@
 #!/bin/bash
 # TODO: make this into a python script, too
-BASEPATH='/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/3km153x153_6km303x303_043017_NAM/'
+BASEPATH='/scratch/rice/c/cbelak/Projects/VORTEXSE/simulations/ARPS/2017_IOP4C/EnKF/3km153x153_6km303x303_043017_NAM/'
 JOBNAME='3km153x153_6km303x303_043017_NAM'
 
 # Force unload xalt module due to python bug
