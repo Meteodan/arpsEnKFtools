@@ -191,7 +191,7 @@ arpsintrp_param = {
 radremap_param = {
     'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
     'start_timestamp': '20170430170000',
-    'end_timestamp': '201704300220000',
+    'end_timestamp': '20170430220000',
     'interval_seconds': 300,
     'tolerance': 900,
     'closest_before': True,
