@@ -15,7 +15,7 @@ conda activate arpsEnKFtools
 python run_real_data_case.py  \
     --base-path $BASEPATH  --job-name $JOBNAME --user cbelak                                        \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
-    --ens-start 39600  --ens-end 59600  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
+    --ens-start 39600  --ens-end 57600  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2013_0519.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
