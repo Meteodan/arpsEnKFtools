@@ -14,7 +14,7 @@ conda activate arpsEnKFtools
 
 # Initial 105-min spinup from 1800-1945 UTC 19 May 2013
 python run_real_data_case.py  \
-    --base-path $BASEPATH  --job-name $JOBNAME                                        \
+    --base-path $BASEPATH  --job-name $JOBNAME                                       \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
     --ens-start 0 --ens-end 6300  --ens-step 300  --assim-step 6300  --chunk-size 6300                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
