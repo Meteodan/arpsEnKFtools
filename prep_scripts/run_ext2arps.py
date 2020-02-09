@@ -82,14 +82,12 @@ if run_lbc:
         'hdmpfmt': 0
     }
     extdfile_lbc_args.update(new_args)
-
     # Create namelist file for lbc run
     editNamelistFile(ext2arps_input_template_path,
                      ext2arps_input_lbc_exp_path,
                      runname=config.exp_name,
                      **config.grid_param,
                      **extdfile_lbc_args)
-
 # # Run ext2arps
 
 # Make sure the target output directory exists
