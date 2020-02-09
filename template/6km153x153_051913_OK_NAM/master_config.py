@@ -3,12 +3,13 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
+import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
-depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+scratch_base_dir = '/scratch/rice/s/sharm261'
+depot_base_dir = '/depot/rtanama/users/sharm261'
+arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools/'
 project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
@@ -38,11 +39,13 @@ trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
 radflag_file = 'template.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
+radarinfo_file = 'radarinfo.dat'
+radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
 blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 
 # Executable file names and directories
-arps_base_dir = '/home/dawson29/arps5.4_main'
+arps_base_dir = '/home/sharm261/arps5.4'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
