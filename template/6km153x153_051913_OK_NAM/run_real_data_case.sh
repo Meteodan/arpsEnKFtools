@@ -14,7 +14,7 @@ conda activate arpsEnKFtools
 
 # Initial 6-hr spinup from 0600-1200 UTC 19 May 2013
 python run_real_data_case.py  \
-    --base-path $BASEPATH  --job-name $JOBNAME                                        \
+    --base-path $BASEPATH  --job-name $JOBNAME --user-name sharm261                                       \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
     --ens-start 0  --ens-end 21600  --ens-step 300  --assim-step 21600  --chunk-size 21600                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
@@ -25,7 +25,7 @@ python run_real_data_case.py  \
 
 # Then, 15-min cycle assimilating ASOS 5-min obs until 0300 UTC 20 May 2013
 python run_real_data_case.py  \
-    --base-path $BASEPATH  --job-name $JOBNAME                                        \
+    --base-path $BASEPATH  --job-name $JOBNAME --user-name sharm261                                       \
     --n-ens 40  --mpi-config-model 3 5 --mpi-config-dump 3 5 --mpi-config-enkf 3 5 --algorithm ensrf                                                                        \
     --ens-start 21600  --ens-end 75600  --ens-step 300  --assim-step 900  --chunk-size 900                                   \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
