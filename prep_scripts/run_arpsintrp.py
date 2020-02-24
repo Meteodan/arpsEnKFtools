@@ -26,6 +26,9 @@ if len(sys.argv) > 1:   # Try to import user-defined config file
 else:
     print("Please provide an experiment configuration file on the command line! Exiting!")
 
+# Determine whether we are using MPI
+use_mpi = config.arpsintrp_param.get('use_mpi', False)
+
 # Set the path to the arpsintrp.input namelist template file
 arpsintrp_input_template_path = os.path.join(config.template_exp_dir, 'arpsintrp.input')
 
@@ -100,9 +103,12 @@ for t0_interp_input_file_name, t0_interp_output_file_name, lbc_interp_input_file
                                            lbc_interp_input_file_names,
                                            lbc_interp_output_file_names):
 
-    command = [config.mpi_exe, config.mpi_nproc_flag,
-               str(config.grid_param['nproc_x']*config.grid_param['nproc_y']),
-               config.arpsintrp_exe_path]
+    if use_mpi:
+        command = [config.mpi_exe, config.mpi_nproc_flag,
+                str(config.grid_param['nproc_x']*config.grid_param['nproc_y']),
+                config.arpsintrp_exe_path]
+    else:
+        command = [config.arpsintrp_exe_path]
 
     with open(t0_interp_input_file_name, 'r') as inputfile, \
             open(t0_interp_output_file_name, 'w') as outputfile:

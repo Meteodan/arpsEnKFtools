@@ -6,17 +6,16 @@ from datetime import datetime
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
+scratch_base_dir = '/scratch/rice/c/cbelak'
 depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+arpsenkftools_base_dir = '/home/cbelak/arpsEnKFtools'
 project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_043017_NAM/6km153x153_043017_NAM',
-                                  IOP_name)
+ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM/6km303x303_043017_NAM')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/NEXRAD/IOP_4C/level2/')
 # TODO: add other obs type directories here
@@ -46,7 +45,7 @@ blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 remapped_radar_dir = os.path.join(project_depot_dir, '{}/remapped_radar/{}'.format(IOP_name, exp_name))
 
 # Executable file names and directories
-arps_base_dir = '/home/dawson29/arps5.4_main'
+arps_base_dir = '/home/cbelak/arps5.4'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
@@ -55,7 +54,7 @@ arps_exe_path = os.path.join(arps_bin_dir, 'arps_mpi')
 arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
 wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps_mpi')
-arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
+arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp')
 radremap_exe_path = os.path.join(arps_bin_dir, '88d2arps')
 mpi_exe = 'mpiexec'
 mpi_nproc_flag = '-n'
@@ -122,7 +121,9 @@ arpstrn_param = {
     'lon_sample': 90,
     'trnanxopt': 2,
     'dirname': trndata_dir,
-    'terndmp': 3
+    'terndmp': 3,
+    'mapfile(1)': os.path.join(arps_base_dir, 'data/arpsplt/us_state.mapdata'),
+    'mapfile(2)': os.path.join(arps_base_dir, 'data/arpsplt/world_us_country.mapdata'),
 }
 
 # ARPSSFC parameters
@@ -153,10 +154,10 @@ arpssfc_param = {
 
 # ARPSINTRP parameters
 arpsintrp_param = {
-    'nproc_x': 3,
-    'nproc_y': 5,
-    'nproc_x_in': 3,
-    'nproc_y_in': 5,
+    'nproc_x': 10,
+    'nproc_y': 6,
+    'nproc_x_in': 10,
+    'nproc_y_in': 6,
     'nproc_x_out': 1,
     'nproc_y_out': 1,
     'inisplited': 1,
@@ -180,6 +181,7 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
+    'use_mpi': False,
     'start_time': 39600.0,
     'end_time': 57600.0,
     'step_time': 300.0
@@ -189,7 +191,7 @@ arpsintrp_param = {
 radremap_param = {
     'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
     'start_timestamp': '20170430170000',
-    'end_timestamp': '201704300220000',
+    'end_timestamp': '20170430220000',
     'interval_seconds': 300,
     'tolerance': 900,
     'closest_before': True,
@@ -247,7 +249,6 @@ arps_param = {
 # ARPSENKFIC parameters
 arpsenkfic_param = {
 }
-
 
 # ARPSENKF parameters.
 arpsenkf_param = {
