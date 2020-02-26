@@ -1243,7 +1243,7 @@ def main():
             assimilation_lines = ["base=%s" % args.base_path, "cd $base", ""]
             try:
                 radar_data_flag_sngltime = radar_data_flag[end_time]
-            except KeyError:
+            except (KeyError, TypeError):
                 radar_data_flag_sngltime = None
             assimilation_lines.extend(
                 generateEnKFAssimilation(args, batch, end_time, radar_data_flag_sngltime)
