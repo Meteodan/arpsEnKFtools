@@ -3,30 +3,29 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
-import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/s/sharm261'
-depot_base_dir = '/depot/rtanama/users/sharm261'
-arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools/'
-project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
+scratch_base_dir = '/scratch/rice/d/dawson29'
+depot_base_dir = '/depot/dawson29'
+arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
-IOP_name = ''  # Not needed for this experiment
+IOP_name = '2016_IOP3'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
-ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/model_data/NAM',
+ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
                                   IOP_name)
-sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
+sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '6km153x153_051913_OK'
+exp_name_base = '6km153x153_033116'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
+prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
 exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
 template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
@@ -45,7 +44,7 @@ blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 
 # Executable file names and directories
-arps_base_dir = '/home/sharm261/arps5.4'
+arps_base_dir = '/home/dawson29/arps5.4_main'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
@@ -64,20 +63,24 @@ arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
 # Basic experiment parameters
 num_ensemble_members = 40
 # Initial time of entire experiment
-initial_time = '201305190600'
+initial_time = '201603311200'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
 perturb_ic = True
-external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
-external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+if perturb_ic:
+    external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
+    external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+else:
+    external_inifile = 'ena001.hdf{:06d}'.format(initial_time_sec)
+    external_inigbf = 'ena001.hdfgrdbas'
 external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
 external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
 # ARPS comment_lines namelist parameters
 nocmnt = 2
-comments = ['ARPS 5.4', 'May 19th, 2013 OK outbreak']
+comments = ['ARPS 5.4', 'March 31st, 2016 VSE IOP3']
 
 # Grid and map projection parameters
 grid_param = {
@@ -94,12 +97,12 @@ grid_param = {
     'dlayer2': 1.0e5,
     'strhtune': 0.2,
     'zflat': 1.0e5,
-    'ctrlat': 35.3331,
-    'ctrlon': -97.2775,
+    'ctrlat': 34.80,
+    'ctrlon': -87.68,
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -97.2275
+    'trulon': -87.68,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -127,8 +130,8 @@ arpssfc_param = {
     'fvtypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/naoge1_01l_1km.img'),
     'bvtypfl': os.path.join(depot_base_dir, 'data/arpssfc.data/owe14d_10min.data'),
     'ndatopt': 1,
-    'fndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/namay92ndl_1km.img'),
-    'bndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/ndvi9005_10min.data'),
+    'fndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/naapr92ndl_1km.img'),
+    'bndvifl': os.path.join(depot_base_dir, 'data/arpssfc.data/ndvi9004_10min.data'),
     'vfrcopt': 1,
     'vfrcdr': os.path.join(depot_base_dir, 'data/arpssfc.data/'),
     'nsmthsl': 3,
@@ -168,32 +171,26 @@ ext2arps_param = {
     'extdfmt': 3,
     'dir_extd': ext_model_data_dir,
     'extdname': 'nam_218',
-    'nextdfil': 22,
+    'nextdfil': 16,
     # Note, for now explicitly list each time string here. We can work on a more
     # compact solution later
     'extdtimes': [
-        '2013-05-19.06:00:00+000:00:00',
-        '2013-05-19.06:00:00+001:00:00',
-        '2013-05-19.06:00:00+002:00:00',
-        '2013-05-19.06:00:00+003:00:00',
-        '2013-05-19.06:00:00+004:00:00',
-        '2013-05-19.06:00:00+005:00:00',
-        '2013-05-19.12:00:00+000:00:00',
-        '2013-05-19.12:00:00+001:00:00',
-        '2013-05-19.12:00:00+002:00:00',
-        '2013-05-19.12:00:00+003:00:00',
-        '2013-05-19.12:00:00+004:00:00',
-        '2013-05-19.12:00:00+005:00:00',
-        '2013-05-19.18:00:00+000:00:00',
-        '2013-05-19.18:00:00+001:00:00',
-        '2013-05-19.18:00:00+002:00:00',
-        '2013-05-19.18:00:00+003:00:00',
-        '2013-05-19.18:00:00+004:00:00',
-        '2013-05-19.18:00:00+005:00:00',
-        '2013-05-20.00:00:00+000:00:00',
-        '2013-05-20.00:00:00+001:00:00',
-        '2013-05-20.00:00:00+002:00:00',
-        '2013-05-20.00:00:00+003:00:00'
+        '2016-03-31.12:00:00+000:00:00',
+        '2016-03-31.12:00:00+001:00:00',
+        '2016-03-31.12:00:00+002:00:00',
+        '2016-03-31.12:00:00+003:00:00',
+        '2016-03-31.12:00:00+004:00:00',
+        '2016-03-31.12:00:00+005:00:00',
+        '2016-03-31.18:00:00+000:00:00',
+        '2016-03-31.18:00:00+001:00:00',
+        '2016-03-31.18:00:00+002:00:00',
+        '2016-03-31.18:00:00+003:00:00',
+        '2016-03-31.18:00:00+004:00:00',
+        '2016-03-31.18:00:00+005:00:00',
+        '2016-04-01.00:00:00+000:00:00',
+        '2016-04-01.00:00:00+001:00:00',
+        '2016-04-01.00:00:00+002:00:00',
+        '2016-04-01.00:00:00+003:00:00'
     ],
     'iorder': 3,
     'intropt': 1,
@@ -233,7 +230,7 @@ arps_param = {
     'brlxhw': 4,
     'cbcdmp': 0.00555556,
     'exbcfmt': 3,
-    'tmixopt': 4,
+    'tmixopt': 5,
     'trbisotp': 0,
     'tkeopt': 3,
     'trbvimp': 1,

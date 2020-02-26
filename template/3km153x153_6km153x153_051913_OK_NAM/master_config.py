@@ -229,7 +229,7 @@ arps_param = {
     'brlxhw': 4,
     'cbcdmp': 0.00555556,
     'exbcfmt': 3,
-    'tmixopt': 5,
+    'tmixopt': 4,
     'trbisotp': 0,
     'tkeopt': 3,
     'trbvimp': 1,

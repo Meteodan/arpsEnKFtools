@@ -151,17 +151,17 @@
 !-----------------------------------------------------------------------
 
  &message_passing
-   nproc_x = 1,
-   nproc_y = 1,
+   nproc_x = 5,
+   nproc_y = 2,
    max_fopen = 1,
 
-   nproc_x_in = 1,
-   nproc_y_in = 1,
-   inisplited = 1,
+   nproc_x_in = 10,
+   nproc_y_in = 6,
+   inisplited = 0000001,
 
    nproc_x_out = 1,
    nproc_y_out = 1,
-   dmp_out_joined = 0,
+   dmp_out_joined = 1111111,
  /
 
 *-----------------------------------------------------------------------
@@ -214,13 +214,13 @@
 
    hdmpinopt    = 1,
 
-     hdmpfheader = '/lustre/scratch/tsupinie/05June2009/3km-ensemble/enmean',
+     hdmpfheader = 'dump_dir/3km0331163DVARCA030015min540_6km1hr15RUNTMP',
      hdmpftrailer= '',
      tintv_dmpin = 300.0,
-     tbgn_dmpin  = 14400.0,
-     tend_dmpin  = 18000.0,
+     tbgn_dmpin  = 10800.0,
+     tend_dmpin  = 10800.0,
 
-     grdbasfn =   './may20.hdfgrdbas',
+     grdbasfn =   './may20.grbgrdbas',
      nhisfile = 3,
      hisfile(1) = './may20.grb000000',
      hisfile(2) = './may20.grb003600',
@@ -234,9 +234,9 @@
 !-----------------------------------------------------------------------
 
  &output_dims
-    nx1 = 255,
-    ny1 = 255,
-    nz1 = 51,
+    nx1 = 153,
+    ny1 = 153,
+    nz1 = 53,
  /
 !
 !-----------------------------------------------------------------------
@@ -278,9 +278,9 @@
  &newgrid_soil
    soilmodel_option = 1,
    nzsoil1          = 2,
-   dzsoil1          = 1.0,
+   dzsoil1          = 1.00,
    zrefsoil1        = 0.0,
-   soilstrhopt      = 0, 
+   soilstrhopt      = 0,
    soildzmin        = 0.01,
    soildlayer1      = 0.0,
    soildlayer2      = 1.0,
@@ -298,7 +298,7 @@
 !-----------------------------------------------------------------------
 
  &jobname
-   runname = 'enmeanicbc',
+   runname = '1kmbgbc_3km3DVARCA030015min540_6km1hr15RUNTMP',
  /
 
 !-----------------------------------------------------------------------
@@ -398,25 +398,25 @@
    xy_or_ll = 2,
      xctr1  = 32495.0,
      yctr1  = 32201.0,
-     ctrlat1=  41.619985,
-     ctrlon1= -104.344,
+     ctrlat1=  34.8,
+     ctrlon1= -87.68,
 
-   snap_to_grid = 2,
+   snap_to_grid = 1,
    same_res = 0,
 
-   dx1    =  1000.0,
-   dy1    =  1000.0,
-   dz1    =  500.0,
+   dx1    =  3000.0,
+   dy1    =  3000.0,
+   dz1    =  400.0,
 
    zrefsfc1  = 0.0,
-   strhopt1  = 2,
-     dzmin1    = 50.0,
+   strhopt1  = 1,
+     dzmin1    = 20.0,
      dlayer11  = 0.0,
      dlayer21  = 1.0e5,
-     strhtune1 = 1.0,
+     strhtune1 = 0.2,
      zflat1    = 1.0e5,
 
-   nstyp1 = -1,
+   nstyp1 = 3,
 
    noutgrds = 0,
      xctr_grd(1) = 0.,
@@ -467,16 +467,16 @@
 !-----------------------------------------------------------------------
 
  &newterrain
-   ternopt1 = 3,
-     ntmerge = 7,
+   ternopt1 = 4,
+     ntmerge = 12,
      mntopt1  = 0,
        hmount1  =     0.000,
        mntwidx1 = 10000.000,
        mntwidy1 = 10000.000,
        mntctrx1 = 10000.000,
        mntctry1 = 10000.000,
-     terndta1 = '1kmgoshen.trndata',
-       ternfmt1 = 1,
+     terndta1 = '/Users/dawson29/Projects/VORTEXSE/simulations/ARPS/trndata/3km153x153.trndata',
+       ternfmt1 = 3,
  /
 
 !-----------------------------------------------------------------------
@@ -555,7 +555,7 @@
 !         = 3, HDF4 (uncompressed).
 !
 !-----------------------------------------------------------------------
- 
+
  &sfc_data
    sfcdat   = 0,
      styp     = 3,
@@ -563,8 +563,8 @@
      lai0     = 0.31,
      roufns0  = 0.01,
      veg0     = 0.3,
-     sfcdtfl  = '../jun08/jun08B.sfcdata',
-     sfcfmt   = 1,
+     sfcdtfl  = '/Users/dawson29/VORTEXSE/simulations/ARPS/sfcdata/1km203x203.sfcdata',
+     sfcfmt   = 3,
  /
 
 !-----------------------------------------------------------------------
@@ -700,30 +700,30 @@
 !-----------------------------------------------------------------------
 
  &output
-   dirname  = '/lustre/scratch/tsupinie/05June2009/boundary/',
+   dirname  = 'out_dir/',
 
    hdmpfmt    = 3,
      grbpkbit   = 16,
-     hdfcompr   = 5,
+     hdfcompr   = 2,
 
    filcmprs = 0,
    readyfl  = 0,
 
-   basout   = 0,
-   grdout   = 0,
+   basout   = 1,
+   grdout   = 1,
    varout   = 1,
    mstout   = 1,
    iceout   = 1,
    tkeout   = 1,
    trbout   = 1,
-   rainout  = 0,
-   prcout   = 0,
+   rainout  = 1,
+   prcout   = 1,
    sfcout   = 1,
    landout  = 1,
    radout   = 1,
    flxout   = 1,
 
-   exbcdmp  = 3,
+   exbcdmp  = 0,
      exbchdfcompr = 2,
      qcexout  = 1,
      qrexout  = 1,
@@ -732,9 +732,9 @@
      qhexout  = 1,
      qgexout  = 1,
      nqexout  = 1,
-     zqexout =  1,
+     zqexout  = 1,
 
-     ngbrz = 5,
+     ngbrz = 12,
      zbrdmp = 12000.0,
 
    sfcdmp  = 0,

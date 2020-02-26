@@ -99,10 +99,10 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
     nproc_x_enkf, nproc_y_enkf = cm_args.mpi_config_enkf
 
     extraneous_files = [
-        "%s/%s.hdf%06d*.01" % (work_path, 'ena%(ens)03d', start_time),
-        "%s/%s.hdfgrdbas*.01" % (work_path, 'ena%(ens)03d'),
-        "%s/%s.log*" % (work_path, 'ena%(ens)03d'),
-        "%s/%s.maxmin*" % (work_path, 'ena%(ens)03d'),
+        "%s/EN%s/%s.hdf%06d*.01" % (work_path,'%(ens)03d', 'ena%(ens)03d', start_time),
+        "%s/EN%s/%s.hdfgrdbas*.01" % (work_path,'%(ens)03d', 'ena%(ens)03d'),
+        "%s/EN%s/%s.log*" % (work_path,'%(ens)03d', 'ena%(ens)03d'),
+        "%s/EN%s/%s.maxmin*" % (work_path,'%(ens)03d', 'ena%(ens)03d'),
     ]
 
     read_split = split_files in ['read', 'both']
@@ -1056,8 +1056,6 @@ def main():
 
         n_chunk_start = (ens_chunk_start - args.t_ens_start) / args.chunk_size
 
-        # TODO: insert logic to generate lookup tables if needed at the beginning of an
-        # experiment. For now, just manually do so.
         if t_ens == args.t_ens_start and not args.restart and args.save_lookup:
             print("This is the beginning of the experiment, we need to generate lookup"
                   "tables for rfopt = 3!")
