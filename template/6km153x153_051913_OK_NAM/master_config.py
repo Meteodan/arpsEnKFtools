@@ -244,6 +244,7 @@ arps_param = {
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 7.5,
+    'terndta': trndata_file,
     'hdmpfmt': 103,
     'thisdmp': 300.0
 }

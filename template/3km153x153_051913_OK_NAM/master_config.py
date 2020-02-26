@@ -9,7 +9,7 @@ import numpy as np
 # Base project names and directories
 scratch_base_dir = '/scratch/rice/s/sharm261'
 depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools')
+arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools'
 project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
@@ -257,6 +257,7 @@ arps_param = {
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
+    'terndta': trndata_file,
     'hdmpfmt': 103,
     'thisdmp': 300.0,
     'rfopt': 3,
