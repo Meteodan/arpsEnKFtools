@@ -1056,8 +1056,6 @@ def main():
 
         n_chunk_start = (ens_chunk_start - args.t_ens_start) / args.chunk_size
 
-        # TODO: insert logic to generate lookup tables if needed at the beginning of an
-        # experiment. For now, just manually do so.
         if t_ens == args.t_ens_start and not args.restart and args.save_lookup:
             print("This is the beginning of the experiment, we need to generate lookup"
                   "tables for rfopt = 3!")

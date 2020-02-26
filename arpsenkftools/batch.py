@@ -45,8 +45,10 @@ def parseQLineKraken(line):
             qstat.append(fields)
     return qstat
 
-def parseQLineRice(line):
-    cols_order = ['id', 'username', 'queue', 'name', 'sessid', 'nnodes', 'ncores', 'reqmem', 'reqtime', 'state', 'timeuse'] #, 'timestart']
+
+def parseQLineRice_PBS(line):
+    cols_order = ['id', 'username', 'queue', 'name', 'sessid', 'nnodes', 'ncores', 'reqmem',
+                  'reqtime', 'state', 'timeuse'] #, 'timestart']
     cols = dict([
         ('id',          slice(0,     8)),
         ('username',    slice(24,   35)),
@@ -73,48 +75,96 @@ def parseQLineRice(line):
 
     return line_dict
 
+
+def parseQLineRice(line):
+    cols_order = ['id', 'username', 'queue', 'name', 'nnodes', 'ncores', 'reqtime', 'state',
+                  'timeuse']
+    cols = dict([
+        ('id',          slice(0,     5)),
+        ('username',    slice(13,   21)),
+        ('queue',       slice(23,   31)),
+        ('name',        slice(36,   52)),
+        ('nnodes',      slice(53,   58)),
+        ('ncores',      slice(61,   65)),
+        ('reqtime',     slice(66,  77)),
+        ('state',       slice(78, 80)),
+        ('timeuse',     slice(81, None)),
+    ])
+
+    line_dict = {}
+    for name in cols_order:
+        line_dict[name] = line[cols[name]].strip()
+    #print line_dict[name]
+    try:
+        line_dict['id'] = int(line_dict['id'])
+        #print line_dict['id']
+    except ValueError:
+        return ""
+
+    return line_dict
+
+
+
 _environment = {
-    'stampede':{
-        'btmarker':"SBATCH",
-        '-J':"%(jobname)s",
-        '-o':"%(debugfile)s",
-        '-n':"%(nmpi)d",
-        '-N':"%(nnodes)d",
-        '-p':"%(queue)s",
-        '-t':"%(timereq)s",
-        'queueprog':'showq',   # Name of the program that gets the queue state
-        'queueparse':parseQLineStampede,
-        'submitprog':'sbatch', # Name of the program submits the batch file
-        'mpiprog':'ibrun',     # Name of the program that runs MPI
-        'n_cores_per_node':16,
+    'stampede': {
+        'btmarker': "SBATCH",
+        '-J': "%(jobname)s",
+        '-o': "%(debugfile)s",
+        '-n': "%(nmpi)d",
+        '-N': "%(nnodes)d",
+        '-p': "%(queue)s",
+        '-t': "%(timereq)s",
+        'queueprog': 'showq',   # Name of the program that gets the queue state
+        'queueparse': parseQLineStampede,
+        'submitprog': 'sbatch', # Name of the program submits the batch file
+        'mpiprog': 'ibrun',     # Name of the program that runs MPI
+        'n_cores_per_node': 16,
     },
-    'kraken':{
-        'btmarker':"PBS",
-        'queueprog':'qstat',
-        'queueparse':parseQLineKraken,
-        'submitprog':'qsub',
-        'mpiprog':'aprun',
-        'n_cores_per_node':12,
+    'kraken': {
+        'btmarker': "PBS",
+        'queueprog': 'qstat',
+        'queueparse': parseQLineKraken,
+        'submitprog': 'qsub',
+        'mpiprog': 'aprun',
+        'n_cores_per_node': 12,
     },
-    'oscer':{
+    'oscer': {
     },
-    'rice':{
-        'btmarker':"PBS",
-        '-q':" %(queue)s",
-        '-l nodes':"=%(nnodes)d:ppn=%(ppn)d",
-        '-l walltime':"=%(timereq)s",
-        '-N':" %(jobname)s",
-        '-l naccesspolicy':"=singleuser", # '-n':"",
-        'queueprog':'qstat',
-        'queueparse':parseQLineRice,
-        'submitprog':'qsub',
-        'mpiprog':'mpiexec',
-        'mpiargs':'-n %d',
-        'n_cores_per_node':20,
-        'running_state': 'R',
-        'complete_state': 'C'
+    # 'rice': {
+    #     'btmarker': "PBS",
+    #     '-q': " %(queue)s",
+    #     '-l nodes': "=%(nnodes)d:ppn=%(ppn)d",
+    #     '-l walltime': "=%(timereq)s",
+    #     '-N': " %(jobname)s",
+    #     '-l naccesspolicy': "=singleuser", # '-n':"",
+    #     'queueprog': 'qstat',
+    #     'queueparse': parseQLineRice,
+    #     'submitprog': 'qsub',
+    #     'mpiprog': 'mpiexec',
+    #     'mpiargs': '-n %d',
+    #     'n_cores_per_node': 20,
+    #     'running_state': 'R',
+    #     'complete_state': 'C'
+    # }
+    'rice': {
+        'btmarker': "SBATCH",
+        '-A': " %(queue)s",
+        '-N': " %(nnodes)d",
+        '--ntasks-per-node': " %(ppn)d",
+        '-t': " %(timereq)s",
+        '--job-name': "=%(jobname)s",
+        '--exclusive': "",
+        'queueprog': 'squeue',
+        'queueparse': parseQLineRice,
+        'submitprog': 'sbatch',
+        'mpiprog': 'mpiexec',
+        'mpiargs': '-n %d',
+        'n_cores_per_node': 20,
+        'running_state': ' R',
+        'complete_state': 'CD'
     }
 }
+
 
 class Batch(object):
     def __init__(self, environment, username="dawson29"):
@@ -127,10 +177,12 @@ class Batch(object):
         env_dict = {}
         ppn = kwargs.get('ppn', 20)
         nnodes = kwargs.get('nnodes', 1)
+        # if self._envname == 'rice':
+        #     ppn = ppn * nnodes  # Rice now needs the *total* nodes in the job specification
         if ppn < 20 and nnodes > 1:
             # print(self._env.keys())
             try:
-                self._env.pop('-l naccesspolicy')
+                self._env.pop('--exclusive')
             except (KeyError):
                 pass
         for k, v in self._env.items():
