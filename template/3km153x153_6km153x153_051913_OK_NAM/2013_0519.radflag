@@ -1,30 +1,30 @@
-radar_data_flag = {   49500.0: {False: [], True: ['KTLX']},
-    50400.0: {False: [], True: ['KTLX']},
-    51300.0: {False: [], True: ['KTLX']},
-    52200.0: {False: [], True: ['KTLX']},
-    53100.0: {False: [], True: ['KTLX']},
-    54000.0: {False: [], True: ['KTLX']},
-    54900.0: {False: [], True: ['KTLX']},
-    55800.0: {False: [], True: ['KTLX']},
-    56700.0: {False: [], True: ['KTLX']},
-    57600.0: {False: [], True: ['KTLX']},
-    58500.0: {False: [], True: ['KTLX']},
-    59400.0: {False: [], True: ['KTLX']},
-    60300.0: {False: [], True: ['KTLX']},
-    61200.0: {False: [], True: ['KTLX']},
-    62100.0: {False: [], True: ['KTLX']},
-    63000.0: {False: [], True: ['KTLX']},
-    63900.0: {False: [], True: ['KTLX']},
-    64800.0: {False: [], True: ['KTLX']},
-    65700.0: {False: [], True: ['KTLX']},
-    66600.0: {False: [], True: ['KTLX']},
-    67500.0: {False: [], True: ['KTLX']},
-    68400.0: {False: [], True: ['KTLX']},
-    69300.0: {False: [], True: ['KTLX']},
-    70200.0: {False: [], True: ['KTLX']},
-    71100.0: {False: [], True: ['KTLX']},
-    72000.0: {False: [], True: ['KTLX']},
-    72900.0: {False: [], True: ['KTLX']},
-    73800.0: {False: [], True: ['KTLX']},
-    74700.0: {False: [], True: ['KTLX']},
-    75600.0: {False: [], True: ['KTLX']}}
+radar_data_flag = {   49500.0: {False: ['KCRI','KFDR'], True: ['KTLX', 'KVNX']}, #1945
+    50400.0: {False: ['KFDR'], True: ['KTLX', 'KCRI', 'KVNX']},			    #2000
+    51300.0: {False: ['KVNX', 'KCRI'], True: ['KTLX', 'KFDR']},	    #2015
+    52200.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},	    #2030
+    53100.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #2045
+    54000.0: {False: ['KVNX'], True: ['KTLX', 'KCRI', 'KFDR']},   #2100
+    54900.0: {False: ['KCRI'], True: ['KTLX', 'KVNX', 'KFDR']},	    #2115
+    55800.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #2130
+    56700.0: {False: ['KTLX', 'KVNX'], True: ['KCRI', 'KFDR']},	    #2145
+    57600.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #2200
+    58500.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #2215
+    59400.0: {False: ['KCRI','KTLX'], True: ['KVNX', 'KFDR']},		    #2230
+    60300.0: {False: ['KCRI'], True: ['KTLX', 'KVNX', 'KFDR']},	    #2245
+    61200.0: {False: ['KTLX'], True: ['KCRI', 'KVNX', 'KFDR']},   #2300
+    62100.0: {False: ['KCRI'], True: ['KTLX', 'KVNX', 'KFDR']},	    #2315
+    63000.0: {False: [], True: ['KTLX', 'KVNX', 'KFDR', 'KCRI']},   #2330
+    63900.0: {False: ['KCRI','KVNX'], True: ['KTLX', 'KFDR']},	    	    #2345
+    64800.0: {False: [], True: ['KTLX', 'KVNX', 'KCRI', 'KFDR']},  	    #0000
+    65700.0: {False: ['KCRI'], True: ['KTLX', 'KVNX', 'KFDR']},           #0015
+    66600.0: {False: ['KTLX', 'KVNX'], True: ['KCRI', 'KFDR']},   	    #0030
+    67500.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   	    #0045
+    68400.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   	    #0100
+    69300.0: {False: ['KFDR'], True: ['KTLX', 'KCRI' 'KVNX']}, 		    #0115
+    70200.0: {False: ['KFDR'], True: ['KTLX', 'KCRI', 'KVNX']},  	    #0130
+    71100.0: {False: ['KFDR'], True: ['KTLX', 'KCRI', 'KVNX']},   	    #0145
+    72000.0: {False: ['KFDR'], True: ['KTLX', 'KCRI', 'KVNX']},   	    #0200
+    72900.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #0215
+    73800.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #0230
+    74700.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']},   #0245
+    75600.0: {False: [], True: ['KTLX', 'KCRI', 'KVNX', 'KFDR']}}   #0300
