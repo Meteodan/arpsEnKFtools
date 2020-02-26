@@ -21,7 +21,7 @@ ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_051913_OK_NAM/6km153x
                                   IOP_name)
 #ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/model_data/NAM')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
-radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/KTLX/level2/')
+radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
@@ -190,7 +190,7 @@ arpsintrp_param = {
 
 # Radar remapper parameters
 radremap_param = {
-    'radar_list': ['KTLX'],
+    'radar_list': ['KTLX','KCRI','KVNX','KFDR'],
     'start_timestamp': '20130519194500',
     'end_timestamp': '20130520020000',
     'interval_seconds': 300,
@@ -240,6 +240,7 @@ arps_param = {
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
+    'terndta': trndata_file,
     'hdmpfmt': 103,
     'thisdmp': 300.0,
     'rfopt': 3,
@@ -252,11 +253,11 @@ arpsenkfic_param = {
 
 # ARPSENKF parameters.
 arpsenkf_param = {
-    'nrdrused': 1,
-    'radarname': ['KTLX'],
-    'ntwtype': [1],
-    'vcpmode': [11],
-    'rdrlocopt': [1]
+    'nrdrused': 4,
+    'radarname': ['KTLX','KCRI','KVNX','KFDR'],
+    'ntwtype': [1,1,1,1],
+    'vcpmode': [11,11,11,11],
+    'rdrlocopt': [1,1,1,1]
 }
 
 # Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
