@@ -21,7 +21,7 @@ sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '6km153x153_033116'
+exp_name_base = '6km303x303_033116_0600'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
@@ -63,7 +63,7 @@ arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
 # Basic experiment parameters
 num_ensemble_members = 40
 # Initial time of entire experiment
-initial_time = '201603311200'
+initial_time = '201603310600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
@@ -84,8 +84,8 @@ comments = ['ARPS 5.4', 'March 31st, 2016 VSE IOP3']
 
 # Grid and map projection parameters
 grid_param = {
-    'nx': 153,
-    'ny': 153,
+    'nx': 303,
+    'ny': 303,
     'nz': 53,
     'dx': 6000.0,
     'dy': 6000.0,
@@ -171,10 +171,16 @@ ext2arps_param = {
     'extdfmt': 3,
     'dir_extd': ext_model_data_dir,
     'extdname': 'nam_218',
-    'nextdfil': 16,
+    'nextdfil': 22,
     # Note, for now explicitly list each time string here. We can work on a more
     # compact solution later
     'extdtimes': [
+        '2016-03-31.06:00:00+000:00:00',
+        '2016-03-31.06:00:00+001:00:00',
+        '2016-03-31.06:00:00+002:00:00',
+        '2016-03-31.06:00:00+003:00:00',
+        '2016-03-31.06:00:00+004:00:00',
+        '2016-03-31.06:00:00+005:00:00',
         '2016-03-31.12:00:00+000:00:00',
         '2016-03-31.12:00:00+001:00:00',
         '2016-03-31.12:00:00+002:00:00',
@@ -247,9 +253,9 @@ arps_param = {
 
 # ARPSENKFIC parameters
 arpsenkfic_param = {
-    'iniprtopt': 2,
-    'iniprt_ptprt': 2,
-    'iniprt_qv': 2,
+    'iniprtopt': 3,
+    'iniprt_ptprt': 3,
+    'iniprt_qv': 3,
     'smoothopt': 2,
     'lhor': 36000.0,
     'lver': 7200.0,
