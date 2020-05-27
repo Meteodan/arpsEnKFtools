@@ -1,4 +1,4 @@
-
+import os
 import subprocess
 from datetime import datetime
 
@@ -76,7 +76,7 @@ def parseQLineRice_PBS(line):
     return line_dict
 
 
-def parseQLineRice(line):
+def parseQLineRice_old(line):
     cols_order = ['id', 'username', 'queue', 'name', 'nnodes', 'ncores', 'reqtime', 'state',
                   'timeuse']
     cols = dict([
@@ -103,6 +103,23 @@ def parseQLineRice(line):
 
     return line_dict
 
+
+def parseQLineRice(line):
+    cols_order = ['id', 'username', 'queue', 'name', 'nnodes', 'ncores', 'reqtime', 'state',
+                  'timeuse']
+    line = line.strip().split()
+    line_dict = {}
+
+    for n, name in enumerate(cols_order):
+        line_dict[name] = line[n].strip()
+    #print line_dict[name]
+    try:
+        line_dict['id'] = int(line_dict['id'])
+        #print line_dict['id']
+    except ValueError:
+        return ""
+
+    return line_dict
 
 
 _environment = {
@@ -212,6 +229,8 @@ class Batch(object):
         return
 
     def getQueueStatus(self, display=True):
+        if self._env['queueprog'] == 'squeue':
+            os.environ['SQUEUE_FORMAT'] = "%12i %9u %12a %60j %.5D %.6C %.11l %.2t %M"
         queue = subprocess.Popen([self._env['queueprog'], '-u', self._username], stdout=subprocess.PIPE)
         queue_text = queue.communicate()[0]
         lines = []

@@ -45,13 +45,13 @@ ovrwind = True              # Overlay wind vectors on plots?
 storm_u = 0.0 #-9.75 # -9.75 # -11.69 # 0.0
 storm_v = 0.0 #-2.80 # -2.80 # -1.41 # 0.0
 
-windintv_horz = 2               # Grid interval for wind vector plotting
-windintv_vert = 2
-wind_standard_value = 20
+windintv_horz = 5               # Grid interval for wind vector plotting
+windintv_vert = 5
+wind_standard_value = 10
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
-tmat_opt = False
+tmat_opt = True
 wavelen = 107.0 #Units of mm
 #dirscatt = '/Users/ddawson/arps5.3_CVS/data/scatt/S-band/'
 dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
@@ -59,9 +59,12 @@ dirscatt = '/home/dawson29/Projects/pyCRMtools/data/tmatrix/S-band/MFflg1/'
 # Map and GIS overlay stuff
 
 ovrmap = True
-gis_info = None # ["Moore OK", 35.3387, -97.4864]  # Plot location of a town, radar, etc
-county_shapefile_location = '/home/dawson29/Projects/pyCRMtools/data/shapefiles/county/countyp020'
-urban_shapefile_location = '/home/dawson29/Projects/pyCRMtools/data/shapefiles/urban2/tl_2008_us_cbsa'
+gis_info = [['PIPS1A', 35.046499999999995, -87.67749219783126],
+            ['PIPS1B', 35.084130703422055, -87.7198528728348],
+            ['PIPS2A', 35.015666666666675, -87.67168627067865],
+            ['PIPS2B', 35.1515, -87.74416666666664]] # ["Moore OK", 35.3387, -97.4864]  # Plot location of a town, radar, etc
+county_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/county/countyp020'
+urban_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/urban2/tl_2008_us_cbsa'
 
 draw_counties = 0
 draw_urban = 0
@@ -86,15 +89,15 @@ intrpswp = 1            # If plot_slice = 4, how should we interpolate to the ra
 slices = [1]          # List of slices to plot (not yet implemented, see slice1,2,3 below)
 
 # Tick intervals for each axis (m)
-plotxtickintv = 200000.
-plotytickintv = 200000.
+plotxtickintv = 50000.
+plotytickintv = 50000.
 plotztickintv = 1000.
 
 savefigopt = 1
 figfmt = 'png'              # Format of figures (e.g., .png, .pdf, .jpg, .eps, etc.)
 
-nproc_x_in = 3             # Number of patches for split history files.
-nproc_y_in = 5
+nproc_x_in = 15             # Number of patches for split history files.
+nproc_y_in = 6
 
 # Misc section (incomplete or unimplemented stuff)
 ovrtrajc = False
@@ -129,42 +132,48 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/051913_OK/ARPS/EnKF/6km153x153_051913_OK_NAM/6km153x153_051913_OK_NAM/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [True,True]
-dir_list = ['./ENamean/','./ENfmean/']
-dir_extra_list = ['./','./']
-runname_list = ['enmean','efmean']
-runlabel_list = ['enmean','efmean']
-trailer_list = ['','']
-mphyopt_list = [15,15]
-plotlim_list = [None,None]
-master_time_list = [N.arange(64800.0,75600.0+3600.0,3600.0), N.arange(64800.0,75600.0+3600.0,3600.0)]
-start_timestamp_list = ['20130519060000', '20130519060000']
-arbfile_list = [None,None]
+toPlot_list = [True, False, False, False]
+dir_list = ['./ENamean/','./ENfmean/','./EN022/','./ENF013/']
+dir_extra_list = ['./','./','./','./']
+runname_list = ['enmean','efmean','ena022','enf013']
+runlabel_list = ['enmean','efmean','ena022','enf013']
+trailer_list = ['','','','']
+mphyopt_list = [15,15,15,15]
+plotlim_list = [[150000., 300000., 200000., 350000.], [150000., 300000., 200000., 350000.],
+                [150000., 275000., 200000., 325000.], [150000., 275000., 200000., 325000.]]
+master_time_list = [N.arange(3600.,17100.+900.0,900.0), N.arange(14400.,14400.+900.0,900.0),
+                    N.arange(0.,17100.+300.0,300.0), N.arange(0.,13500.+300.0,300.0)]
+start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
+arbfile_list = [None,None,None,None]
+
 
 # Variables to plot
 
-fieldname = "pte"
-fieldlevels = N.arange(320.0,370.0+1.0,1.0)
-clvls = matplotlib.ticker.MultipleLocator(base=5.0)
-clabel = r'$\theta_e$'
+fieldname = "dBZ"
+fieldlevels = N.arange(5.0,85.0+5.0,5.0)
+clvls = matplotlib.ticker.MultipleLocator(base=10.0)
+clabel = r'dBZ'
 cformat = None
-fieldcm = cm.viridis
+fieldcm = cmapdBZ
 norm = matplotlib.colors.BoundaryNorm(fieldlevels,fieldcm.N)
 plabel = None
 slice1 = 1
 stag = 's'
+arbvar = False
 
-fieldovername = "none"
-fieldoverlevels = N.arange(10.0,80.0+10.0,10.0)
+fieldovername = "w"
+fieldoverlevels = N.arange(5.0,60.0+5.0,5.0)
 fieldovercolor = 'k'
-slice2 = 1
+slice2 = 14
 stagovr = 's'
+arbvarovr = False
 
-fieldover2name = "none"
-fieldover2levels = N.arange(1.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
+fieldover2name = "vortz"
+fieldover2levels = N.arange(5.e-3,1.e-2,5.e-3) # N.arange(1.e-1,1.,1.e-1)
 fieldover2color = 'purple'
-slice3 = 14 # 14
+slice3 = 7 # 14
 stagovr2 = 's'
+arbvarovr2 = False

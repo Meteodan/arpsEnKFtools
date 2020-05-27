@@ -3,7 +3,6 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
-import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
@@ -14,17 +13,16 @@ project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2016_IOP3'
-IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF_test')
+IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(depot_base_dir,
-                                  'data/Projects/VORTEXSE/model_data/newse_data')
+ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
+                                  IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao', IOP_name)
-radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '1km453x453_033116'
-exp_name_tag = '_newse'
+exp_name_base = '6km303x303_033116_0600'
+exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
 prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
@@ -38,13 +36,12 @@ sfcdata_path = os.path.join(sfcdata_dir, sfcdata_file)
 trndata_dir = os.path.join(project_depot_dir, 'trndata')
 trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
-radflag_file = '2016_IOP3_5min.radflag'
+radflag_file = 'template.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
 radarinfo_file = 'radarinfo.dat'
 radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
 blacklist_file = 'blacklist.sfc'
 blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
-remapped_radar_dir = os.path.join(project_depot_dir, '{}/remapped_radar/{}'.format(IOP_name, exp_name))
 
 # Executable file names and directories
 arps_base_dir = '/home/dawson29/arps5.4_main'
@@ -57,24 +54,21 @@ arpsenkf_exe_path = os.path.join(arps_bin_dir, 'arpsenkf_mpi')
 arpsenkfic_exe_path = os.path.join(arps_bin_dir, 'arpsenkfic')
 wrf2arps_exe_path = os.path.join(arps_bin_dir, 'wrf2arps_mpi')
 arpsintrp_exe_path = os.path.join(arps_bin_dir, 'arpsintrp_mpi')
-radremap_exe_path = os.path.join(arps_bin_dir, '88d2arps')
-mpi_exe = 'mpiexec'
-mpi_nproc_flag = '-n'
+
 
 # Experiment parameters (many of these are namelist parameters that will be inserted in the
 # appropriate namelist input files for the various ARPS programs used in an experiment). See the
 # documentation in the various namelist input files for details on their meanings.
 
 # Basic experiment parameters
-num_ensemble_members = 36
-# Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
-# initial time of the original parent experiment!
-initial_time = '201603311800'
+num_ensemble_members = 40
+# Initial time of entire experiment
+initial_time = '201603310600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
 initial_time_sec = 0
-perturb_ic = False
+perturb_ic = True
 if perturb_ic:
     external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
     external_inigbf = '{}.hdfgrdbas'.format(exp_name)
@@ -90,13 +84,11 @@ comments = ['ARPS 5.4', 'March 31st, 2016 VSE IOP3']
 
 # Grid and map projection parameters
 grid_param = {
-    'nx': 453,
-    'ny': 453,
+    'nx': 303,
+    'ny': 303,
     'nz': 53,
-    'nproc_x': 15,
-    'nproc_y': 6,
-    'dx': 1000.0,
-    'dy': 1000.0,
+    'dx': 6000.0,
+    'dy': 6000.0,
     'dz': 400.0,
     'strhopt': 1,
     'dzmin': 20.0,
@@ -105,12 +97,12 @@ grid_param = {
     'dlayer2': 1.0e5,
     'strhtune': 0.2,
     'zflat': 1.0e5,
-    'ctrlat': 34.799999,
-    'ctrlon': -87.680000,
+    'ctrlat': 34.80,
+    'ctrlon': -87.68,
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -87.680000,
+    'trulon': -87.68,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -119,8 +111,8 @@ arpstrn_param = {
     'trndataopt': 3,
     'dir_trndata': os.path.join(depot_base_dir, 'data/arpstopo30.data'),
     'nsmth': 2,
-    'lat_sample': 30,
-    'lon_sample': 30,
+    'lat_sample': 180,
+    'lon_sample': 180,
     'trnanxopt': 2,
     'dirname': trndata_dir,
     'terndmp': 3
@@ -152,43 +144,69 @@ arpssfc_param = {
     'dirname': sfcdata_dir
 }
 
-# WRF2ARPS parameters
-wrf2arps_param = {
-    'run_mpi': True,
-    'nproc_x': 5,
-    'nproc_y': 2,
-    'history_interval_sec': 900,
-    'history_interval': '00_00:15:00',
-    'init_timestamp': initial_time,
-    'end_timestamp': '201604010245',
-    'subdir_template': None,
-    'hdmpfmt': 3,
-    'exbcdmp': 3,
-    'dmp_out_joined': 1111111,
-    'wrfexttrnopt': 3,
-    'terndta': trndata_path,
-    'ternfmt': 3,
-    'extntmrg': 7,
-    'dirname': external_icbc_dir
-}
-
-# ARPSINTRP parameters
-arpsintrp_param = {
-}
-
-# Radar remapper parameters
-radremap_param = {
-    'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
-    'start_timestamp': '20160331180000',
-    'end_timestamp': '20160401030000',
-    'interval_seconds': 300,
-    'tolerance': 900,
-    'closest_before': True,
-    'nthreads': 10
-}
-
 # EXT2ARPS parameters
 ext2arps_param = {
+    'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
+    'tstart': float(initial_time_sec),
+    'tstop': float(initial_time_sec),
+    'dmp_out_joined': 1,
+    'hdmpfmt': 3,
+    'hdfcompr': 2,
+    'exbcdmp': 3,
+    'exbchdfcompr': 2,
+    'extdadmp': 1,
+    'qcexout': 1,
+    'qrexout': 1,
+    'qiexout': 1,
+    'qsexout': 1,
+    'qhexout': 1,
+    'qgexout': 1,
+    'nqexout': 1,
+    'zqexout': 1,
+    'dirname': external_icbc_dir,
+    'ternopt': 2,
+    'terndta': trndata_path,
+    'ternfmt': 3,
+    'extdopt': 116,
+    'extdfmt': 3,
+    'dir_extd': ext_model_data_dir,
+    'extdname': 'nam_218',
+    'nextdfil': 22,
+    # Note, for now explicitly list each time string here. We can work on a more
+    # compact solution later
+    'extdtimes': [
+        '2016-03-31.06:00:00+000:00:00',
+        '2016-03-31.06:00:00+001:00:00',
+        '2016-03-31.06:00:00+002:00:00',
+        '2016-03-31.06:00:00+003:00:00',
+        '2016-03-31.06:00:00+004:00:00',
+        '2016-03-31.06:00:00+005:00:00',
+        '2016-03-31.12:00:00+000:00:00',
+        '2016-03-31.12:00:00+001:00:00',
+        '2016-03-31.12:00:00+002:00:00',
+        '2016-03-31.12:00:00+003:00:00',
+        '2016-03-31.12:00:00+004:00:00',
+        '2016-03-31.12:00:00+005:00:00',
+        '2016-03-31.18:00:00+000:00:00',
+        '2016-03-31.18:00:00+001:00:00',
+        '2016-03-31.18:00:00+002:00:00',
+        '2016-03-31.18:00:00+003:00:00',
+        '2016-03-31.18:00:00+004:00:00',
+        '2016-03-31.18:00:00+005:00:00',
+        '2016-04-01.00:00:00+000:00:00',
+        '2016-04-01.00:00:00+001:00:00',
+        '2016-04-01.00:00:00+002:00:00',
+        '2016-04-01.00:00:00+003:00:00'
+    ],
+    'iorder': 3,
+    'intropt': 1,
+    'nsmooth': 1,
+    'exttrnopt': 2,
+    'extntmrg': 12,
+    'extsfcopt': 0,
+    'ext_lbc': 1,
+    'ext_vbc': 1,
+    'grdbasopt': 1
 }
 
 # ARPS parameters
@@ -208,17 +226,17 @@ arps_param = {
     'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
     'inifile': './{}'.format(external_inifile),
     'inigbf': './{}'.format(external_inigbf),
-    'dtbig': 2.0,
+    'dtbig': 7.5,
     'tstart': float(initial_time_sec),
     'tstop': float(initial_time_sec),
-    'dtsml': 1.0,
+    'dtsml': 1.5,
     'tintegopt': 1,
-    'tintvebd': 900.0,
+    'tintvebd': 3600.0,
     'ngbrz': 10,
     'brlxhw': 4,
-    'cbcdmp': 0.05,
+    'cbcdmp': 0.00555556,
     'exbcfmt': 3,
-    'tmixopt': 4,
+    'tmixopt': 5,
     'trbisotp': 0,
     'tkeopt': 3,
     'trbvimp': 1,
@@ -228,33 +246,56 @@ arps_param = {
     'mphyopt': 15,
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
-    'dtsfc': 2.0,
+    'dtsfc': 7.5,
     'hdmpfmt': 103,
-    'thisdmp': 300.0,
-    'rfopt': 3,
-    'sv_lkup_tble': 1
+    'thisdmp': 300.0
 }
 
 # ARPSENKFIC parameters
 arpsenkfic_param = {
+    'iniprtopt': 3,
+    'iniprt_ptprt': 3,
+    'iniprt_qv': 3,
+    'smoothopt': 2,
+    'lhor': 36000.0,
+    'lver': 7200.0,
+    'prtibgn': 3,
+    'prtiend': grid_param['nx'] - 2,
+    'prtjbgn': 3,
+    'prtjend': grid_param['ny'] - 2,
+    'prtkbgn': 3,
+    'prtkend': grid_param['nz'] - 2,
+    'prtibgnu': 3,
+    'prtiendu': grid_param['nx'] - 2,
+    'prtjbgnv': 3,
+    'prtjendv': grid_param['ny'] - 2,
+    'prtkbgnw': 3,
+    'prtkendw': grid_param['nz'] - 2,
+    'r0h_uv': 6000.0,
+    'r0v_uv': 3000.0,
+    'r0h_w': 6000.0,
+    'r0v_w': 3000.0,
+    'r0h_ptprt': 6000.0,
+    'r0v_ptprt': 3000.0,
+    'r0h_pprt': 6000.0,
+    'r0v_pprt': 3000.0,
+    'r0h_qv': 6000.0,
+    'r0v_qv': 3000.0,
+    'r0h_qli': 6000.0,
+    'r0v_qli': 3000.0,
+    'stdu': 2.0,
+    'stdv': 2.0,
+    'stdw': 0.0,
+    'stdptprt': 1.0,
+    'stdpprt': 0.0,
+    'stdqv': 0.0006,
+    'stdqrelative': 0.1,
 }
 
-# ARPSENKF parameters.
+# ARPSENKF parameters
 arpsenkf_param = {
-    'nrdrused': 1,
-    'radarname': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
-    'ntwtype': [1, 1, 1, 1, 1, 1, 1],
-    'vcpmode': [11, 11, 11, 11, 11, 11, 11],
-    'rdrlocopt': [1, 1, 1, 1, 1, 1, 1]
+    'sfcweight': 2,
+    'sfcr0h': 300000.0,
+    'sfcr0h_meso': 50000.0,
+    'sfcr0v': 6000.0,
 }
-
-# Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
-radflag_param = {
-    # Add appropriate "radar groups" (i.e. all radars, only WSR-88Ds, only mobile, etc.)
-    # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
-    # that there is no overlap between the times for each radar group.
-    'radar_groups': {
-        'all_radars': (arpsenkf_param['radarname'], np.arange(0., 31500. + 300., 300.))
-    },
-}
-

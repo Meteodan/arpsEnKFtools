@@ -50,8 +50,6 @@ def _searchLine(line, **kwargs):
                 else:
                     str_value = _namelistToString(replacement, padded_zeros=padded_zeros)
 
-                #print "Replacing %s with %s" % (parameter, replacement)
-
                 # Looks for a string that matches (parameter = a comma-separated list of either strings, booleans, or numbers) followed by a bareword (another variable name) or a newline.
                 line = re.sub(r"%s[\s]*=[\s]*(?:(?:'[^']+'[\s]*,?[\s]*)+|(?:\.(?:true|TRUE|false|FALSE)\.[\s]*,?[\s]*)+|(?:[\dEe.-]+[\s]*,?[\s]*)+?)(?=[A-Za-z][\w(,)]*|" % parameter_escaped + "\n)",
                     "%s = %s," % (parameter, str_value), line)
