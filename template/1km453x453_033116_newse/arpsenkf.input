@@ -1061,12 +1061,12 @@
 
    loc_rdrinfo = 'data/adas',
 
-   nrdrused = 7,
-     radarname= 'KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH',
-     ntwtype  =      1,      1,      1,      1,      1,      1,      1,
-     vcpmode  =     11,     11,     11,     11,     11,     11,     11, 
+   nrdrused = 1,
+     radarname = 'KTLX', 'KFDR',
+     ntwtype = 1, 1, 1, 1, 1, 1, 1,
+     vcpmode = 11, 11, 11, 11, 11, 11, 11,
 
-     rdrlocopt =     1,       1,     1,      1,      1,      1,      1,
+     rdrlocopt = 1, 1, 1, 1, 1, 1, 1,
      xpos      =   0.0, 25000.0,   0.0,    0.0,    0.0,    0.0,    0.0,
      ypos      =   0.0, 15000.0,   0.0,    0.0,    0.0,    0.0,    0.0,
      hpos      =  10.0,    10.0,  10.0,   10.0,   10.0,   10.0,   10.0,

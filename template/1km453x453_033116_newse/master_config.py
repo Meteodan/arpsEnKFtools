@@ -3,6 +3,7 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
+import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
@@ -13,11 +14,11 @@ project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2016_IOP3'
-IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
+IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF_test')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
 ext_model_data_dir = os.path.join(depot_base_dir,
                                   'data/Projects/VORTEXSE/model_data/newse_data')
-sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao')
+sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao', IOP_name)
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/level2/')
 # TODO: add other obs type directories here
 
@@ -37,7 +38,7 @@ sfcdata_path = os.path.join(sfcdata_dir, sfcdata_file)
 trndata_dir = os.path.join(project_depot_dir, 'trndata')
 trndata_file = '{}.trndata'.format(exp_name)
 trndata_path = os.path.join(trndata_dir, trndata_file)
-radflag_file = '2016_IOP3.radflag'
+radflag_file = '2016_IOP3_5min.radflag'
 radflag_path = os.path.join(template_exp_dir, radflag_file)
 radarinfo_file = 'radarinfo.dat'
 radarinfo_path = os.path.join(template_base_dir, radarinfo_file)
@@ -246,3 +247,14 @@ arpsenkf_param = {
     'vcpmode': [11, 11, 11, 11, 11, 11, 11],
     'rdrlocopt': [1, 1, 1, 1, 1, 1, 1]
 }
+
+# Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
+radflag_param = {
+    # Add appropriate "radar groups" (i.e. all radars, only WSR-88Ds, only mobile, etc.)
+    # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
+    # that there is no overlap between the times for each radar group.
+    'radar_groups': {
+        'all_radars': (arpsenkf_param['radarname'], np.arange(0., 31500. + 300., 300.))
+    },
+}
+

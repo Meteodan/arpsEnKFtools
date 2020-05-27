@@ -40,7 +40,8 @@ for radar_group_name, radar_group in radflag_param['radar_groups'].items():
         assim_time: {True: radar_group[0], False: []} for assim_time in radar_group[1]
     })
 
+print(config.radflag_path)
 with open(config.radflag_path, 'w') as radflag_output:
-    output_text = pprint.pformat(radar_data_flag, indent=4)
+    output_text = pprint.pformat(radar_data_flag, indent=4, width=120)
     radflag_output.write('radar_data_flag = {}'.format(output_text))
 
