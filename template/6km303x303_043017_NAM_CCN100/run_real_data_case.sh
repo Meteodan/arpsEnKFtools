@@ -20,7 +20,7 @@ python run_real_data_case.py  \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar no  --assim-prof no  --assim-surf yes  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-    --fcst-req 0:45  --init-fcst-req 2:15  --assim-on-req 0:45                                                              \
+    --fcst-req 0:45  --init-fcst-req 2:45  --assim-on-req 0:45                                                              \
     --split-init auto --debug --save-batch --error-check 
 
 # every 15 minutes from 12 UTC to 23 UTC
