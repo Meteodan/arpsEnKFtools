@@ -24,7 +24,7 @@ radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/201
 
 # Experiment name and directories
 exp_name_base = '6km303x303_043017'
-exp_name_tag = '_NAM'
+exp_name_tag = '_NAM_CCN100'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
 prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
@@ -292,7 +292,7 @@ arps_param = {
     'cfcm4v': 5.0e-4,
     'cmix_opt': 1,
     'mphyopt': 15,
-    'ntcloud': 1.0e9,
+    'ntcloud': 1.0e8,
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,

@@ -15,16 +15,14 @@ project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/model_data/nam_data',
-                                  IOP_name)
-#ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM/6km303x303_043017_NAM')
+ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM_CCN100/6km303x303_043017_NAM_CCN100/')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/NEXRAD/IOP_4C/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
-exp_name_base = '6km303x303_043017'
-exp_name_tag = '_NAM'
+exp_name_base = '3km153x153_6km303x303_043017'
+exp_name_tag = '_NAM_CCN100'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
 prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
@@ -73,10 +71,14 @@ initial_time = '201704300600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
-initial_time_sec = 0 # 0600 UTC
-perturb_ic = True
-external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
-external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+initial_time_sec = 39600 # 1700 UTC
+perturb_ic = False
+if perturb_ic:
+    external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
+    external_inigbf = '{}.hdfgrdbas'.format(exp_name)
+else:
+    external_inifile = 'ena001.hdf{:06d}'.format(initial_time_sec)
+    external_inigbf = 'ena001.hdfgrdbas'
 external_inifile_path = os.path.join(external_icbc_dir, external_inifile)
 external_inigbf_path = os.path.join(external_icbc_dir, external_inigbf)
 
@@ -86,13 +88,13 @@ comments = ['ARPS 5.4', 'April 30th, 2017 VORTEX-SE IOP4C']
 
 # Grid and map projection parameters
 grid_param = {
-    'nx': 303,
-    'ny': 303,
+    'nx': 153,
+    'ny': 153,
     'nz': 53,
-    'nproc_x': 10,
-    'nproc_y': 6,
-    'dx': 6000.0,
-    'dy': 6000.0,
+    'nproc_x': 3,
+    'nproc_y': 5,
+    'dx': 3000.0,
+    'dy': 3000.0,
     'dz': 400.0,
     'strhopt': 1,
     'dzmin': 20.0,
@@ -198,63 +200,6 @@ radremap_param = {
 
 # EXT2ARPS parameters
 ext2arps_param = {
-    'initime': initial_datetime.strftime('%Y-%m-%d.%H:%M:00'),
-    'tstart': float(initial_time_sec),
-    'tstop': float(initial_time_sec),
-    'dmp_out_joined': 1,
-    'hdmpfmt': 3,
-    'hdfcompr': 2,
-    'exbcdmp': 3,
-    'exbchdfcompr': 2,
-    'extdadmp': 1,
-    'qcexout': 1,
-    'qrexout': 1,
-    'qiexout': 1,
-    'qsexout': 1,
-    'qhexout': 1,
-    'qgexout': 1,
-    'nqexout': 1,
-    'zqexout': 1,
-    'dirname': external_icbc_dir,
-    'ternopt': 2,
-    'terndta': trndata_path,
-    'ternfmt': 3,
-    'extdopt': 116,
-    'extdfmt': 3,
-    'dir_extd': ext_model_data_dir,
-    'extdname': 'nam_218',
-    'nextdfil': 18,
-    # Note, for now explicitly list each time string here. We can work on a more
-    # compact solution later
-    'extdtimes': [
-        '2017-04-30.06:00:00+000:00:00',
-        '2017-04-30.06:00:00+001:00:00',
-        '2017-04-30.06:00:00+002:00:00',
-        '2017-04-30.06:00:00+003:00:00',
-        '2017-04-30.06:00:00+004:00:00',
-        '2017-04-30.06:00:00+005:00:00',
-        '2017-04-30.12:00:00+000:00:00',
-        '2017-04-30.12:00:00+001:00:00',
-        '2017-04-30.12:00:00+002:00:00',
-        '2017-04-30.12:00:00+003:00:00',
-        '2017-04-30.12:00:00+004:00:00',
-        '2017-04-30.12:00:00+005:00:00',
-        '2017-04-30.18:00:00+000:00:00',
-        '2017-04-30.18:00:00+001:00:00',
-        '2017-04-30.18:00:00+002:00:00',
-        '2017-04-30.18:00:00+003:00:00',
-        '2017-04-30.18:00:00+004:00:00',
-        '2017-04-30.18:00:00+005:00:00',
-    ],
-    'iorder': 3,
-    'intropt': 1,
-    'nsmooth': 1,
-    'exttrnopt': 2,
-    'extntmrg': 12,
-    'extsfcopt': 0,
-    'ext_lbc': 1,
-    'ext_vbc': 1,
-    'grdbasopt': 1
 }
 
 # ARPS parameters
@@ -292,7 +237,7 @@ arps_param = {
     'cfcm4v': 5.0e-4,
     'cmix_opt': 1,
     'mphyopt': 15,
-    'ntcloud': 1.0e9,
+    'ntcloud': 1.0e8,
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
@@ -304,43 +249,6 @@ arps_param = {
 
 # ARPSENKFIC parameters
 arpsenkfic_param = {
-'iniprtopt': 2,
-    'iniprt_ptprt': 2,
-    'iniprt_qv': 2,
-    'smoothopt': 2,
-    'lhor': 36000.0,
-    'lver': 7200.0,
-    'prtibgn': 3,
-    'prtiend': grid_param['nx'] - 2,
-    'prtjbgn': 3,
-    'prtjend': grid_param['ny'] - 2,
-    'prtkbgn': 3,
-    'prtkend': grid_param['nz'] - 2,
-    'prtibgnu': 3,
-    'prtiendu': grid_param['nx'] - 2,
-    'prtjbgnv': 3,
-    'prtjendv': grid_param['ny'] - 2,
-    'prtkbgnw': 3,
-    'prtkendw': grid_param['nz'] - 2,
-    'r0h_uv': 6000.0,
-    'r0v_uv': 3000.0,
-    'r0h_w': 6000.0,
-    'r0v_w': 3000.0,
-    'r0h_ptprt': 6000.0,
-    'r0v_ptprt': 3000.0,
-    'r0h_pprt': 6000.0,
-    'r0v_pprt': 3000.0,
-    'r0h_qv': 6000.0,
-    'r0v_qv': 3000.0,
-    'r0h_qli': 6000.0,
-    'r0v_qli': 3000.0,
-    'stdu': 2.0,
-    'stdv': 2.0,
-    'stdw': 0.0,
-    'stdptprt': 1.0,
-    'stdpprt': 0.0,
-    'stdqv': 0.0006,
-    'stdqrelative': 0.1,
 }
 
 # ARPSENKF parameters.
@@ -349,9 +257,5 @@ arpsenkf_param = {
     'radarname': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
     'ntwtype': [1, 1, 1, 1, 1, 1, 1],
     'vcpmode': [11, 11, 11, 11, 11, 11, 11],
-    'rdrlocopt': [1, 1, 1, 1, 1, 1, 1],
-    'sfcweight': 2,
-    'sfcr0h': 300000.0,
-    'sfcr0h_meso': 50000.0,
-    'sfcr0v': 6000.0,
+    'rdrlocopt': [1, 1, 1, 1, 1, 1, 1]
 }

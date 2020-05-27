@@ -1,7 +1,7 @@
 #!/bin/bash
 # TODO: make this into a python script, too
-BASEPATH='/scratch/rice/c/cbelak/Projects/VORTEXSE/simulations/ARPS/2017_IOP4C/EnKF/6km303x303_043017_NAM'
-JOBNAME='6km303x303_043017_NAM'
+BASEPATH='/scratch/rice/c/cbelak/Projects/VORTEXSE/simulations/ARPS/2017_IOP4C/EnKF/6km303x303_043017_NAM_CCN100'
+JOBNAME='6km303x303_043017_NAM_CCN100'
 
 # Force unload xalt module due to python bug
 # EDIT: do we need to do this anymore?
@@ -20,7 +20,7 @@ python run_real_data_case.py  \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar no  --assim-prof no  --assim-surf yes  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-    --fcst-req 0:45  --init-fcst-req 2:15  --assim-on-req 0:45                                                              \
+    --fcst-req 0:45  --init-fcst-req 2:45  --assim-on-req 0:45                                                              \
     --split-init auto --debug --save-batch --error-check 
 
 # every 15 minutes from 12 UTC to 23 UTC
