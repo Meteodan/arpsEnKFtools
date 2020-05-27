@@ -237,7 +237,8 @@ def generateEnsemblePerturbations(cm_args, batch, start_time):
     for n_ens in cm_args.members:
         ens_member_name = "ena%03d" % (n_ens + 1)
 
-        arpsenkfic_input_file_name = "%s/%s.arpsenkfic.input" % (input_path, ens_member_name)
+        arpsenkfic_input_file_name = "%s/%s_%s.arpsenkfic.input" % (input_path, cm_args.job_name,
+                                                                    ens_member_name)
 
         editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkfic_template),
                          arpsenkfic_input_file_name,
@@ -376,16 +377,16 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
             n_radars = len(radar_data_flag[True])
             radar_names = radar_data_flag[True]
             print(radar_names)
-            if cm_args.check_radar_files and cm_args.init_time_string:                
+            if cm_args.check_radar_files and cm_args.init_time_string:
                 radar_datetime = cm_args.datetime_dict[assim_time]
-                radar_time_string = radar_datetime.strftime('%Y%m%d.%H%M%S') 
+                radar_time_string = radar_datetime.strftime('%Y%m%d.%H%M%S')
                 for radar_name in radar_names:
                     radar_filename = '{}.{}'.format(radar_name, radar_time_string)
                     radar_path = os.path.join(cm_args.base_path, 'nexrad/{}'.format(radar_filename))
                     if not os.path.exists(radar_path):
                         print("Radar data file {} doesn't exist! Removing!".format(radar_filename))
                         n_radars = n_radars - 1
-                        radar_data_flag[True].remove(radar_name)    
+                        radar_data_flag[True].remove(radar_name)
         else:
             n_radars = 0
             radar_names = ['']
@@ -898,7 +899,7 @@ def main():
         print("Copying over initial condition files from {} to {}".format(args.init_job_name, args.job_name))
         # TODO: individual ensemble member directories are currently only used for split_files option
         # The below code assumes that this is the case. Need to change things such that individual ensemble
-        # member directories are used for joined files too. 
+        # member directories are used for joined files too.
         for n_ens in member_list:
             init_mem_dir = os.path.join(init_work_path, 'EN{:03d}'.format(n_ens+1))
             dest_mem_dir = os.path.join(work_path, 'EN{:03d}'.format(n_ens+1))
