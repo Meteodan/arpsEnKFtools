@@ -20,7 +20,7 @@
 !  programs.
 !
 !  For ARPS official release, this file is configured for the May 20,1977
-!  Del City supercell storm simulation, similar (but not identical) to
+!  Del City supercell storm simulation, similar (but not identical) to 
 !  the one described in the validation chapter of ARPS User's Guide.
 !
 !  Note that only lines between &NAMELIST_NAME and / are read as the
@@ -29,8 +29,8 @@
 !  such as the Cray VPP (see below).
 !
 !  We are using '!' in the first column of comment line only to distinguish
-!  them from the data statement.
-!
+!  them from the data statement. 
+!                                                                     
 !                                                                     =*
 *-----------------------------------------------------------------------
 !
@@ -161,9 +161,9 @@
 !-----------------------------------------------------------------------
 
  &grid_dims
-   nx   = 303,
-   ny   = 303,
-   nz   = 53,
+   nx   = 153,
+   ny   = 153,
+   nz   = 35,
  /
 
 !-----------------------------------------------------------------------
@@ -206,13 +206,13 @@
 !-----------------------------------------------------------------------
 
  &message_passing
-   nproc_x = 3,
-   nproc_y = 5,
+   nproc_x = 1,
+   nproc_y = 1,
 
-   max_fopen = 60,
+   max_fopen = 8,
 
-   nproc_x_out = 5,
-   nproc_y_out = 3,
+   nproc_x_out = 1,
+   nproc_y_out = 1,
  /
 
 !-----------------------------------------------------------------------
@@ -227,7 +227,7 @@
  &comment_lines
    nocmnt  = 2,
    cmnt(1) = 'ARPS 5.4',
-   cmnt(2) = '30 April 2017 VORTEX-SE IOP4C',
+   cmnt(2) = 'Del City Storm Simulation',
  /
 
 !-----------------------------------------------------------------------
@@ -243,7 +243,7 @@
 !-----------------------------------------------------------------------
 
  &jobname
-   runname = '6kmconv',
+   runname = 'may19_SSEF_radarda, Version 5.4, May 20 Sounding',
  /
 
 !-----------------------------------------------------------------------
@@ -412,27 +412,25 @@
 !-----------------------------------------------------------------------
 
  &initialization
-   initime = '2016-03-31.12:00:00',
-   initopt = 3,
-     timeopt = 1,
+   initime = '2013-05-19.21:45:00',
+   initopt = 1,
+     timeopt = 0,
 
      pt0opt  = 0,
        ptpert0(1) =     4.0,
-       pt0radx(1) = 10000.0,
-       pt0rady(1) = 10000.0,
-       pt0radz(1) =  1500.0,
-       pt0ctrx(1) = 48000.0,
-       pt0ctry(1) = 16000.0,
-       pt0ctrz(1) =  1500.0,
+       pt0radx(1) = 30000.0,
+       pt0rady(1) = 30000.0,
+       pt0radz(1) =  4500.0,
+       pt0ctrx(1) = 200000.0,
+       pt0ctry(1) = 200000.0,
+       pt0ctrz(1) =  4500.0,
 
      rstinf   = 'may20.rst003600',
 
      inifmt   = 3,
      inisplited = 0,
-     inifile = './6km033116NAMnoDA.hdf010800',
-     inigbf = './6km033116NAMnoDA.hdfgrdbas',
-     ensfile = 'may20.bin000000',
-     ensgbf = 'may20.bingrdbas',
+     inifile  = 'may20.hdf003600',
+     inigbf   = 'may20.hdfgrdbas',
 
    inibasopt = 1,
      viniopt = 1,
@@ -440,7 +438,7 @@
        vbar0   = 0.0,
        zshear  = 3000.0,
 
-     sndfile = 'may20.snd',
+     sndfile = '../may19_SSEF_21Z_forecast_OKC.snd',
 
      pttrop = 343.0,
      ttrop  = 213.0,
@@ -624,15 +622,15 @@
 !-----------------------------------------------------------------------
 
  &terrain
-   ternopt = 2,
-     mntopt  = 1,
-       hmount  =     0.000,
-       mntwidx = 10000.000,
-       mntwidy = 10000.000,
-       mntctrx = 10000.000,
-       mntctry = 10000.000,
-     terndta = '6km303x303.trndata',
-       ternfmt = 3,
+   ternopt = 0,
+   mntopt  = 1,
+     hmount  =     0.000,
+     mntwidx = 10000.000,
+     mntwidy = 10000.000,
+     mntctrx = 10000.000,
+     mntctry = 10000.000,
+   terndta = 'arpstern.dat',
+     ternfmt = 3,
  /
 
 !-----------------------------------------------------------------------
@@ -682,18 +680,19 @@
 !-----------------------------------------------------------------------
 
  &grid
-   dx       =  6000.000,
-   dy       =  6000.000,
-   dz       =   400.000,
-   strhopt  = 1,
-     dzmin    =   20.000,
+   dx       =  3000.000,
+   dy       =  3000.000,
+   dz       =   500.000,
+   strhopt  = 0,
+     dzmin    =   100.000,
      zrefsfc  =     0.0,
      dlayer1  =     0.0,
      dlayer2  =     1.0e5,
-     strhtune =     0.2,
+     strhtune =     1.0,
    zflat    =     1.0e5,
-   ctrlat   =    34.799999,
-   ctrlon   =    -87.680000,
+   ctrlat   =    35.3331,
+   ctrlon   =  -97.2775,
+
    crdorgnopt = 0,
 
  /
@@ -727,10 +726,10 @@
 !-----------------------------------------------------------------------
 
  &projection
-   mapproj = 2,
-     trulat1 =  33.0,
-     trulat2 =  36.0,
-     trulon  = -87.680000,
+   mapproj = 0,
+     trulat1 =  30.0,
+     trulat2 =  60.0,
+     trulon  = -100.0,
      sclfct  =  1.0,
 
    mpfctopt = 1,
@@ -748,9 +747,9 @@
 !-----------------------------------------------------------------------
 
  &timestep
-   dtbig =   7.5,
-   tstart=   10800.0,
-   tstop =   54000.0,
+   dtbig =   6.0,
+   tstart=   0.0,
+   tstop =   7200.0,
  /
 
 !-----------------------------------------------------------------------
@@ -786,7 +785,7 @@
      csound   = 150.0,
 
    tacoef   = 0.6,
-   dtsml    = 1.5,
+   dtsml    = 1.0,
  /
 
 !-----------------------------------------------------------------------
@@ -832,7 +831,7 @@
 !                 each dependent variable updated each RK3 substep
 !            = 3: RK3 with all forcing terms updated each RK3 substep
 !                 for each dependent variable.
-!            = 4: RK3, New implementation of 3rd order Runge-Kutta time
+!            = 4: RK3, New implementation of 3rd order Runge-Kutta time 
 !                 integration scheme with support for FCT scalar advection
 !                 (to be fully tested)
 !
@@ -845,7 +844,7 @@
 !            and benchmarking purposes.
 !         c) These two implementations are EXPERIMENTAL
 !            The implementation has not been thoroughly tested for all
-!            combinations of options.
+!            combinations of options. 
 !
 !  madvopt Momentum advection option
 !         = 1, second order advection
@@ -915,8 +914,8 @@
 
  &numerics
    tintegopt = 1,
-   madvopt = 3,
-   sadvopt = 4,
+   madvopt = 2,
+   sadvopt = 2,
      fctorderopt = 2,
      fctadvptprt = 1,
      fctfinalopt = 1,
@@ -1034,11 +1033,11 @@
 !-----------------------------------------------------------------------
 
  &boundary_condition_options
-   lbcopt  = 2,
-     wbc     = 5,
-     ebc     = 5,
-     sbc     = 5,
-     nbc     = 5,
+   lbcopt  = 1,
+     wbc     = 4,
+     ebc     = 4,
+     sbc     = 4,
+     nbc     = 4,
        c_phase = 300.0,
        rlxlbc  = 0.5,
        rbcopt  = 4,
@@ -1085,13 +1084,15 @@
 !-----------------------------------------------------------------------
 
  &exbcpara
-   exbcname = './boundary/3kmbgfrom3DVAR',
-   tinitebd = '1999-05-03.21:00:00',
+   exbcname = 'arpsexbc',
+   tinitebd = '2013-05-19.21:00:00',
    tintvebd = 3600,
-   ngbrz = 10,
-   brlxhw = 4,
-   cbcdmp = 0.00555556,
-   exbcfmt = 3,
+
+   ngbrz    = 5,
+   brlxhw   = 2.3,
+   cbcdmp   = 0.0033333333,
+
+   exbcfmt  = 3,
  /
 
 !-----------------------------------------------------------------------
@@ -1138,8 +1139,8 @@
 !-----------------------------------------------------------------------
 
  &coriolis_force
-   coriopt  = 4,
-     earth_curvature = 1,
+   coriopt  = 0,
+     earth_curvature = 0,
      coriotrm        = 1,
  /
 
@@ -1194,14 +1195,14 @@
 !-----------------------------------------------------------------------
 
  &turbulence
-   tmixopt  = 5,
-     trbisotp = 0,
-     tkeopt   = 3,
+   tmixopt  = 4,
+     trbisotp = 1,
+     tkeopt   = 1,
      tmixcst  = 0.0,
      tmixvert = 0,
      prantl   = 1.0,
 
-   trbvimp  = 1,
+   trbvimp  = 0,
 
    kmlimit  = 1.0,
  /
@@ -1242,14 +1243,14 @@
  &computational_mixing
    cmix2nd = 0,
      cfcm2h  = 0.0,
-     cfcm2v  = 0.0,
+     cfcm2v  = 4.0e-4,
 
    cmix4th = 1,
      cfcm4h  = 5.0e-4,
      cfcm4v  = 5.0e-4,
 
    scmixfctr = 1.0,
-   cmix_opt = 1,
+   cmix_opt = 0,
  /
 
 !-----------------------------------------------------------------------
@@ -1268,7 +1269,7 @@
 !-----------------------------------------------------------------------
 
  &divergence_damping
-   divdmp    = 2,
+   divdmp    = 1,
      divdmpndh = 0.05,
      divdmpndv = 0.05,
  /
@@ -1290,7 +1291,7 @@
 !-----------------------------------------------------------------------
 
  &rayleigh_damping
-   raydmp = 2,
+   raydmp = 1,
      cfrdmp = 0.00333,
      zbrdmp = 12000.0,
  /
@@ -1362,8 +1363,8 @@
 !
 !          REFERENCE for microphysics scheme 13-14:
 !
-!      Edward R. Mansell, E. R., C. L. Ziegler, and E. C. Bruning, 2010:
-!      Simulated Electrification of a Small Thunderstorm with Two-Moment Bulk Microphysics.
+!      Edward R. Mansell, E. R., C. L. Ziegler, and E. C. Bruning, 2010: 
+!      Simulated Electrification of a Small Thunderstorm with Two-Moment Bulk Microphysics. 
 !      J. Atmos. Sci., 67, 171–194. doi: http://dx.doi.org/10.1175/2009JAS2965.1
 !
 !      NOTE FOR MULTIMOMENT SCHEMES: sadvopt = 4 is HIGHLY RECOMMENDED when using any of the
@@ -1413,7 +1414,7 @@
 !  alphahail shape parameter for hail DSD:                    mphyopt=8,9,13-14
 !
 !  murain   Secondary shape parameter for rain (NSSL 1 and 2 Moment)
-!  musnow   Secondary shape parameter for snow (NSSL 1 and 2 Moment)
+!  musnow   Secondary shape parameter for snow (NSSL 1 and 2 Moment) 
 !
 !  Default values for them from Lin et al. (1983) are:
 !  n0rain  = 8.0e6, n0snow  = 3.0e6, n0hail  = 4.0e4,
@@ -1426,7 +1427,7 @@
 !  Default values for NSSL scheme are:
 !  ntcloud/ccn = 0.45e9, n0rain = 8.0e5, n0snow = 3.0e6, n0grpl = 4.0e5, nohail = 4.0e4,
 !  rhosnow = 100., rhogrpl = 500., rhohail = 900.
-!  murain = 1.0, musnow = 3.0
+!  murain = 1.0, musnow = 3.0 
 !  alpharain = 0.0, alphaice = 2.0, alphasnow = -0.4, alphagrpl = 0.0, alphahail = 1.0,
 !
 !  graupel_ON  Option to suppress graupel initiation for mphyopt = 8,9,10,11
@@ -1440,16 +1441,14 @@
 !       = 1    Hail is allowed
 !
 !  MFflg    Option for melting treatment. <NOTE> Only valid for dualpol = 2. Doesn't apply to rfopt = 0.
-!       = 0    Melting following Jung et al. (2008)
-!       = 1    Dawson et al. (2014)/Johnson et al. (2016) iterative distirbution
+!       = 1    Dawson et al. (2014)/Johnson et al. (2016) iterative distirbution 
 !              of water fraction. Only available for rfopt 2 or 3.
-!       = 2    No melting
-!       = 3    Temperature-dependent melting (snow: -2.5C - 2.5C, hail/graupel: 0C - 5C)
+!       = 2    No melting 
 !       = 4    Option 0 with preservation of median diameter by altering number
 !              concentration
-!       = 5    Saved for water fraction explicitly predicted by MP scheme,
+!       = 5    Saved for water fraction explicitly predicted by MP scheme, 
 !              no schemes in ARPS currently do this
-!
+!                     
 !
 !  mpdiag      Option to output microphysical rates associated with
 !              latent heating/cooling changes.  Note that these are the
@@ -1535,11 +1534,11 @@
 
  &microphysics
    moist    = 1,
-   mphyopt  = 15,
+   mphyopt  = 1,
    nmphystp = 1,
    dsdpref  = 0,
-    ntcloud   = 1.0e9,
-    n0rain  = 4.0e5,
+    ntcloud   = 1.0e8,
+    n0rain  = 8.0e6,
     n0snow  = 3.0e6,
     n0grpl  = 4.0e5,
     n0hail  = 4.0e4,
@@ -1552,14 +1551,13 @@
     alphasnow = 0.0,
     alphagrpl = 0.0,
     alphahail = 0.0,
-
+ 
     murain = 1,
-    musnow = 3,
+    musnow = 3, 
 
 
    graupel_ON = 1,
    hail_ON    = 1,
-   MFflg      = 0,
 
    mpdiag = 0,
 
@@ -1724,7 +1722,7 @@
 !
 
  &radiation
-   radopt  = 2,
+   radopt  = 0,
      radstgr = 1,
      rlwopt  = 1,
      radshade = 0,
@@ -1792,8 +1790,8 @@
 !-----------------------------------------------------------------------
 
  &surface_physics
-   sfcphy   = 4,
-     landwtr  = 1,
+   sfcphy   = 0,
+     landwtr  = 0,
      cdhwtropt= 0,
      cdmlnd   = 3.0e-3,
      cdmwtr   = 1.0e-3,
@@ -1802,11 +1800,11 @@
      cdqlnd   = 2.1e-3,
      cdqwtr   = 0.7e-3,
 
-   pbldopt  = 2,
+   pbldopt  = 1,
      pbldpth0 = 1400.0,
      lsclpbl0 = 0.25,
 
-   tqflxdis = 2,
+   tqflxdis = 0,
      dtqflxdis= 200.0,
 
    smthflx = 0,
@@ -2022,14 +2020,14 @@
 !---------------------------------------------------------------------=*
 
  &soil_ebm
-   sfcdat   = 2,
+   sfcdat   = 1,
      styp     = 3,
      vtyp     = 10,
      lai0     = 0.31,
      roufns0  = 0.01,
      veg0     = 0.3,
 
-     sfcdtfl = '6km303x303.sfcdata',
+     sfcdtfl  = 'arpssfc.data',
        sfcfmt = 3,
 
    soilmodel_forced = 0,
@@ -2060,7 +2058,7 @@
      soildlayer2  =     1.0,
      soilstrhtune =     1.0,
 
-   soilinit = 3,
+   soilinit = 1,
      ptslnd0  = 293.0,
      ptswtr0  = 288.0,
      wetcanp0 = 0.00,
@@ -2073,12 +2071,13 @@
      soilinfl = 'may20.soilinit',
        soilfmt = 3,
 
-   nstyp  = 3,
+   nstyp  = 4,
 
-     tsoil_offset = 0,
-     tsoil_offset_amplitude = 2.5,
+   tsoil_offset = 0,
+   tsoil_offset_amplitude = 2.5,
 
-   dtsfc    = 7.5,
+   dtsfc    = 60.0,
+
    prtsoilflx = 0,
 
  /
@@ -2215,12 +2214,12 @@
  &history_dump
    hdmpopt    = 1,
      dmp_out_joined = 11101,
-     hdmpfmt    = 103,
+     hdmpfmt    = 3,
        grbpkbit   = 16,
        hdfcompr   = 2,
 
-     thisdmp    = 300.0,
-     tstrtdmp   = 0.0,
+   thisdmp    = 3600.0,
+   tstrtdmp   = 0.0,
 
    numhdmp    = 3,
      hdmptim(1) = 0.,
@@ -2372,18 +2371,18 @@
 !              (Currently, works only for Lin's scheme)
 !            = 1, Jung, Zhang, and Xue, MWR (2008)
 !            = 2, Jung, Xue, and Zhang, JAMC (2010) using T-matrix table
-!            = 3, As in rfopt=2, but compute lookup tables to speed up
+!            = 3, As in rfopt=2, but compute lookup tables to speed up 
 !               reflectivity calculations.
-!               **Note 1: for NSSL 2 moment scheme (mphyopt = 14), this
+!               **Note 1: for NSSL 2 moment scheme (mphyopt = 14), this 
 !                 defaults to rfopt 1 for snow for now
-!               *****Note 2: nlam and nalpha min/max ranges need to be set,
-!                 the default values given in the input file were used with
+!               *****Note 2: nlam and nalpha min/max ranges need to be set, 
+!                 the default values given in the input file were used with 
 !                 the MY2 scheme after investigation of the range of typical
 !                 lamdas seen in PSDs of the scheme. It is recommended that
 !                 anyone using this option for the MY or other schemes
 !                 investigate the expected range of values for their scheme
-!                 and individual case.
-!
+!                 and individual case. 
+!                
 !            = 10, Tong, Xue, and Zhang, JR (2009) with attenation
 !
 !            OR
@@ -2395,7 +2394,7 @@
 !             For multi-moment microphysics schemes, use rfopt >= 1.
 !             For non-exponential distributions (mphyopt=10,11), use rfopt = 2.
 !             The NSSL Single-Moment scheme (mphyopt 13) has not been fully
-!             implemented yet for rfopt!
+!             implemented yet for rfopt! 
 !
 !  rsadir     Directory path where the radar scattering amplitude tables
 !             are stored. (Table is produced by tmatrix.f90)
@@ -2415,29 +2414,29 @@
 !           (1) rain, (2) snow, (3) hail, (4) graupel, (5) rime
 !  l_max    For rfopt=3, maximum lamda value for lookup table
 !           (1) rain, (2) snow, (3) hail, (4) graupel, (5) rime
-!  alf_min  For rfopt=3, minimum/initial alpha value for lookup table. This is
-!           '0' for both min and max if a triple moment scheme is not being
-!           used.
+!  alf_min  For rfopt=3, minimum/initial alpha value for lookup table. This is 
+!           '0' for both min and max if a triple moment scheme is not being 
+!           used. 
 !           (1) rain, (2) snow, (3) hail, (4) graupel, (5) rime
-!  alf_max  For rfopt 3, maximum alpha value for lookup table
-!           (1) rain, (2) snow, (3) hail, (4) graupel, (5) rime
+!  alf_max  For rfopt 3, maximum alpha value for lookup table 
+!           (1) rain, (2) snow, (3) hail, (4) graupel, (5) rime 
 !  nlam_coarse For rfopt=3, option to extend lamda value list at a coarser
-!              resolution (larger interval between values) beyond l_max
-!              if few but much higher lamda values
-!              may be possible with a given MP scheme
+!              resolution (larger interval between values) beyond l_max 
+!              if few but much higher lamda values 
+!              may be possible with a given MP scheme 
 !  l_max_coarse For rfopt=3, option to extend lamda value list beyond l_max
-!              to a higher value with at a coarser resolution (larger
+!              to a higher value with at a coarser resolution (larger 
 !              interval between values)
 !  rd_lkup_tble For rfopt=3, option to read in scattering value lookup tables
-!               that has already been created and stored in rsadir to save
-!               computation time
+!               that has already been created and stored in rsadir to save 
+!               computation time 
 !               = 0 no
-!               = 1 yes
-!  sv_lkup_tble For rfopt=3, option to save scattering value lookup tables
-!               to be read in by rd_lkup_tble table later to save
-!               computation time
+!               = 1 yes 
+!  sv_lkup_tble For rfopt=3, option to save scattering value lookup tables 
+!               to be read in by rd_lkup_tble table later to save 
+!               computation time 
 !               = 0 no
-!               = 1 yes
+!               = 1 yes 
 !
 !  sfcdmp    Flag to dump ARPS surface data files
 !          = 0, no surface data files
@@ -2472,26 +2471,26 @@
 !-----------------------------------------------------------------------
 
  &output
-   dirname = './',
+   dirname  = './',
    filcmprs = 0,
    readyfl  = 0,
 
-   basout = 1,
+   basout   = 0,
    grdout   = 1,
    varout   = 1,
    mstout   = 1,
-   iceout   = 1,
+   iceout   = 0,
    tkeout   = 1,
    trbout   = 1,
    rainout  = 1,
-   sfcout   = 1,
-   landout  = 1,
-   prcout   = 1,
-   radout   = 1,
-   flxout   = 1,
+   sfcout   = 0,
+   landout  = 0,
+   prcout   = 0,
+   radout   = 0,
+   flxout   = 0,
 
    exbcdmp  = 0,
-   exbchdfcompr = 0,
+   exbchdfcompr = 5,
    extdadmp = 0,
      qcexout  = 0,
      qrexout  = 0,
@@ -2511,8 +2510,8 @@
    nalpha = 15,
    l_min = 0.0, 0.0, 0.0, 0.0,0.0,
    l_max = 5.0e3,5.0e3,5.0e3,5.0e3,5.0e3, 
-   alf_min = 0.0,0.0,0.0,0.0,0.0,
-   alf_max = 15.0,15.0,15.0,15.0,15.0,
+   alf_min = 0.0,0.0,0.0,0.0,0.0
+   alf_max = 15.0,15.0,15.0,15.0,15.0
 
    nlam_coarse = 50,
    l_max_coarse = 1.0e6,1.0e6,1.0e6,1.0e6,1.0e6,
@@ -2525,7 +2524,7 @@
    terndmp  = 0,
 
    tfmtprt  = 0.0,
-   trstout  = 10800.0,
+   trstout  = 0.0,
    tmaxmin  = 60.0,
    tenergy  = 0.0,
 
@@ -3615,7 +3614,7 @@
      extdfmt  = 3,
 
    dir_extd = './',
-   extdname = 'may20',
+   extdname = 'may19',
    nextdfil = 1,
    extdtime(1) = '1977-05-20.21:00:00+000:00:00',
    extdtime(2) = '1977-05-20.21:00:00+000:00:00',

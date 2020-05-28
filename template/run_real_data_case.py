@@ -407,6 +407,7 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                      radarname=radar_names,
                      rmsfcst=2,
                      hdmpfheader=cm_args.job_name,
+                     radarname=radar_data_flag[True],
                      **kwargs
                      )
 
