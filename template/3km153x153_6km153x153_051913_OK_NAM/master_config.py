@@ -112,7 +112,7 @@ grid_param = {
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -97.2275,
+    'trulon': -97.2775,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -183,6 +183,7 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
+    'use_mpi': True,
     'start_time': 43200.0,
     'end_time': 75600.0,
     'step_time': 300.0
@@ -191,10 +192,10 @@ arpsintrp_param = {
 # Radar remapper parameters
 radremap_param = {
     'radar_list': ['KTLX','KCRI','KVNX','KFDR'],
-    'start_timestamp': '20130519194500',
+    'start_timestamp': '20130519180000',
     'end_timestamp': '20130520020000',
     'interval_seconds': 300,
-    'tolerance': 300,
+    'tolerance': 900,
     'closest_before': True,
     'nthreads': 10}
 
@@ -266,7 +267,7 @@ radflag_param = {
     # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
     # that there is no overlap between the times for each radar group.
     'radar_groups': {
-        'all_radars': (arpsenkf_param['radarname'], np.arange(49500., 75600. + 900., 900.))
+        'all_radars': (arpsenkf_param['radarname'], np.arange(43200., 75600. + 900., 900.))
     },
 }
 
