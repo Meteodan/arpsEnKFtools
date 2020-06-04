@@ -55,7 +55,9 @@ datetime_range = [start_datetime + timedelta(seconds=x) for x in
                         history_interval_sec)]
 wrf_timestrings = [d.strftime('%Y-%m-%d_%H:%M:%S') for d in datetime_range]
 
-ens_member_list = range(1, config.num_ensemble_members + 1)
+# ens_member_list = range(1, config.num_ensemble_members + 1)
+config.num_ensemble_members = 1
+ens_member_list = [29]
 subdir_template = config.wrf2arps_param.pop('subdir_template', None)
 ens_member_names = ["ena{:03d}".format(m) for m in ens_member_list]
 
@@ -118,17 +120,17 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
                      **config.grid_param)
 
     # Boundary conditions
-    # editNamelistFile("{}".format(wrf2arps_input_template_path),
-    #                  lbc_input_file_name,
-    #                  dir_extd=ens_member_dirs[ens_member - 1],
-    #                  runname=ens_member_name,
-    #                  init_time_str=wrf_timestrings[0],
-    #                  start_time_str=wrf_timestring,
-    #                  end_time_str=wrf_timestring,
-    #                  hdmpfmt=0,
-    #                  exbcdmp=3,
-    #                  **config.wrf2arps_param,
-    #                  **config.grid_param)
+#    editNamelistFile("{}".format(wrf2arps_input_template_path),
+#                     lbc_input_file_name,
+#                     dir_extd=ens_member_dirs[i],
+#                     runname=ens_member_name,
+#                     init_time_str=wrf_timestrings[0],
+#                     start_time_str=wrf_timestring,
+#                     end_time_str=wrf_timestring,
+#                     hdmpfmt=0,
+#                     exbcdmp=3,
+#                     **config.wrf2arps_param,
+#                     **config.grid_param)
 
     # If wrfout files are not in separate subdirectories for each ensemble member, we need to make a
     # temporary softlink to the correct wrfout file but removing the ensemble member from the end,
