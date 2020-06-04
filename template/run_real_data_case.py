@@ -657,6 +657,13 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
 
     print("Done submitting ...")
 
+    # Create the list of expected job names
+    if 'ekf' not in job_suffixes:
+        expected_job_names = ["{}-{}_{:d}-{:d}".format(suffix, cm_args.job_name, start_time, end_time)
+                              for suffix in job_suffixes]
+    else:
+        expected_job_names = ["ekf-{}_{:d}".format(cm_args.job_name, end_time)]
+
     if not cm_args.submit:
         return
 
@@ -667,7 +674,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
         time.sleep(0.5 * 60)
 
         queue = batch.getQueueStatus(display=False)
-        queue = [q for q in queue if cm_args.job_name in q['name']]
+        queue = [q for q in queue if q['name'] in expected_job_names]
+        # queue = [q for q in queue if cm_args.job_name in q['name']]
         batch.displayQueue(queue)
         if len(queue) > 0:
             jobs_queued = [r['name'].strip() for r in queue]
@@ -695,7 +703,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         job_completed[idx] = True
                 if need_to_check and not job_completed[idx]:
                     # TODO: check to make sure a CFL violation did not occur
-
+                    # TODO: improve checking to scour standard output files for failures
+                    # to read files that exist but are corrupted in some way.
                     # Check to see if all the appropriate output files have been written
                     # by the job. If not, something went wrong (likely a lustre problem)
                     # Try resubmitting the job.

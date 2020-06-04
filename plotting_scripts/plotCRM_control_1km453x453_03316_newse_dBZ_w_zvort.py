@@ -132,7 +132,7 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse_5min/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [True, False, False, False]
@@ -144,7 +144,7 @@ trailer_list = ['','','','']
 mphyopt_list = [15,15,15,15]
 plotlim_list = [[150000., 300000., 200000., 350000.], [150000., 300000., 200000., 350000.],
                 [150000., 275000., 200000., 325000.], [150000., 275000., 200000., 325000.]]
-master_time_list = [N.arange(3600.,17100.+900.0,900.0), N.arange(14400.,14400.+900.0,900.0),
+master_time_list = [N.arange(3900.,9000.+300.0,300.0), N.arange(14400.,14400.+900.0,900.0),
                     N.arange(0.,17100.+300.0,300.0), N.arange(0.,13500.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]

@@ -196,12 +196,12 @@ class Batch(object):
         nnodes = kwargs.get('nnodes', 1)
         # if self._envname == 'rice':
         #     ppn = ppn * nnodes  # Rice now needs the *total* nodes in the job specification
-        if ppn < 20 and nnodes > 1:
-            # print(self._env.keys())
-            try:
-                self._env.pop('--exclusive')
-            except (KeyError):
-                pass
+        # if ppn < 20 and nnodes > 1:
+        #     # print(self._env.keys())
+        #     try:
+        #         self._env.pop('--exclusive')
+        #     except (KeyError):
+        #         pass
         for k, v in self._env.items():
             try:
                 assert k[0] == '-'
