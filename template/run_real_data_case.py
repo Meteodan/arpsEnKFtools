@@ -562,7 +562,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
     job_failed = []
 
     envname = batch.getEnv()
-    if(envname == 'rice'):
+    if(envname in ['rcac', 'rice', 'brown']):
         queuename = cm_args.queue_name # 'dawson29'
         if cm_args.ppn_req > 0:
             ppn = cm_args.ppn_req
@@ -615,7 +615,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_key = "%s-%s_%d" % (key, cm_args.job_name, end_time)
         else:
             job_key = "%s-%s_%d-%d" % (key, cm_args.job_name, start_time, end_time)
-        if(envname == 'rice'):
+        if(envname in ['rcac', 'rice', 'brown']):
             queuename = cm_args.queue_name # 'dawson29'
             file_text = batch.gen(
                 commands,
@@ -731,7 +731,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
                         commands = command_lines[key]
-                        if(envname == 'rice'):
+                        if(envname in ['rcac', 'rice', 'brown']):
                             queuename = cm_args.queue_name #  'dawson29'
                             file_text = batch.gen(
                                 commands,
@@ -849,9 +849,10 @@ def main():
     ap.add_argument('--init-job-name', dest='init_job_name', default=None)
     ap.add_argument('--init-time-string', dest='init_time_string', default=None)
     ap.add_argument('--check-radar-files', dest='check_radar_files', action='store_true')
+    ap.add_argument('--machine-name', dest='machine_name', default='rice')
 
     args = ap.parse_args()
-    batch = Batch('rice', username=args.user_name)  # stampede
+    batch = Batch(args.machine_name, username=args.user_name)  # stampede
 
     if args.init_time_string:
         datetime_init = datetime.strptime(args.init_time_string, '%Y%m%d%H%M%S')

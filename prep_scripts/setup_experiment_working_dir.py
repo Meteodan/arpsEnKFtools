@@ -199,8 +199,11 @@ shutil.copy(config.radarinfo_path, config.exp_scr_dir)
 
 # Finally copy the run_real_data_case.py and run_real_data_case.csh scripts
 print("Copying run scripts...")
+
 shutil.copy(os.path.join(config.template_base_dir, 'run_real_data_case.py'), config.exp_scr_dir)
-shutil.copy(os.path.join(config.template_exp_dir, 'run_real_data_case.sh'), config.exp_scr_dir)
+run_real_data_case_shell_scripts = glob.glob(config.template_exp_dir + '/run_real_data_case*sh')
+for run_script in run_real_data_case_shell_scripts:
+    shutil.copy(run_script, config.exp_scr_dir)
 
 print("Successfully set up experiment working directory for {}".format(config.exp_name))
 print("Just wanted to let you know: Good luck, we're all counting on you!")
