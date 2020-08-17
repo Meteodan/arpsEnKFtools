@@ -1,4 +1,3 @@
-
 import re
 
 def _namelistToString(value, padded_zeros=None):

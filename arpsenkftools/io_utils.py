@@ -1,7 +1,6 @@
 """
 Some utility functions
 """
-
 import imp
 
 

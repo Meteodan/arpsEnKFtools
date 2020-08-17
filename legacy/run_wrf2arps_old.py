@@ -8,7 +8,7 @@
 
 import os
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime
 from arpsenkftools.editNamelist import editNamelistFile
 
 # USER SPECIFICATIONS ###
