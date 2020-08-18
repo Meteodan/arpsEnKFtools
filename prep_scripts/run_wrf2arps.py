@@ -69,7 +69,8 @@ else:
 # output file associated with it.
 wrf2arps_dict_list = []
 for wrf_timestring in wrf_timestrings:
-    for ens_member, ens_member_name in zip(ens_member_list, ens_member_names):
+    for ens_member, ens_member_name, ens_member_dir in zip(ens_member_list, ens_member_names,
+                                                           ens_member_dirs):
         t0_input_file_name = "{}/{}_{}.wrf2arps_t0.input".format(wrf2arps_work_dir, ens_member_name,
                                                                  wrf_timestring)
         t0_output_file_name = "{}/{}_{}.wrf2arps_t0.output".format(wrf2arps_work_dir,
@@ -91,6 +92,7 @@ for wrf_timestring in wrf_timestrings:
                              lbc_output_file_name=lbc_output_file_name,
                              ens_member_name=ens_member_name,
                              ens_member=ens_member,
+                             ens_member_dir=ens_member_dir,
                              wrfout_file_name=wrfout_file_name,
                              wrf_timestring=wrf_timestring)
         wrf2arps_dict_list.append(wrf2arps_dict)
@@ -104,12 +106,12 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
     ens_member_name = wrf2arps_dict['ens_member_name']
     wrf_timestring = wrf2arps_dict['wrf_timestring']
     ens_member = wrf2arps_dict['ens_member']
+    ens_member_dir = wrf2arps_dict['ens_member_dir']
     dirname = config.wrf2arps_param['dirname']
-
     # Initial conditions
     editNamelistFile("{}".format(wrf2arps_input_template_path),
                      t0_input_file_name,
-                     dir_extd=ens_member_dirs[i],
+                     dir_extd=ens_member_dir,
                      runname=ens_member_name,
                      init_time_str=wrf_timestrings[0],
                      start_time_str=wrf_timestring,
@@ -134,10 +136,10 @@ for i, wrf2arps_dict in enumerate(wrf2arps_dict_list):
     # temporary softlink to the correct wrfout file but removing the ensemble member from the end,
     # because this is what wrf2arps is expecting
     wrfout_file_name = wrf2arps_dict['wrfout_file_name']
-    wrfout_file_path = os.path.join(ens_member_dirs[i], wrfout_file_name)
+    wrfout_file_path = os.path.join(ens_member_dir, wrfout_file_name)
     if subdir_template is None:
         wrfout_file_link_name = "wrfout_d01_{}".format(wrf_timestring)
-        wrfout_file_link_path = os.path.join(ens_member_dirs[i], wrfout_file_link_name)
+        wrfout_file_link_path = os.path.join(ens_member_dir, wrfout_file_link_name)
         command = 'ln -sf {} {}'.format(wrfout_file_path, wrfout_file_link_path)
         print("Linking {} to {}".format(wrfout_file_link_path, wrfout_file_path))
         subprocess.call(command, shell=True)
