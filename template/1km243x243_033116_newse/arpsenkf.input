@@ -373,7 +373,7 @@
    Vr_updtime_c2 = 0.0,
 
 
-   Z_updtime_uv = 99999.0,
+   Z_updtime_uv = 31800.0,
    Z_updtime_w = 0.0,
    Z_updtime_ptprt = 0.0,
    Z_updtime_pprt = -1.0,
@@ -391,16 +391,16 @@
 
    vrqcopt = 1,
      Vr_QC_delay = 0.,
-     Vr_factor   = 20.,
+     Vr_factor   = 5.,
      Vr_err_fn   = './calib/vrerr.enkftab',
 
    updt_hgt = 16000.0,
 
    enforcebc = 0,
 
-   epsQ = 0.0,
-   epsN = 0.0,
-   epsZ = 0.0,
+   epsQ = 1.e-14,
+   epsN = 1.e-4,
+   epsZ = 1.e-32,
    epsV = 0.0,
  /
 
@@ -1092,7 +1092,7 @@
      rdrdaopt7 = 0, 0, 0, 0, 0, 0, 0,
 
      rdrthd1= -990.0, -990.0, -990.0, -990.0, -990.0, -990.0, -990.0,
-     rdrthd2=  -90.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,  -99.0,
+     rdrthd2=   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,  -10.0,
      rdrthd3=   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,   10.0,
      rdrthd4=    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,    0.3,
      rdrthd5=    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,    1.9,
