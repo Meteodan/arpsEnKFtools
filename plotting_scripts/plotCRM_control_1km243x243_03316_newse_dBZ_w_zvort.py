@@ -132,10 +132,10 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse_Z0/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [False, False, False, True]
+toPlot_list = [False, False, True, True]
 dir_list = ['./ENamean/','./ENfmean/','./EN013/','./ENF013/']
 dir_extra_list = ['./','./','./','./']
 runname_list = ['enmean','efmean','ena013','enf013']
@@ -145,14 +145,14 @@ mphyopt_list = [15,15,15,15]
 plotlim_list = [[150000., 300000., 200000., 350000.], [150000., 300000., 200000., 350000.],
                 None, None]
 master_time_list = [N.arange(3900.,9000.+300.0,300.0), N.arange(14400.,14400.+900.0,900.0),
-                    N.arange(3600.,21600.+300.0,300.0), N.arange(3600.,21600.+300.0,300.0)]
+                    N.arange(21000.,26100.+300.0,300.0), N.arange(21000.,26100.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]
 
 
 # Variables to plot
 
-fieldname = "dBZ"
+fieldname = "dBZmod"
 fieldlevels = N.arange(5.0,85.0+5.0,5.0)
 clvls = matplotlib.ticker.MultipleLocator(base=10.0)
 clabel = r'dBZ'
