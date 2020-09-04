@@ -20,6 +20,7 @@ ext_model_data_dir = os.path.join(depot_base_dir,
                                   'data/Projects/VORTEXSE/model_data/newse_data')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao', IOP_name)
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/level2/')
+ua_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/raob', IOP_name)
 # TODO: add other obs type directories here
 
 # Experiment name and directories

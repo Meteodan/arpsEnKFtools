@@ -63,10 +63,10 @@ gis_info = [['PIPS1A', 35.046499999999995, -87.67749219783126],
             ['PIPS1B', 35.084130703422055, -87.7198528728348],
             ['PIPS2A', 35.015666666666675, -87.67168627067865],
             ['PIPS2B', 35.1515, -87.74416666666664]] # ["Moore OK", 35.3387, -97.4864]  # Plot location of a town, radar, etc
-county_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/county/countyp020'
+county_shapefile_location = '/depot/dawson29/apps/Projects/pyCRMtools/data/shapefiles/county/countyp020'
 urban_shapefile_location = '/Users/ddawson/python_scripts/from_Nate/public_python/shapefiles/urban2/tl_2008_us_cbsa'
 
-draw_counties = 0
+draw_counties = 1
 draw_urban = 0
 draw_radar = 0
 
@@ -135,7 +135,7 @@ yzslice = 50
 basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse_Z0/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [True, True, False, False]
+toPlot_list = [True, False, False, False]
 dir_list = ['./ENamean/','./ENfmean/','./EN013/','./ENF013/']
 dir_extra_list = ['./','./','./','./']
 runname_list = ['enmean','efmean','ena013','enf013']
@@ -144,7 +144,7 @@ trailer_list = ['','','','']
 mphyopt_list = [15,15,15,15]
 plotlim_list = [None, None,
                 None, None]
-master_time_list = [N.arange(3600.,27300.+300.0,300.0), N.arange(3600.,27300.+300.0,300.0),
+master_time_list = [N.arange(28800.,28800.+300.0,300.0), N.arange(3600.,27300.+300.0,300.0),
                     N.arange(26100.,27300.+300.0,300.0), N.arange(26100.,27300.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]
@@ -153,7 +153,7 @@ arbfile_list = [None,None,None,None]
 # Variables to plot
 
 fieldname = "dBZ"
-fieldlevels = N.arange(5.0,85.0+5.0,5.0)
+fieldlevels = N.arange(5.0,80.0+5.0,5.0)
 clvls = matplotlib.ticker.MultipleLocator(base=10.0)
 clabel = r'dBZ'
 cformat = None
