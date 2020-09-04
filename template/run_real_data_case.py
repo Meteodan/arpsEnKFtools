@@ -23,7 +23,7 @@ def import_all_from(module_path):
     mod = imp.load_source('mod', module_path)
     return mod
 
-
+# TODO: this function doesn't work in python 3. Not using it anymore anyway..
 def isDivisible(dividend, divisor):
     return float(dividend) / int(divisor) == int(dividend) / int(divisor)
 

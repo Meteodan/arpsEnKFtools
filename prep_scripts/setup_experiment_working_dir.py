@@ -152,7 +152,7 @@ try:
     snd_files = [os.path.basename(snd_path) for snd_path in snd_paths]
     target_files = [snd_file.replace('raob', '') for snd_file in snd_files]
     # Lame. We need to add an additional "00" for the seconds field.
-    target_files = [target_file.replace('.snd', '00.snd') for target_file in target_files]
+    # target_files = [target_file.replace('.snd', '00.snd') for target_file in target_files]
     target_paths = [os.path.join(obs_dir, target_file) for target_file in target_files]
 
     for snd_path, snd_target_path in zip(snd_paths, target_paths):
