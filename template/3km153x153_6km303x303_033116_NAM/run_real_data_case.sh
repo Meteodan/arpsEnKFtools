@@ -19,5 +19,5 @@ python run_real_data_case.py  \
     --arps-template inputfiletemplates/arps.input  --arpsenkf-template inputfiletemplates/arpsenkf.input  --arpsenkfic-template inputfiletemplates/arpsenkfic.input      \
     --assim-radar 2016_IOP3.radflag  --assim-prof no  --assim-surf no  --assim-sndg no                                                    \
     --covariance-inflation 0:mults=1.20,adapt=0.90 \
-    --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45 --init-time-string 20160331120000 --check-radar-files                                                              \
+    --fcst-req 0:45  --init-fcst-req 1:15  --assim-on-req 0:45 --init-time-string 20160331180000 --check-radar-files                                                              \
     --split-init auto --debug --save-batch --error-check --initial-conditions yes --save-lookup
