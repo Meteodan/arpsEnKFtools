@@ -132,7 +132,7 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse_10min_Z0_sfc/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse_10min_Z0_sfc_rfopt2/' # Base directory name where individual
                                                                 # run folders reside
 
 # basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/test_sounding_assim_2000/'
@@ -146,7 +146,7 @@ trailer_list = ['','','','']
 mphyopt_list = [15,15,15,15]
 plotlim_list = [None, None,
                 None, None]
-master_time_list = [N.arange(28800.,31200.+600.0,600.0), N.arange(28800.,31200.+300.0,300.0),
+master_time_list = [N.arange(3600.,12600.+300.0,300.0), N.arange(3600.,12600.+600.0,600.0),
                     N.arange(26100.,27300.+300.0,300.0), N.arange(26100.,27300.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]
