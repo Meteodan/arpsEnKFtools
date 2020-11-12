@@ -15,7 +15,7 @@ project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM_CCN100/6km303x303_043017_NAM_CCN100/')
+ext_model_data_dir = os.path.join(IOP_scr_dir, '6km303x303_043017_NAM_CCN100/CCN100_6km303x303_043017_NAM/')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/NEXRAD/IOP_4C/level2/')
 # TODO: add other obs type directories here
@@ -224,7 +224,7 @@ arps_param = {
     'tstop': float(initial_time_sec),
     'dtsml': 1.0,
     'tintegopt': 1,
-    'tintvebd': 300.0,
+    'tintvebd': 300,
     'ngbrz': 10,
     'brlxhw': 4,
     'cbcdmp': 0.05,

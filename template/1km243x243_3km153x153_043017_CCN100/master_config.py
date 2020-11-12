@@ -15,14 +15,14 @@ project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2017_IOP4C'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = '/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2017_IOP4C/EnKF/3km153x153_6km303x303_043017_NAM/3km153x153_6km303x303_043017_NAM'
+ext_model_data_dir = '/scratch/rice/c/cbelak/Projects/VORTEXSE/simulations/ARPS/2017_IOP4C/EnKF/3km153x153_6km303x303_043017_NAM_CCN100/5_min_CCN_100_3km153x153_6km303x303_043017_NAM/'
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/sao/IOP4C')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2017/NEXRAD/IOP_4C/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
 exp_name_base = '1km243x243_3km153x153_043017'
-exp_name_tag = ''
+exp_name_tag = '_CCN100'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
 prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
@@ -91,7 +91,7 @@ grid_param = {
     'nx': 243,
     'ny': 243,
     'nz': 53,
-    'nproc_x': 15,
+    'nproc_x': 6,
     'nproc_y': 6,
     'dx': 1000.0,
     'dy': 1000.0,
@@ -246,7 +246,7 @@ arps_param = {
     'tstop': float(initial_time_sec),
     'dtsml': 1.0,
     'tintegopt': 1,
-    'tintvebd': 300.0,
+    'tintvebd': 300,
     'ngbrz': 10,
     'brlxhw': 4,
     'cbcdmp': 0.05,

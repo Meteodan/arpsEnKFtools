@@ -71,7 +71,7 @@ initial_time = '201704300600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
-initial_time_sec = 39600 # 1700 UTC
+initial_time_sec = 21600 # 1700 UTC
 perturb_ic = False
 if perturb_ic:
     external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
@@ -103,7 +103,7 @@ grid_param = {
     'dlayer2': 1.0e5,
     'strhtune': 0.2,
     'zflat': 1.0e5,
-    'ctrlat': 34.80,
+    'ctrlat': 34.20,
     'ctrlon': -87.68,
     'mapproj': 2,
     'trulat1': 33.0,
@@ -182,15 +182,15 @@ arpsintrp_param = {
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
     'use_mpi': False,
-    'start_time': 39600.0,
+    'start_time': 21600.0,
     'end_time': 57600.0,
     'step_time': 300.0
 }
 
 # Radar remapper parameters
 radremap_param = {
-    'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
-    'start_timestamp': '20170430170000',
+    'radar_list': ['KBMX', 'KGWX', 'KHTX', 'KNQA', 'KOHX', 'KDGX'],
+    'start_timestamp': '20170430140000',
     'end_timestamp': '20170430220000',
     'interval_seconds': 300,
     'tolerance': 900,
@@ -224,7 +224,7 @@ arps_param = {
     'tstop': float(initial_time_sec),
     'dtsml': 1.0,
     'tintegopt': 1,
-    'tintvebd': 300.0,
+    'tintvebd': 300,
     'ngbrz': 10,
     'brlxhw': 4,
     'cbcdmp': 0.05,
@@ -237,6 +237,7 @@ arps_param = {
     'cfcm4v': 5.0e-4,
     'cmix_opt': 1,
     'mphyopt': 15,
+    'ntcloud': 1.0e9,
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
@@ -252,9 +253,9 @@ arpsenkfic_param = {
 
 # ARPSENKF parameters.
 arpsenkf_param = {
-    'nrdrused': 7,
-    'radarname': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
-    'ntwtype': [1, 1, 1, 1, 1, 1, 1],
-    'vcpmode': [11, 11, 11, 11, 11, 11, 11],
-    'rdrlocopt': [1, 1, 1, 1, 1, 1, 1]
+    'nrdrused': 6,
+    'radarname': ['KBMX', 'KGWX','KHTX', 'KNQA', 'KOHX', 'KDGX'],
+    'ntwtype': [1, 1, 1, 1, 1, 1],
+    'vcpmode': [11, 11, 11, 11, 11, 11],
+    'rdrlocopt': [1, 1, 1, 1, 1, 1]
 }

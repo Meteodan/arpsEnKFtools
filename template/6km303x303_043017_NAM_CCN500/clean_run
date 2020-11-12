@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm *.e*
+rm *.o*
+rm *core*
+rm debug/*
+rm input/*
+rm *6kmconv*csh
+rm 6kmconv/*
