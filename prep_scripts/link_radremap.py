@@ -80,6 +80,7 @@ for radname in radar_list:
             # then take the absolute value of the array of differences
             diff = np.where(diff > 0, np.inf, diff)
         closest = np.abs(diff).min()
+        print(closest)
         # Only do the linking if the time difference is greater than zero and less than the
         # desired tolerance (if the difference is zero, then just use the file itself,
         # silly)
@@ -92,14 +93,18 @@ for radname in radar_list:
             if os.path.islink(link_path):
                 os.remove(link_path)
             os.symlink(remapped_file_paths[closest_index], link_path)
+        
+        elif closest == 0:
+            tmp = os.system(f'ln -s {link_path} {remapped_file_paths[0]}')
+
         elif closest > config.radremap_param['tolerance']:
-            print('For time ', t)
-            if not closest_before:
-                print('No time within tolerance ({:d} s)'.format(
-                    config.radremap_param['tolerance']))
-                print('Closest is {:d} s'.format(int(closest)))
-            else:
-                print('No time within tolerance ({:d} s) prior to requested time.'.format(
-                    config.radremap_param['tolerance']))
-                if np.isfinite(closest):
+                print('For time ', t)
+                if not closest_before:
+                    print('No time within tolerance ({:d} s)'.format(
+                        config.radremap_param['tolerance']))
                     print('Closest is {:d} s'.format(int(closest)))
+                else:
+                    print('No time within tolerance ({:d} s) prior to requested time.'.format(
+                        config.radremap_param['tolerance']))
+                    if np.isfinite(closest):
+                        print('Closest is {:d} s'.format(int(closest)))
