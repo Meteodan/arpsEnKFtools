@@ -179,7 +179,24 @@ _environment = {
         'n_cores_per_node': 20,
         'running_state': ' R',
         'complete_state': 'CD'
+    },
+    'bell': {
+        'btmarker': "SBATCH",
+        '-A': " %(queue)s",
+        '-N': " %(nnodes)d",
+        '--ntasks-per-node': " %(ppn)d",
+        '-t': " %(timereq)s",
+        '--job-name': "=%(jobname)s",
+        'queueprog': 'squeue',
+        'queueparse': parseQLineRice,
+        'submitprog': 'sbatch',
+        'mpiprog': 'mpiexec',
+        'mpiargs': '-n %d',
+        'n_cores_per_node': 128,
+        'running_state': ' R',
+        'complete_state': 'CD'
     }
+
 }
 
 
