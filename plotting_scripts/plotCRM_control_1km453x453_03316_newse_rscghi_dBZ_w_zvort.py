@@ -132,12 +132,12 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse_ccn100/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
 toPlot_list = [False, False, True, False]
 dir_list = ['./ENamean/','./ENfmean/','./EN022/','./ENF013/']
-dir_extra_list = ['./','./','./','./']
+dir_extra_list = ['./','./','./EN022','./']
 runname_list = ['enmean','efmean','ena022','enf013']
 runlabel_list = ['enmean','efmean','ena022','enf013']
 trailer_list = ['','','','']
@@ -145,29 +145,29 @@ mphyopt_list = [15,15,15,15]
 plotlim_list = [[150000., 300000., 200000., 350000.], [150000., 300000., 200000., 350000.],
                 [150000., 275000., 200000., 325000.], [150000., 275000., 200000., 325000.]]
 master_time_list = [N.arange(3900.,9000.+300.0,300.0), N.arange(14400.,14400.+900.0,900.0),
-                    N.arange(0.,21600.+300.0,300.0), N.arange(0.,13500.+300.0,300.0)]
+                    N.arange(3600.,21600.+300.0,300.0), N.arange(0.,13500.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]
 
 
 # Variables to plot
 
-fieldname = "dBZmod"
-fieldlevels = N.arange(5.0,85.0+5.0,5.0)
-clvls = matplotlib.ticker.MultipleLocator(base=10.0)
-clabel = r'dBZ'
+fieldname = "rscghi"
+fieldlevels = N.arange(1.e-6,3.1e-4,1.e-6)
+clvls = matplotlib.ticker.MultipleLocator(base=1.e-5)
+clabel = r'vert. int. charging rate'
 cformat = None
 fieldcm = cmapdBZ
 norm = matplotlib.colors.BoundaryNorm(fieldlevels,fieldcm.N)
 plabel = None
-slice1 = 1
+slice1 = None
 stag = 's'
-arbvar = False
+arbvar = True
 
-fieldovername = "w"
-fieldoverlevels = N.arange(5.0,60.0+5.0,5.0)
-fieldovercolor = 'k'
-slice2 = 14
+fieldovername = "dBZmod"
+fieldoverlevels = N.arange(10.0,90.0,10.0)
+fieldovercolor = 'b'
+slice2 = 1
 stagovr = 's'
 arbvarovr = False
 

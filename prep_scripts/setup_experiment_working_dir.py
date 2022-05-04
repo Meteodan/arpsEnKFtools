@@ -127,20 +127,40 @@ print("Linking conventional observation files...")
 obs_dir = os.path.join(config.exp_scr_dir, 'obs')
 if not os.path.exists(obs_dir):
     os.makedirs(obs_dir)
+
 # Look at lso files for each obs type and create links to them. For now only asos5min,
 # but will add others soon.
 # TODO: refactor into function
-asos5min_paths = glob.glob(config.sfc_obs_dir + '/asos5min*lso')
-asos5min_files = [os.path.basename(asos5min_path) for asos5min_path in asos5min_paths]
-target_files = [asos5min_file.replace('asos5min', '') for asos5min_file in asos5min_files]
-# Lame. We need to add an additional "00" for the seconds field.
-target_files = [target_file.replace('.lso', '00.lso') for target_file in target_files]
-target_paths = [os.path.join(obs_dir, target_file) for target_file in target_files]
+try:
+    asos5min_paths = glob.glob(config.sfc_obs_dir + '/asos5min*lso')
+    asos5min_files = [os.path.basename(asos5min_path) for asos5min_path in asos5min_paths]
+    target_files = [asos5min_file.replace('asos5min', '') for asos5min_file in asos5min_files]
+    # Lame. We need to add an additional "00" for the seconds field.
+    target_files = [target_file.replace('.lso', '00.lso') for target_file in target_files]
+    target_paths = [os.path.join(obs_dir, target_file) for target_file in target_files]
 
-for asos5min_path, asos5min_target_path in zip(asos5min_paths, target_paths):
-    if os.path.lexists(asos5min_target_path):
-        os.remove(asos5min_target_path)
-    os.symlink(asos5min_path, asos5min_target_path)
+    for asos5min_path, asos5min_target_path in zip(asos5min_paths, target_paths):
+        if os.path.lexists(asos5min_target_path):
+            os.remove(asos5min_target_path)
+        os.symlink(asos5min_path, asos5min_target_path)
+except:
+    print("Linking surface observations failed!")
+
+# Now create links to sounding files
+try:
+    snd_paths = glob.glob(config.ua_obs_dir + '/raob*snd')
+    snd_files = [os.path.basename(snd_path) for snd_path in snd_paths]
+    target_files = [snd_file.replace('raob', '') for snd_file in snd_files]
+    # Lame. We need to add an additional "00" for the seconds field.
+    # target_files = [target_file.replace('.snd', '00.snd') for target_file in target_files]
+    target_paths = [os.path.join(obs_dir, target_file) for target_file in target_files]
+
+    for snd_path, snd_target_path in zip(snd_paths, target_paths):
+        if os.path.lexists(snd_target_path):
+            os.remove(snd_target_path)
+        os.symlink(snd_path, snd_target_path)
+except:
+    print("Linking upper air observations failed!")
 
 # Generate namelist input templates
 print("Generating and copying namelist input template files...")
@@ -199,8 +219,11 @@ shutil.copy(config.radarinfo_path, config.exp_scr_dir)
 
 # Finally copy the run_real_data_case.py and run_real_data_case.csh scripts
 print("Copying run scripts...")
+
 shutil.copy(os.path.join(config.template_base_dir, 'run_real_data_case.py'), config.exp_scr_dir)
-shutil.copy(os.path.join(config.template_exp_dir, 'run_real_data_case.sh'), config.exp_scr_dir)
+run_real_data_case_shell_scripts = glob.glob(config.template_exp_dir + '/run_real_data_case*sh')
+for run_script in run_real_data_case_shell_scripts:
+    shutil.copy(run_script, config.exp_scr_dir)
 
 print("Successfully set up experiment working directory for {}".format(config.exp_name))
 print("Just wanted to let you know: Good luck, we're all counting on you!")

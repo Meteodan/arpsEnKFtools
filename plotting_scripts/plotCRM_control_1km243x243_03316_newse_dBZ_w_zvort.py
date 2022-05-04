@@ -96,8 +96,8 @@ plotztickintv = 1000.
 savefigopt = 1
 figfmt = 'png'              # Format of figures (e.g., .png, .pdf, .jpg, .eps, etc.)
 
-nproc_x_in = 15             # Number of patches for split history files.
-nproc_y_in = 6
+nproc_x_in = 6             # Number of patches for split history files.
+nproc_y_in = 5
 
 # Misc section (incomplete or unimplemented stuff)
 ovrtrajc = False
@@ -132,27 +132,27 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km453x453_033116_newse/1km453x453_033116_newse_ccn100/' # Base directory name where individual
+basedir = '/scratch/rice/d/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/1km243x243_033116_newse/1km243x243_033116_newse_Z0/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [False, False, True, False]
-dir_list = ['./ENamean/','./ENfmean/','./EN022/','./ENF013/']
+toPlot_list = [True, True, False, False]
+dir_list = ['./ENamean/','./ENfmean/','./EN013/','./ENF013/']
 dir_extra_list = ['./','./','./','./']
-runname_list = ['enmean','efmean','ena022','enf013']
-runlabel_list = ['enmean','efmean','ena022','enf013']
+runname_list = ['enmean','efmean','ena013','enf013']
+runlabel_list = ['enmean','efmean','ena013','enf013']
 trailer_list = ['','','','']
 mphyopt_list = [15,15,15,15]
-plotlim_list = [[150000., 300000., 200000., 350000.], [150000., 300000., 200000., 350000.],
-                [150000., 275000., 200000., 325000.], [150000., 275000., 200000., 325000.]]
-master_time_list = [N.arange(3900.,9000.+300.0,300.0), N.arange(14400.,14400.+900.0,900.0),
-                    N.arange(0.,21600.+300.0,300.0), N.arange(0.,13500.+300.0,300.0)]
+plotlim_list = [None, None,
+                None, None]
+master_time_list = [N.arange(3600.,27300.+300.0,300.0), N.arange(3600.,27300.+300.0,300.0),
+                    N.arange(26100.,27300.+300.0,300.0), N.arange(26100.,27300.+300.0,300.0)]
 start_timestamp_list = ['20160331180000', '20160331180000', '20160331180000', '20160331180000']
 arbfile_list = [None,None,None,None]
 
 
 # Variables to plot
 
-fieldname = "dBZmod"
+fieldname = "dBZ"
 fieldlevels = N.arange(5.0,85.0+5.0,5.0)
 clvls = matplotlib.ticker.MultipleLocator(base=10.0)
 clabel = r'dBZ'
