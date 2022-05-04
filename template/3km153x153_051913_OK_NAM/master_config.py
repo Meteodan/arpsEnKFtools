@@ -3,12 +3,13 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
+import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
+scratch_base_dir = '/scratch/rice/s/sharm261'
 depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools'
 project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
@@ -19,7 +20,7 @@ prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/model_data/NAM',
                                   IOP_name)
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
-radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/')
+radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/KTLX/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
@@ -46,7 +47,7 @@ blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 remapped_radar_dir = os.path.join(project_depot_dir, 'remapped_radar/{}'.format(exp_name))
 
 # Executable file names and directories
-arps_base_dir = '/home/dawson29/arps5.4_main'
+arps_base_dir = '/home/sharm261/arps5.4'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
@@ -161,8 +162,9 @@ radremap_param = {
     'start_timestamp': '20130519194500',
     'end_timestamp': '20130520020000',
     'interval_seconds': 300,
-    'tolerance': 300
-}
+    'tolerance': 300,
+    'closest_before': True,
+    'nthreads': 10}
 
 # EXT2ARPS parameters
 ext2arps_param = {
@@ -255,6 +257,7 @@ arps_param = {
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
+    'terndta': trndata_file,
     'hdmpfmt': 103,
     'thisdmp': 300.0,
     'rfopt': 3,
@@ -310,4 +313,14 @@ arpsenkf_param = {
     'ntwtype': [1, 1],
     'vcpmode': [11, 11],
     'rdrlocopt': [1, 1]
+}
+
+# Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
+radflag_param = {
+    # Add appropriate "radar groups" (i.e. all radars, only WSR-88Ds, only mobile, etc.)
+    # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
+    # that there is no overlap between the times for each radar group.
+    'radar_groups': {
+        'all_radars': (arpsenkf_param['radarname'], np.arange(6300., 28800. + 900., 900.))
+    },
 }

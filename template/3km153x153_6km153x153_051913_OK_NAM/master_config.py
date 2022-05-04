@@ -7,9 +7,9 @@ from datetime import datetime
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
-depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = os.path.join(depot_base_dir, 'apps/Projects/arpsEnKFtools')
+scratch_base_dir = '/scratch/rice/s/sharm261'
+depot_base_dir = '/depot/rtanama/users/sharm261'
+arpsenkftools_base_dir = '/home/sharm261/arpsEnKFtools'
 project_dir = 'Projects/051913_OK/ARPS'  # Note, removed redundant "simulations" subdirectory here
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
@@ -19,11 +19,13 @@ IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
 prep_work_dir = os.path.join(IOP_scr_dir, 'prep_work')
 ext_model_data_dir = os.path.join(IOP_scr_dir, '6km153x153_051913_OK_NAM/6km153x153_051913_OK_NAM',
                                   IOP_name)
+#ext_model_data_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/model_data/NAM')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/sao')
-radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/')
+radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/051913_OK/obsdata/nexrad/level2/')
 # TODO: add other obs type directories here
 
 # Experiment name and directories
+#exp_name_base = '3km153x153_6km153x153_051913_OK'
 exp_name_base = '3km153x153_6km153x153_051913_OK'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
@@ -47,7 +49,7 @@ blacklist_file_path = os.path.join(template_exp_dir, blacklist_file)
 remapped_radar_dir = os.path.join(project_depot_dir, 'remapped_radar/{}'.format(exp_name))
 
 # Executable file names and directories
-arps_base_dir = '/home/dawson29/arps5.4_main'
+arps_base_dir = '/home/sharm261/arps5.4'
 arps_bin_dir = os.path.join(arps_base_dir, 'bin')
 arpstrn_exe_path = os.path.join(arps_bin_dir, 'arpstrn')
 arpssfc_exe_path = os.path.join(arps_bin_dir, 'arpssfc')
@@ -110,7 +112,7 @@ grid_param = {
     'mapproj': 2,
     'trulat1': 33.0,
     'trulat2': 36.0,
-    'trulon': -97.2275,
+    'trulon': -97.2775,
 }
 
 # ARPSTRN parameters (note that this is set to use the 30-s terrain data. Will add hooks
@@ -181,19 +183,21 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
-    'start_time': 65100.0,
+    'use_mpi': True,
+    'start_time': 43200.0,
     'end_time': 75600.0,
     'step_time': 300.0
 }
 
 # Radar remapper parameters
 radremap_param = {
-    'radar_list': ['KTLX'],
-    'start_timestamp': '20130519194500',
+    'radar_list': ['KTLX','KCRI','KVNX','KFDR'],
+    'start_timestamp': '20130519180000',
     'end_timestamp': '20130520020000',
     'interval_seconds': 300,
-    'tolerance': 300
-}
+    'tolerance': 900,
+    'closest_before': True,
+    'nthreads': 10}
 
 # EXT2ARPS parameters
 ext2arps_param = {
@@ -237,6 +241,7 @@ arps_param = {
     'sfcdtfl': sfcdata_file,
     'sfcfmt': 3,
     'dtsfc': 4.0,
+    'terndta': trndata_file,
     'hdmpfmt': 103,
     'thisdmp': 300.0,
     'rfopt': 3,
@@ -249,11 +254,11 @@ arpsenkfic_param = {
 
 # ARPSENKF parameters.
 arpsenkf_param = {
-    'nrdrused': 1,
-    'radarname': ['KTLX', 'KFDR'],
-    'ntwtype': [1, 1],
-    'vcpmode': [11, 11],
-    'rdrlocopt': [1, 1]
+    'nrdrused': 4,
+    'radarname': ['KTLX','KCRI','KVNX','KFDR'],
+    'ntwtype': [1,1,1,1],
+    'vcpmode': [11,11,11,11],
+    'rdrlocopt': [1,1,1,1]
 }
 
 # Parameters to generate an appropriate radflag file. Used by "gen_radflag.py"
@@ -262,7 +267,7 @@ radflag_param = {
     # And the time range for each to assimilate. Note that the gen_radflag.py script assumes
     # that there is no overlap between the times for each radar group.
     'radar_groups': {
-        'all_radars': (arpsenkf_param['radarname'], np.arange(49500., 75600. + 900., 900.))
+        'all_radars': (arpsenkf_param['radarname'], np.arange(43200., 75600. + 900., 900.))
     },
 }
 

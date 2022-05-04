@@ -121,6 +121,22 @@ def parseQLineRice(line):
 
     return line_dict
 
+def parseQLineBell(line):
+    cols_order = ['id', 'username', 'queue', 'name', 'nnodes', 'ncores', 'reqtime', 'state',
+                  'timeuse']
+    line = line.strip().split()
+    line_dict = {}
+
+    for n, name in enumerate(cols_order):
+        line_dict[name] = line[n].strip()
+    #print line_dict[name]
+    try:
+        line_dict['id'] = int(line_dict['id'])
+        #print line_dict['id']
+    except ValueError:
+        return ""
+
+    return line_dict
 
 _environment = {
     'stampede': {
@@ -187,8 +203,9 @@ _environment = {
         '--ntasks-per-node': " %(ppn)d",
         '-t': " %(timereq)s",
         '--job-name': "=%(jobname)s",
+        '--exclusive': "",
         'queueprog': 'squeue',
-        'queueparse': parseQLineRice,
+        'queueparse': parseQLineBell,
         'submitprog': 'sbatch',
         'mpiprog': 'mpiexec',
         'mpiargs': '-n %d',
@@ -235,7 +252,7 @@ class Batch(object):
         for arg, val in env_dict.items():
             text += "#%s %s%s\n" % (self._env['btmarker'], arg, val)
 
-        if(self._envname in ['rcac', 'rice', 'brown']):
+        if(self._envname == 'bell'):
             commands.insert(0,"module load netcdf")
             #text += "\n" + "module load devel" + "\n"
 
@@ -270,7 +287,7 @@ class Batch(object):
         for line in queue:
             # if line['state'].lower() == 'running':
             if line['state'] == self._env['running_state']:
-                if self._envname in ['rcac', 'rice', 'brown']:
+                if self._envname == 'bell':
                     print("%(name)s (PID %(id)d): %(state)s (%(timeuse)s elapsed)" % line)
                 else:
                     print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
@@ -297,7 +314,7 @@ class Batch(object):
         return self._env['running_state'], self._env['complete_state']
 
 if __name__ == "__main__":
-    bt = Batch('rice')
+    bt = Batch('bell')
 #   bt_text = bt.gen(['ls $HOME', 'ls $WORK'], jobname='test', debugfile='test.debug', ncores=1, nnodes=1, queue='normal', timereq='00:05:00')
 #   bt.submit(bt_text)
     bt.getQueueStatus()
