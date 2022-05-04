@@ -86,3 +86,5 @@ target/
 #Misc
 *.ps*
 *.output*
+
+src/pycrmtools

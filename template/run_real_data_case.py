@@ -23,7 +23,7 @@ def import_all_from(module_path):
     mod = imp.load_source('mod', module_path)
     return mod
 
-
+# TODO: this function doesn't work in python 3. Not using it anymore anyway..
 def isDivisible(dividend, divisor):
     return float(dividend) / int(divisor) == int(dividend) / int(divisor)
 
@@ -286,20 +286,41 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     # Figure out what conventional data we're assimilating (combine this with the next section!)
     cvn_data_flags = dict((k, getattr(cm_args, k))
                           for k in ['sndgflags', 'profflags', 'surfflags'])
-    # assim_all = False
-    if isDivisible(assim_time, 3600):
-        print("Assimilate all data ...")
-    else:
-        cvn_data_flags['sndgflags'] = 'no'
-        cvn_data_flags['profflags'] = 'no'
 
-    # Conventional DA flags
-    for cvn_flag, kw_flag in [('sndgflags', 'sndassim'), ('profflags',
-                                                          'proassim'), ('surfflags', 'sfcassim')]:
-        if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
-            kwargs[kw_flag] = 1
-        else:
-            kwargs[kw_flag] = 0
+    for cvn_flag, kw_flag in [('sndgflags', 'sndassim'), ('profflags', 'proassim'),
+                              ('surfflags', 'sfcassim')]:
+        if cm_args.check_data_files and cm_args.init_time_string:   # Check for existence of file
+            data_datetime = cm_args.datetime_dict[assim_time]
+            data_time_string = data_datetime.strftime('%Y%m%d%H%M%S')
+
+            if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
+                # Check for existence of data file corresponding to the type we want to assimilate
+                if 'snd' in cvn_flag:
+                    data_suffix = 'snd'
+                elif 'pro' in cvn_flag:
+                    data_suffix = 'pro'
+                elif 'surf' in cvn_flag:
+                    data_suffix = 'lso'
+                data_filename = '{}.{}'.format(data_time_string, data_suffix)
+                data_path = os.path.join(cm_args.base_path, 'obs/{}'.format(data_filename))
+                if not os.path.exists(data_path):
+                    print("Observation file {} doesn't exist. Excluding.".format(data_filename))
+                    kwargs[kw_flag] = 0
+                else:
+                    kwargs[kw_flag] = 1
+        else:   # Original behavior
+            # assim_all = False
+            if isDivisible(assim_time, 3600):
+                print("Assimilate all data ...")
+            else:
+                cvn_data_flags['sndgflags'] = 'no'
+                cvn_data_flags['profflags'] = 'no'
+
+            # Conventional DA flags
+            if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
+                kwargs[kw_flag] = 1
+            else:
+                kwargs[kw_flag] = 0
 
     if cm_args.split_files:
         kwargs['nproc_x_in'] = nproc_x_dump
@@ -371,13 +392,14 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     elif cm_args.algorithm == '4densrf':
         kwargs['anaopt'] = 5
 
+    # Figure out what radar data we are assimilating
     # print len(radar_data_flag[True]) if True in radar_data_flag else 0
     try:
         if True in radar_data_flag:
             n_radars = len(radar_data_flag[True])
             radar_names = radar_data_flag[True]
             print(radar_names)
-            if cm_args.check_radar_files and cm_args.init_time_string:
+            if cm_args.check_data_files and cm_args.init_time_string:
                 radar_datetime = cm_args.datetime_dict[assim_time]
                 radar_time_string = radar_datetime.strftime('%Y%m%d.%H%M%S')
                 for radar_name in radar_names:
@@ -395,6 +417,8 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
         n_radars = 0
         radar_names = ['']
     radardaopt = 1 if n_radars > 0 else 0
+
+
 
     editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkf_template), enkf_input_file_name,
                      nen=cm_args.n_ens_members,
@@ -562,7 +586,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
     job_failed = []
 
     envname = batch.getEnv()
-    if(envname == 'rice'):
+    if(envname in ['rcac', 'rice', 'brown']):
         queuename = cm_args.queue_name # 'dawson29'
         if cm_args.ppn_req > 0:
             ppn = cm_args.ppn_req
@@ -615,7 +639,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_key = "%s-%s_%d" % (key, cm_args.job_name, end_time)
         else:
             job_key = "%s-%s_%d-%d" % (key, cm_args.job_name, start_time, end_time)
-        if(envname == 'rice'):
+        if(envname in ['rcac', 'rice', 'brown']):
             queuename = cm_args.queue_name # 'dawson29'
             file_text = batch.gen(
                 commands,
@@ -731,7 +755,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
                         commands = command_lines[key]
-                        if(envname == 'rice'):
+                        if(envname in ['rcac', 'rice', 'brown']):
                             queuename = cm_args.queue_name #  'dawson29'
                             file_text = batch.gen(
                                 commands,
@@ -848,10 +872,11 @@ def main():
     ap.add_argument('--queue-name', dest='queue_name', default='dawson29')
     ap.add_argument('--init-job-name', dest='init_job_name', default=None)
     ap.add_argument('--init-time-string', dest='init_time_string', default=None)
-    ap.add_argument('--check-radar-files', dest='check_radar_files', action='store_true')
+    ap.add_argument('--check-data-files', dest='check_data_files', action='store_true')
+    ap.add_argument('--machine-name', dest='machine_name', default='rice')
 
     args = ap.parse_args()
-    batch = Batch('rice', username=args.user_name)  # stampede
+    batch = Batch(args.machine_name, username=args.user_name)  # stampede
 
     if args.init_time_string:
         datetime_init = datetime.strptime(args.init_time_string, '%Y%m%d%H%M%S')

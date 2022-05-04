@@ -1,0 +1,40 @@
+name: arpsEnKFtools
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - blas
+  - ca-certificates
+  - certifi
+  - libcxx
+  - libffi
+  - libgfortran
+  - llvm-meta
+  - ncurses
+  - numpy
+  - openblas
+  - openssl
+  - pip
+  - python
+  - readline
+  - setuptools
+  - sqlite
+  - tk
+  - wheel
+  - xz
+  - zlib
+  - siphon
+  - pip:
+    - nexradaws
+    - codecov
+    - coverage
+    - flake8
+    - pytest
+    - sphinx
+    - ipython
+    - matplotlib
+    - numpydoc
+    - sphinx-copybutton
+    - "-e git+https://github.com/readthedocs/sphinx_rtd_theme.git@2b8717a3647cc650625c566259e00305f7fb60aa#egg=sphinx_rtd_theme"
+prefix: /Users/dawson29/anaconda2/envs/arpsEnKFtools
+

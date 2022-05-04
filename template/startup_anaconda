@@ -1,5 +1,5 @@
 #!/bin/bash
 # Anaconda python environment
-module load anaconda
-. /apps/cent7/anaconda/5.1.0-py27/etc/profile.d/conda.sh
-
+# TODO: change this to use the modularized environment setup!
+module load anaconda/5.3.1-py37
+source activate arpsEnKFtools

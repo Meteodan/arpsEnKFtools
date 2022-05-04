@@ -163,7 +163,7 @@ _environment = {
     #     'running_state': 'R',
     #     'complete_state': 'C'
     # }
-    'rice': {
+    'rcac': {
         'btmarker': "SBATCH",
         '-A': " %(queue)s",
         '-N': " %(nnodes)d",
@@ -199,6 +199,11 @@ _environment = {
 
 }
 
+_environment['rice'] = _environment['rcac'].copy()
+_environment['rice']['n_cores_per_node'] = 20
+_environment['brown'] = _environment['rcac'].copy()
+_environment['brown']['n_cores_per_node'] = 24
+
 
 class Batch(object):
     def __init__(self, environment, username="dawson29"):
@@ -211,7 +216,7 @@ class Batch(object):
         env_dict = {}
         ppn = kwargs.get('ppn', 20)
         nnodes = kwargs.get('nnodes', 1)
-        # if self._envname == 'rice':
+        # if self._envname == 'rcac':
         #     ppn = ppn * nnodes  # Rice now needs the *total* nodes in the job specification
         # if ppn < 20 and nnodes > 1:
         #     # print(self._env.keys())
@@ -230,7 +235,7 @@ class Batch(object):
         for arg, val in env_dict.items():
             text += "#%s %s%s\n" % (self._env['btmarker'], arg, val)
 
-        if(self._envname == 'rice'):
+        if(self._envname in ['rcac', 'rice', 'brown']):
             commands.insert(0,"module load netcdf")
             #text += "\n" + "module load devel" + "\n"
 
@@ -265,7 +270,7 @@ class Batch(object):
         for line in queue:
             # if line['state'].lower() == 'running':
             if line['state'] == self._env['running_state']:
-                if self._envname == 'rice':
+                if self._envname in ['rcac', 'rice', 'brown']:
                     print("%(name)s (PID %(id)d): %(state)s (%(timeuse)s elapsed)" % line)
                 else:
                     print("%(name)s (PID %(id)d): %(state)s (%(timerem)s remaining)" % line)
