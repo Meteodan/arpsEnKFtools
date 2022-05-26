@@ -3,6 +3,7 @@ master_config.py -- Contains parameters to configure an end-to-end ARPS-EnKF run
 """
 import os
 from datetime import datetime
+import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
