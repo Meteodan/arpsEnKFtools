@@ -66,7 +66,9 @@ for radname in radar_list:
     if not os.path.exists(radar_work_dir):
         os.makedirs(radar_work_dir)
     # Link the radarinfo.dat file
-    if not os.path.lexists(os.path.join(radar_work_dir, 'radarinfo.dat')):
+    radarinfo_path = os.path.join(radar_work_dir, 'radarinfo.dat')
+    print(os.path.exists(radarinfo_path))
+    if not os.path.lexists(radarinfo_path) and not os.path.exists(radarinfo_path):
         os.symlink(config.template_base_dir + '/radarinfo.dat', radar_work_dir + '/radarinfo.dat')
 
     # create the list of radremap input and output file names
@@ -81,7 +83,7 @@ for radname in radar_list:
         os.makedirs(config.remapped_radar_dir)
     # Link the radarinfo.dat file into the remapped radar directory
     radarinfo_link = os.path.join(config.remapped_radar_dir, config.radarinfo_file)
-    if not os.path.exists(radarinfo_link):
+    if not os.path.exists(radarinfo_link) and not os.path.lexists(radarinfo_link):
         os.symlink(config.radarinfo_path, radarinfo_link)
     # Change directories to the output directory
     os.chdir(config.remapped_radar_dir)

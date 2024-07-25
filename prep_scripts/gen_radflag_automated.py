@@ -56,13 +56,17 @@ elif len(config.radremap_param['radar_list']) == 1:
     times = [datetime.strptime(f.split('.')[-1], '%H%M%S')
              for f in remapped_files]
 
+    print(times)
+
     # set the correct year, month, and day
     final_times = [datetime.strptime(f.split('.')[-2] + f.split('.')
                                      [-1], '%Y%m%d%H%M%S') for f in remapped_files]
+    print(final_times)
 
     # get the times at which radar data is available
     avail_time = [(final-initial_time).total_seconds()
                   for final in final_times]
+    print(avail_time)
 
     # Now generate the 'radar_data_flag' dictionary, where keys are assimilation times and values are
     # the radar groups that are to be assimilated for that time. You can also explicitly list the times
@@ -100,22 +104,28 @@ else:
         radar: [f for f in all_rad_files if radar in f] for radar in radar_list
     }
 
+    print(remapped_files_multi_radars['KBMX'])
+
     # access the time of each remapped file for each radar
     times = {
         radar: [datetime.strptime(f.split('.')[-1], '%H%M%S')
                 for f in remapped_files_multi_radars[radar]] for radar in radar_list
     }
 
+    # print(times)
+
     # set the correct year, month, and day
     final_times = {
         radar: [datetime.strptime(f.split('.')[-2] + f.split('.')
                                   [-1], '%Y%m%d%H%M%S') for f in remapped_files_multi_radars[radar]] for radar in radar_list
     }
+    print(final_times['KBMX'])
 
     # get the times at which data is available for each radar
     avail_time = {
         radar: [(final-initial_time).total_seconds() for final in final_times[radar]] for radar in radar_list
     }
+    # print(avail_time)
 
     # Now generate the 'radar_data_flag' dictionary, where keys are assimilation times and values are
     # the radar groups that are to be assimilated for that time. You can also explicitly list the times

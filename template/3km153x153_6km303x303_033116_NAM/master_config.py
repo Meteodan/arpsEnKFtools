@@ -7,16 +7,16 @@ import numpy as np
 
 # Define needed directories and experiment names/tags
 # Base project names and directories
-scratch_base_dir = '/scratch/rice/d/dawson29'
+scratch_base_dir = '/scratch/bell/dawson29'
 depot_base_dir = '/depot/dawson29'
-arpsenkftools_base_dir = '/home/dawson29/Projects/arpsEnKFtools'
+arpsenkftools_base_dir = '/depot/dawson29/apps/Projects/arpsEnKFtools'
 project_dir = 'Projects/VORTEXSE/simulations/ARPS'
 project_scr_dir = os.path.join(scratch_base_dir, project_dir)
 project_depot_dir = os.path.join(depot_base_dir, 'data', project_dir)
 IOP_name = '2016_IOP3'
 IOP_scr_dir = os.path.join(project_scr_dir, IOP_name, 'EnKF')
 IOP_depot_dir = os.path.join(project_depot_dir, IOP_name, 'EnKF')
-ext_model_data_dir = os.path.join(IOP_depot_dir, '6km303x303_033116_NAM/6km303x303_033116_NAM_tmix4')
+ext_model_data_dir = os.path.join(IOP_depot_dir, '6km303x303_033116_0600_NAM/6km303x303_033116_0600_NAM_tmix4')
 sfc_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/sao/2016_IOP3')
 radar_obs_dir = os.path.join(depot_base_dir, 'data/Projects/VORTEXSE/obsdata/2016/NEXRAD/IOP_3/level2/')
 # TODO: add other obs type directories here
@@ -26,7 +26,7 @@ exp_name_base = '3km153x153_6km303x303_033116'
 exp_name_tag = '_NAM'
 exp_name = exp_name_base + exp_name_tag
 exp_scr_dir = os.path.join(IOP_scr_dir, exp_name)
-# prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
+prep_work_dir = os.path.join(exp_scr_dir, '{}_prep_work'.format(exp_name))
 exp_depot_dir = os.path.join(IOP_depot_dir, exp_name)
 template_base_dir = os.path.join(arpsenkftools_base_dir, 'template')
 template_exp_dir = os.path.join(template_base_dir, exp_name)
@@ -68,11 +68,11 @@ mpi_nproc_flag = '-n'
 num_ensemble_members = 40
 # Initial time of entire experiment. Note, for nested ARPS runs this must be consistent with the
 # initial time of the original parent experiment!
-initial_time = '201603311200'
+initial_time = '201603310600'
 initial_datetime = datetime.strptime(initial_time, '%Y%m%d%H%M')
 # Initial time in seconds from model start corresponding to initial_time (can be different from 0
 # if ext2arps/wrf2arps/arpsintrp is run to produce IC's for several different times)
-initial_time_sec = 21600  # 1700 UTC
+initial_time_sec = 21600  # 1200 UTC
 perturb_ic = False
 if perturb_ic:
     external_inifile = '{}.hdf{:06d}'.format(exp_name, initial_time_sec)
@@ -182,7 +182,7 @@ arpsintrp_param = {
     # Following are not used in the namelist, but by the run_arpsintrp.py program
     # They will be "popped" from the dictionary before it is passed to editNamelistFile
     # They determine the history dumps from the outer ARPS grid that are processed
-    'use_mpi': False,
+    'use_mpi': True,
     'start_time': 21600.0,
     'end_time': 75600.0,
     'step_time': 300.0
@@ -193,7 +193,7 @@ radremap_param = {
     'radar_list': ['KBMX', 'KGWX', 'KHPX', 'KHTX', 'KNQA', 'KOHX', 'KPAH'],
     'start_timestamp': '20160331120000',
     'end_timestamp': '20160401030000',
-    'interval_seconds': 300,
+    'interval_seconds': 900,
     'tolerance': 900,
     'closest_before': True,
     'nthreads': 10

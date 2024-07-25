@@ -45,9 +45,9 @@ ovrwind = True              # Overlay wind vectors on plots?
 storm_u = 0.0 #-9.75 # -9.75 # -11.69 # 0.0
 storm_v = 0.0 #-2.80 # -2.80 # -1.41 # 0.0
 
-windintv_horz = 5               # Grid interval for wind vector plotting
-windintv_vert = 5
-wind_standard_value = 20
+windintv_horz = 4               # Grid interval for wind vector plotting
+windintv_vert = 4
+wind_standard_value = 10
 wind_scale = 1
 
 # Parameters for T-matrix reflectivity calculation
@@ -91,7 +91,7 @@ plotytickintv = 100000.
 plotztickintv = 1000.
 
 savefigopt = 1
-figfmt = 'png'              # Format of figures (e.g., .png, .pdf, .jpg, .eps, etc.)
+figfmt = 'eps'              # Format of figures (e.g., .png, .pdf, .jpg, .eps, etc.)
 
 nproc_x_in = 3             # Number of patches for split history files.
 nproc_y_in = 5
@@ -129,45 +129,44 @@ yzslice = 50
 # Data input parameters.
 #-----------------------------------------------------------------------------------------
 
-basedir = '/scratch/bell/dawson29/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6km303x303_033116_NAM/3km153x153_6km303x303_033116_NAM/' # Base directory name where individual
+basedir = '/depot/dawson29/data/Projects/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/3km153x153_6km303x303_033116_NAM/3km153x153_6km303x303_033116_NAM_sfcobs/' # Base directory name where individual
                                                                 # run folders reside
 outdirname = basedir+'plots/' # The directory name where the simulated dual-pol data will be saved.
-toPlot_list = [False, False, True, False]
-dir_list = ['./ENamean/', './ENfmean/', './EN001/', './ENF001/']
-dir_extra_list = ['./', './', './', './']
-runname_list = ['enmean', 'efmean', 'ena001', 'enf001']
-runlabel_list = ['enmean', 'efmean', 'ena001', 'enf001']
-trailer_list = ['', '', '', '']
-mphyopt_list = [15, 15, 15, 15]
-plotlim_list = [None, None, None, None]
-master_time_list = [N.arange(43200.0, 64800.0+900.0, 900.0), N.arange(43200.0, 64800.0+900.0, 900.0),
-                    N.arange(43200.0, 64800.0+300.0, 300.0), N.arange(43200.0, 64800.0+300.0, 300.0)]
-start_timestamp_list = ['20160331060000', '20160331060000', '20160331060000', '20160331060000']
-arbfile_list = [None, None, None, None]
+toPlot_list = [True,True]
+dir_list = ['./ENamean/','./ENfmean/']
+dir_extra_list = ['./','./']
+runname_list = ['enmean','efmean']
+runlabel_list = ['enmean','efmean']
+trailer_list = ['','']
+mphyopt_list = [15,15]
+plotlim_list = [None,None]
+master_time_list = [N.arange(25200.0,75600.0+10800.0,10800.0)] * 2
+start_timestamp_list = ['20160331060000'] * 2
+arbfile_list = [None,None]
 
 # Variables to plot
 
-fieldname = "dBZmod"
-fieldlevels = N.arange(5.0,85.0,5.0)
-clvls = matplotlib.ticker.MultipleLocator(base=10.0)
-clabel = r'dBZ'
+fieldname = "pte"
+fieldlevels = N.arange(290.0,360.0+1.0,1.0)
+clvls = matplotlib.ticker.MultipleLocator(base=5.0)
+clabel = r'$\theta_e$'
 cformat = None
-fieldcm = cmapdBZ
-norm = matplotlib.colors.BoundaryNorm(fieldlevels, fieldcm.N)
+fieldcm = cm.viridis
+norm = matplotlib.colors.BoundaryNorm(fieldlevels,fieldcm.N)
 plabel = None
-slice1 = 10
+slice1 = 1
 stag = 's'
 arbvar = False
 
-fieldovername = "w"
-fieldoverlevels = N.arange(5.0,60.0+5.0,5.0)
+fieldovername = "dBZ"
+fieldoverlevels = N.arange(30.0,80.0+10.0,10.0)
 fieldovercolor = 'k'
-slice2 = 14
+slice2 = 1
 stagovr = 's'
 arbvarovr = False
 
-fieldover2name = "vortz"
-fieldover2levels = N.arange(3.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
+fieldover2name = "none"
+fieldover2levels = N.arange(1.e-3,1.e-2,1.e-3) # N.arange(1.e-1,1.,1.e-1)
 fieldover2color = 'purple'
 slice3 = 14 # 14
 stagovr2 = 's'

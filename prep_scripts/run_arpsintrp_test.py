@@ -7,7 +7,6 @@ the (python) configuration file for that experiment, from which it imports the a
 import os
 import sys
 import subprocess
-import shutil
 from arpsenkftools.editNamelist import editNamelistFile
 from arpsenkftools.io_utils import import_all_from
 
@@ -106,20 +105,23 @@ for t0_interp_input_file_name, t0_interp_output_file_name, lbc_interp_input_file
 
     if use_mpi:
         command = [config.mpi_exe, config.mpi_nproc_flag,
-                str(config.arpsintrp_param['nproc_x']*config.arpsintrp_param['nproc_y']),
+                str(config.grid_param['nproc_x']*config.grid_param['nproc_y']),
                 config.arpsintrp_exe_path]
     else:
         command = [config.arpsintrp_exe_path]
+    
+    inputfile = open(t0_interp_input_file_name, 'r')
+#     outputfile = open(t0_interp_output_file_name, 'w')
+    
+    print("Running {} for {}".format(config.arpsintrp_exe_path, t0_interp_input_file_name))
+    job = subprocess.call(command, stdin=inputfile)
+    print("Job status = ", job)
 
-    print(command)
+    inputfile.close()
+#     outputfile.close()
 
-    with open(t0_interp_input_file_name, 'r') as inputfile, \
-            open(t0_interp_output_file_name, 'w') as outputfile:
-        print("Running {} for {}".format(config.arpsintrp_exe_path, t0_interp_input_file_name))
-        job = subprocess.call(command, stdin=inputfile, stdout=outputfile)
-        print("Job status = ", job)
-    with open(lbc_interp_input_file_name, 'r') as inputfile, \
-            open(lbc_interp_output_file_name, 'w') as outputfile:
-        print("Running {} for {}".format(config.arpsintrp_exe_path, lbc_interp_input_file_name))
-        job = subprocess.call(command, stdin=inputfile, stdout=outputfile)
-        print("Job status = ", job)
+#     with open(lbc_interp_input_file_name, 'r') as inputfile, \
+#             open(lbc_interp_output_file_name, 'w') as outputfile:
+#         print("Running {} for {}".format(config.arpsintrp_exe_path, lbc_interp_input_file_name))
+#         job = subprocess.call(command, stdin=inputfile, stdout=outputfile)
+#         print("Job status = ", job)

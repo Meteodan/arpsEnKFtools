@@ -186,7 +186,7 @@ _environment = {
         '--ntasks-per-node': " %(ppn)d",
         '-t': " %(timereq)s",
         '--job-name': "=%(jobname)s",
-        '--exclusive': "",
+        # '--exclusive': "",
         'queueprog': 'squeue',
         'queueparse': parseQLineRice,
         'submitprog': 'sbatch',
@@ -196,6 +196,19 @@ _environment = {
         'running_state': ' R',
         'complete_state': 'CD'
     },
+    # NOTE: changed mpiprog to srun below, but in order to get it to work
+    # I had to give it the --export=ALL argument in order to make sure
+    # that the job inherited the user environment. Otherwise, I got
+    # shared library object file missing errors when running arps_mpi or
+    # arpsenkf_mpi (specifically the jpeg library). I think this is because
+    # when originally compiling arps, I had the anaconda module loaded which
+    # led to it pointing to the jpeg library in the anaconda distribution
+    # instead of the system one. But when running srun, it seems to not
+    # inherit the environment and can't find the jpeg library. It also
+    # finds different locations for the other needed libraries.
+    # For some reason, using mpiexec doesn't run into this problem.
+    # Also added --mpi=pmi2 since I am using the Intel compilers for ARPS
+    # right now until I can solve other issues with the GNU ones.
     'bell': {
         'btmarker': "SBATCH",
         '-A': " %(queue)s",
@@ -203,12 +216,12 @@ _environment = {
         '--ntasks-per-node': " %(ppn)d",
         '-t': " %(timereq)s",
         '--job-name': "=%(jobname)s",
-        '--exclusive': "",
+        # '--exclusive': "",
         'queueprog': 'squeue',
         'queueparse': parseQLineBell,
         'submitprog': 'sbatch',
-        'mpiprog': 'mpiexec',
-        'mpiargs': '-n %d',
+        'mpiprog': 'srun',
+        'mpiargs': '--export=ALL --mpi=pmi2 -n %d',
         'n_cores_per_node': 128,
         'running_state': ' R',
         'complete_state': 'CD'
@@ -269,7 +282,7 @@ class Batch(object):
 
     def getQueueStatus(self, display=True):
         if self._env['queueprog'] == 'squeue':
-            os.environ['SQUEUE_FORMAT'] = "%12i %9u %12a %60j %.5D %.6C %.11l %.2t %M"
+            os.environ['SQUEUE_FORMAT'] = "%12i %9u %12a %70j %.5D %.6C %.11l %.2t %M"
         queue = subprocess.Popen([self._env['queueprog'], '-u', self._username], stdout=subprocess.PIPE)
         queue_text = queue.communicate()[0]
         lines = []

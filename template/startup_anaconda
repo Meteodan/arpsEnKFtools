@@ -1,5 +1,7 @@
 #!/bin/bash
 # Anaconda python environment
 # TODO: change this to use the modularized environment setup!
-module load anaconda/5.3.1-py37
-source activate arpsEnKFtools
+# module load anaconda/5.3.1-py37
+module load anaconda/2020.02-py37
+conda activate arpsEnKFtools
+# source activate arpsEnKFtools

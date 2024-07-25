@@ -6,9 +6,9 @@ import nexradaws
 conn = nexradaws.NexradAwsInterface()
 
 # TODO: make these command-line arguments
-timestamp_start = '20130519225500'
-timestamp_stop = '20130520030000'
-radar = 'KTLX'
+timestamp_start = '20160331115000'
+timestamp_stop = '20160331180000'
+radar = 'KPAH'
 
 datetime_start = datetime.strptime(timestamp_start, '%Y%m%d%H%M%S')
 datetime_stop = datetime.strptime(timestamp_stop, '%Y%m%d%H%M%S')
