@@ -1,9 +1,5 @@
 
 import os
-import sys
-from shutil import copyfile
-from glob import glob
-from datetime import datetime, timedelta
 import subprocess
 import time
 import argparse
@@ -23,7 +19,7 @@ def import_all_from(module_path):
     mod = imp.load_source('mod', module_path)
     return mod
 
-# TODO: this function doesn't work in python 3. Not using it anymore anyway..
+
 def isDivisible(dividend, divisor):
     return float(dividend) / int(divisor) == int(dividend) / int(divisor)
 
@@ -142,10 +138,10 @@ def generateEnsembleIntegration(cm_args, batch, start_time, end_time,
         "mv *.o* {}/".format(batch_output_dir)
     ])
 
-    arps_input_file_name = "%s/%s_%s.%d-%d.arps.input" % (
-        input_path, cm_args.job_name, 'ena%(ens)03d', start_time, end_time)
-    arps_debug_file_name = "%s/%s_%s.%d-%d.arps.debug" % (
-        debug_path, cm_args.job_name, 'ena%(ens)03d', start_time, end_time)
+    arps_input_file_name = "%s/%s.%d-%d.arps.input" % (
+        input_path, 'ena%(ens)03d', start_time, end_time)
+    arps_debug_file_name = "%s/%s.%d-%d.arps.debug" % (
+        debug_path, 'ena%(ens)03d', start_time, end_time)
     if cm_args.algorithm == "4densrf":
         arpsenkf_input_file_name = "%s/%d.arpsenkf.input" % (input_path, end_time)
 
@@ -237,8 +233,7 @@ def generateEnsemblePerturbations(cm_args, batch, start_time):
     for n_ens in cm_args.members:
         ens_member_name = "ena%03d" % (n_ens + 1)
 
-        arpsenkfic_input_file_name = "%s/%s_%s.arpsenkfic.input" % (input_path, cm_args.job_name,
-                                                                    ens_member_name)
+        arpsenkfic_input_file_name = "%s/%s.arpsenkfic.input" % (input_path, ens_member_name)
 
         editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkfic_template),
                          arpsenkfic_input_file_name,
@@ -249,10 +244,10 @@ def generateEnsemblePerturbations(cm_args, batch, start_time):
                          tfgs=start_time)
 
     arps_input_file_name = "%s/arps.input" % input_path
-    arpsenkfic_input_file_name = "%s/%s_%s.arpsenkfic.input" % (input_path, cm_args.job_name, 'ena%(ens)03d')
-    arpsenkfic_debug_file_name = "%s/%s_%s.arpsenkfic.debug" % (debug_path, cm_args.job_name, 'ena%(ens)03d')
+    arpsenkfic_input_file_name = "%s/%s.arpsenkfic.input" % (input_path, 'ena%(ens)03d')
+    arpsenkfic_debug_file_name = "%s/%s.arpsenkfic.debug" % (debug_path, 'ena%(ens)03d')
 
-    command = "%s --export=ALL -n 1 $base/arpsenkfic %s < %s > %s" % \
+    command = "%s -n 1 $base/arpsenkfic %s < %s > %s" % \
         (batch.getMPIprogram(),
          arps_input_file_name,
          arpsenkfic_input_file_name,
@@ -276,9 +271,9 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     nproc_x, nproc_y = cm_args.mpi_config_enkf
     nproc_x_dump, nproc_y_dump = cm_args.mpi_config_dump
 
-    arps_input_file_name = "%s/%s_%d.arps.input" % (input_path, cm_args.job_name, assim_time)
-    enkf_input_file_name = "%s/%s_%d.arpsenkf.input" % (input_path, cm_args.job_name, assim_time)
-    enkf_debug_file_name = "%s/%s_%d.arpsenkf.debug" % (debug_path, cm_args.job_name, assim_time)
+    arps_input_file_name = "%s/%d.arps.input" % (input_path, assim_time)
+    enkf_input_file_name = "%s/%d.arpsenkf.input" % (input_path, assim_time)
+    enkf_debug_file_name = "%s/%d.arpsenkf.debug" % (debug_path, assim_time)
     # batch_file_name = "%s/%d.sh" % (batch_path, assim_time)
 
     kwargs = {}
@@ -286,41 +281,20 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     # Figure out what conventional data we're assimilating (combine this with the next section!)
     cvn_data_flags = dict((k, getattr(cm_args, k))
                           for k in ['sndgflags', 'profflags', 'surfflags'])
+    # assim_all = False
+    if isDivisible(assim_time, 3600):
+        print("Assimilate all data ...")
+    else:
+        cvn_data_flags['sndgflags'] = 'no'
+        cvn_data_flags['profflags'] = 'no'
 
-    for cvn_flag, kw_flag in [('sndgflags', 'sndassim'), ('profflags', 'proassim'),
-                              ('surfflags', 'sfcassim')]:
-        if cm_args.check_data_files and cm_args.init_time_string:   # Check for existence of file
-            data_datetime = cm_args.datetime_dict[assim_time]
-            data_time_string = data_datetime.strftime('%Y%m%d%H%M%S')
-
-            if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
-                # Check for existence of data file corresponding to the type we want to assimilate
-                if 'snd' in cvn_flag:
-                    data_suffix = 'snd'
-                elif 'pro' in cvn_flag:
-                    data_suffix = 'pro'
-                elif 'surf' in cvn_flag:
-                    data_suffix = 'lso'
-                data_filename = '{}.{}'.format(data_time_string, data_suffix)
-                data_path = os.path.join(cm_args.base_path, 'obs/{}'.format(data_filename))
-                if not os.path.exists(data_path):
-                    print("Observation file {} doesn't exist. Excluding.".format(data_filename))
-                    kwargs[kw_flag] = 0
-                else:
-                    kwargs[kw_flag] = 1
-        else:   # Original behavior
-            # assim_all = False
-            if isDivisible(assim_time, 3600):
-                print("Assimilate all data ...")
-            else:
-                cvn_data_flags['sndgflags'] = 'no'
-                cvn_data_flags['profflags'] = 'no'
-
-            # Conventional DA flags
-            if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
-                kwargs[kw_flag] = 1
-            else:
-                kwargs[kw_flag] = 0
+    # Conventional DA flags
+    for cvn_flag, kw_flag in [('sndgflags', 'sndassim'), ('profflags',
+                                                          'proassim'), ('surfflags', 'sfcassim')]:
+        if cvn_flag in cvn_data_flags and cvn_data_flags[cvn_flag].lower() == 'yes':
+            kwargs[kw_flag] = 1
+        else:
+            kwargs[kw_flag] = 0
 
     if cm_args.split_files:
         kwargs['nproc_x_in'] = nproc_x_dump
@@ -392,36 +366,12 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
     elif cm_args.algorithm == '4densrf':
         kwargs['anaopt'] = 5
 
-    # Figure out what radar data we are assimilating
     # print len(radar_data_flag[True]) if True in radar_data_flag else 0
     try:
-        if True in radar_data_flag:
-            n_radars = len(radar_data_flag[True])
-            radar_names = radar_data_flag[True]
-            print(radar_names)
-            if cm_args.check_data_files and cm_args.init_time_string:
-                radar_datetime = cm_args.datetime_dict[assim_time]
-                radar_time_string1 = radar_datetime.strftime('%Y%m%d.%H%M%S')
-                radar_time_string2 = radar_datetime.strftime('%Y%m%d.%H%M')
-                for radar_name in radar_names:
-                    radar_filename1 = '{}.{}'.format(radar_name, radar_time_string1)
-                    radar_filename2 = '{}.{}'.format(radar_name, radar_time_string2)
-                    radar_path1 = os.path.join(cm_args.base_path, 'nexrad/{}'.format(radar_filename1))
-                    radar_path2 = os.path.join(cm_args.base_path, 'nexrad/{}'.format(radar_filename2))
-                    if not os.path.exists(radar_path1) and not os.path.exists(radar_path2):
-                        print("Radar data file {} or {} doesn't exist! Removing!".format(radar_filename1, radar_filename2))
-                        n_radars = n_radars - 1
-                        radar_data_flag[True].remove(radar_name)
-        else:
-            n_radars = 0
-            radar_names = ['']
-        # n_radars = len(radar_data_flag[True]) if True in radar_data_flag else 0
+        n_radars = len(radar_data_flag[True]) if True in radar_data_flag else 0
     except BaseException:
         n_radars = 0
-        radar_names = ['']
     radardaopt = 1 if n_radars > 0 else 0
-
-
 
     editNamelistFile("%s/%s" % (cm_args.base_path, cm_args.arpsenkf_template), enkf_input_file_name,
                      nen=cm_args.n_ens_members,
@@ -431,7 +381,6 @@ def generateEnKFAssimilation(cm_args, batch, assim_time, radar_data_flag=None):
                      assim_time=assim_time,
                      radardaopt=radardaopt,
                      nrdrused=n_radars,
-                     radarname=radar_names,
                      rmsfcst=2,
                      hdmpfheader=cm_args.job_name,
                      **kwargs
@@ -544,11 +493,11 @@ def generateDomainSubset(cm_args, batch, src_path, start_time, end_time,
                              tfgs=start_time
                              )
 
-    interp_input_file_name = "%s/%s_ena%s.arpsintrp.input" % (input_path, cm_args.job_name, '%(ens)03d')
-    interp_debug_file_name = "%s/%s_ena%s.arpsintrp.debug" % (debug_path, cm_args.job_name, '%(ens)03d')
+    interp_input_file_name = "%s/ena%s.arpsintrp.input" % (input_path, '%(ens)03d')
+    interp_debug_file_name = "%s/ena%s.arpsintrp.debug" % (debug_path, '%(ens)03d')
     arps_input_file_name = "%s/ena%s.arps.input" % (input_path, '%(ens)03d')
-    arpsenkfic_input_file_name = "%s/%s_ena%s.arpsenkfic.input" % (input_path, cm_args.job_name, '%(ens)03d')
-    arpsenkfic_debug_file_name = "%s/%s_ena%s.arpsenkfic.debug" % (debug_path, cm_args.job_name, '%(ens)03d')
+    arpsenkfic_input_file_name = "%s/ena%s.arpsenkfic.input" % (input_path, '%(ens)03d')
+    arpsenkfic_debug_file_name = "%s/ena%s.arpsenkfic.debug" % (debug_path, '%(ens)03d')
 
     commands = ["rm %s/%sicbc.*" % (bc_path, "ena%(ens)03d"), ""]
     if perturb_ic:
@@ -588,23 +537,22 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
     job_submit_count = []
     job_failed = []
 
+    if hybrid:
+        n_mpi = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
+    else:
+        n_mpi = n_cores
+
+    n_nodes = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
+
     envname = batch.getEnv()
-    if(envname in ['rcac', 'rice', 'brown', 'bell']):
-        queuename = cm_args.queue_name # 'dawson29'
+    if(envname == 'rice'):
+        queuename = 'dawson29'
         if cm_args.ppn_req > 0:
             ppn = cm_args.ppn_req
         else:
             ppn = min(batch.getNCoresPerNode(), n_cores)
     else:
         queuename = 'normal'
-
-    if hybrid:
-        n_mpi = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
-    else:
-        n_mpi = n_cores
-
-    # n_nodes = int(ceil(float(n_cores) / batch.getNCoresPerNode()))
-    n_nodes = int(ceil(float(n_cores) / ppn))
 
     running_state, complete_state = batch.getQueueStateNames()
 
@@ -642,8 +590,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
             job_key = "%s-%s_%d" % (key, cm_args.job_name, end_time)
         else:
             job_key = "%s-%s_%d-%d" % (key, cm_args.job_name, start_time, end_time)
-        if(envname in ['rcac', 'rice', 'brown', 'bell']):
-            queuename = cm_args.queue_name # 'dawson29'
+        if(envname == 'rice'):
+            queuename = 'dawson29'
             file_text = batch.gen(
                 commands,
                 queue=queuename,
@@ -684,26 +632,17 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
 
     print("Done submitting ...")
 
-    # Create the list of expected job names
-    if 'ekf' not in job_suffixes:
-        expected_job_names = ["{}-{}_{:d}-{:d}".format(suffix, cm_args.job_name, start_time, end_time)
-                              for suffix in job_suffixes]
-    else:
-        expected_job_names = ["ekf-{}_{:d}".format(cm_args.job_name, end_time)]
-
     if not cm_args.submit:
         return
 
-    # batch.getQueueStatus()
+    batch.getQueueStatus()
     need_to_check = False
 
     while True:
         time.sleep(0.5 * 60)
 
-        queue = batch.getQueueStatus(display=False)
-        queue = [q for q in queue if q['name'] in expected_job_names]
-        # queue = [q for q in queue if cm_args.job_name in q['name']]
-        batch.displayQueue(queue)
+        queue = batch.getQueueStatus()
+
         if len(queue) > 0:
             jobs_queued = [r['name'].strip() for r in queue]
             job_name_len = max(len(n) for n in jobs_queued)
@@ -730,8 +669,7 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         job_completed[idx] = True
                 if need_to_check and not job_completed[idx]:
                     # TODO: check to make sure a CFL violation did not occur
-                    # TODO: improve checking to scour standard output files for failures
-                    # to read files that exist but are corrupted in some way.
+
                     # Check to see if all the appropriate output files have been written
                     # by the job. If not, something went wrong (likely a lustre problem)
                     # Try resubmitting the job.
@@ -758,8 +696,8 @@ def submit(cm_args, batch, command_lines, wall_time, n_cores,
                         # Something went wrong! Resubmit the job if it's the first time it's
                         # happened. Otherwise quit after this cycle.
                         commands = command_lines[key]
-                        if(envname in ['rcac', 'rice', 'brown', 'bell']):
-                            queuename = cm_args.queue_name #  'dawson29'
+                        if(envname == 'rice'):
+                            queuename = 'dawson29'
                             file_text = batch.gen(
                                 commands,
                                 queue=queuename,
@@ -872,24 +810,9 @@ def main():
     ap.add_argument('--error-check', dest='error_check', action='store_true')
     ap.add_argument('--user-name', dest='user_name', default='dawson29')
     ap.add_argument('--save-lookup', dest='save_lookup', action='store_true')
-    ap.add_argument('--queue-name', dest='queue_name', default='dawson29')
-    ap.add_argument('--init-job-name', dest='init_job_name', default=None)
-    ap.add_argument('--init-time-string', dest='init_time_string', default=None)
-    ap.add_argument('--check-data-files', dest='check_data_files', action='store_true')
-    ap.add_argument('--machine-name', dest='machine_name', default='bell')
 
     args = ap.parse_args()
-    batch = Batch(args.machine_name, username=args.user_name)  # stampede
-
-    if args.init_time_string:
-        datetime_init = datetime.strptime(args.init_time_string, '%Y%m%d%H%M%S')
-        datetime_range = [datetime_init + timedelta(seconds=t_ens) for
-                          t_ens in range(args.t_ens_start, args.t_ens_end +
-                                         args.dt_assim_step, args.dt_assim_step)]
-        args.datetime_dict = {t_ens: datetime_t_ens for t_ens, datetime_t_ens in
-                              zip(range(args.t_ens_start, args.t_ens_end +
-                                        args.dt_assim_step, args.dt_assim_step),
-                                  datetime_range)}
+    batch = Batch('rice', username=args.user_name)  # stampede
 
 #   work_path = "%s/%s" % (args.base_path, args.job_name)
 #   input_path = "%s/input" % args.base_path
@@ -928,39 +851,6 @@ def main():
     if member_list == []:
         member_list = list(range(args.n_ens_members))
     args.members = member_list
-
-    # Option to copy initial files from a previous job with a different name
-    if args.init_job_name:
-        init_work_path = "%s/%s" % (args.base_path, args.init_job_name)
-        args.restart = True
-        print("Copying over initial condition files from {} to {}".format(args.init_job_name, args.job_name))
-        # TODO: individual ensemble member directories are currently only used for split_files option
-        # The below code assumes that this is the case. Need to change things such that individual ensemble
-        # member directories are used for joined files too.
-        for n_ens in member_list:
-            init_mem_dir = os.path.join(init_work_path, 'EN{:03d}'.format(n_ens+1))
-            dest_mem_dir = os.path.join(work_path, 'EN{:03d}'.format(n_ens+1))
-            dest_enf_mem_dir = os.path.join(work_path, 'ENF{:03d}'.format(n_ens+1))
-            if not os.path.exists(dest_mem_dir):
-                os.mkdir(dest_mem_dir, 0o755)
-            if not os.path.exists(dest_enf_mem_dir):
-                os.mkdir(dest_enf_mem_dir, 0o755)
-            init_mem_prefix = 'ena{:03d}'.format(n_ens+1)
-            init_mem_hist = '{}.hdf{:06d}'.format(init_mem_prefix, args.t_ens_start)
-            init_mem_grdbas = '{}.hdfgrdbas'.format(init_mem_prefix)
-            init_mem_grdbas_files = glob(init_mem_dir + '/{}_*'.format(init_mem_grdbas))
-            init_mem_hist_files = glob(init_mem_dir + '/{}_*'.format(init_mem_hist))
-            print("Copying {} patches".format(init_mem_grdbas))
-            for path in init_mem_grdbas_files:
-                filename = os.path.basename(path)
-                dest_path = os.path.join(dest_mem_dir, filename)
-                copyfile(path, dest_path)
-            print("Copying {} patches".format(init_mem_hist))
-            for path in init_mem_hist_files:
-                filename = os.path.basename(path)
-                dest_path = os.path.join(dest_mem_dir, filename)
-                copyfile(path, dest_path)
-
 
     nproc_x_mod, nproc_y_mod = args.mpi_config_model
     args.mpi_config_dump = args.mpi_config_dump or args.mpi_config_model
@@ -1005,11 +895,10 @@ def main():
         print("Warning: resetting dt_ens_step to be chunk_size (%d)" % args.dt_ens_step)
 
     if not args.free_forecast:
-        rd = import_all_from("%s/%s" % (args.base_path, args.radflags))
-        radar_data_flag = rd.radar_data_flag
         try:
             rd = import_all_from("%s/%s" % (args.base_path, args.radflags))
             radar_data_flag = rd.radar_data_flag
+            print(radar_data_flag)
         except BaseException:
             radar_data_flag = None
 #       args.radar_data_flags = radar_data_flag
@@ -1352,9 +1241,6 @@ def main():
             # assimilation_lines = [ "set base=%s" % args.base_path, "cd $base", "",
             # "setenv OMP_NUM_THREADS %d" % batch.getNCoresPerNode(), "" ]
             assimilation_lines = ["base=%s" % args.base_path, "cd $base", ""]
-            print("Here!")
-            print(radar_data_flag)
-            print(radar_data_flag[end_time])
             try:
                 radar_data_flag_sngltime = radar_data_flag[end_time]
             except (KeyError, TypeError):

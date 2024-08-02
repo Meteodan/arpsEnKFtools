@@ -53,14 +53,20 @@ elif len(config.radremap_param['radar_list']) == 1:
         os.path.join(remapped_rad_dir, file)) if not file.endswith(".dat") if os.path.islink(glob.glob(remapped_rad_dir + '/' + file)[0]) == True]
 
     # access the time of each remapped file
-    times = [datetime.strptime(f.split('.')[-1], '%H%M%S')
+    if len(remapped_files[0]) == 18:
+        pattern1 = '%H%M'
+        pattern2 = '%Y%m%d%H%M'
+    else:
+        pattern = '%H%M%S'
+        pattern2 = '%Y%m%d%H%M%S'
+    times = [datetime.strptime(f.split('.')[-1], pattern1)
              for f in remapped_files]
 
     print(times)
 
     # set the correct year, month, and day
     final_times = [datetime.strptime(f.split('.')[-2] + f.split('.')
-                                     [-1], '%Y%m%d%H%M%S') for f in remapped_files]
+                                     [-1], pattern2) for f in remapped_files]
     print(final_times)
 
     # get the times at which radar data is available
@@ -106,9 +112,17 @@ else:
 
     print(remapped_files_multi_radars['KBMX'])
 
+    first_key, first_value = next(iter(remapped_files_multi_radars.items()))
     # access the time of each remapped file for each radar
+    if len(first_value[0]) == 18:
+        pattern1 = '%H%M'
+        pattern2 = '%Y%m%d%H%M'
+    else:
+        pattern1 = '%H%M%S'
+        pattern2 = '%Y%m%d%H%M%S'
+
     times = {
-        radar: [datetime.strptime(f.split('.')[-1], '%H%M%S')
+        radar: [datetime.strptime(f.split('.')[-1], pattern1)
                 for f in remapped_files_multi_radars[radar]] for radar in radar_list
     }
 
@@ -117,7 +131,7 @@ else:
     # set the correct year, month, and day
     final_times = {
         radar: [datetime.strptime(f.split('.')[-2] + f.split('.')
-                                  [-1], '%Y%m%d%H%M%S') for f in remapped_files_multi_radars[radar]] for radar in radar_list
+                                  [-1], pattern2) for f in remapped_files_multi_radars[radar]] for radar in radar_list
     }
     print(final_times['KBMX'])
 

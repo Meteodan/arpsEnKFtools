@@ -58,7 +58,7 @@ radar_list = config.radremap_param.pop('radar_list')
 # Loop through radars
 for radname in radar_list:
     # Get the list of level-2 radar data files
-    level2_paths = glob.glob(config.radar_obs_dir + '/{}*'.format(radname))
+    level2_paths = glob.glob(config.radar_obs_dir + '/*{}*'.format(radname))
     level2_file_names = [os.path.basename(level2_path) for level2_path in level2_paths]
     level2_file_times = []
     # Create working subdirectory for the current radar

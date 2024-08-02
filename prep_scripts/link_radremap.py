@@ -65,7 +65,11 @@ for radname in radar_list:
     file_times = [remapped_file_name.replace('{}.'.format(radname), '') for remapped_file_name in
                   remapped_file_names]
     # Create datetime objects out of the timestamps
-    file_datetimes = [datetime.strptime(file_time, '%Y%m%d.%H%M%S') for file_time in file_times]
+    if len(file_times[0]) == 15:
+        pattern = '%Y%m%d.%H%M%S'
+    else:
+        pattern = '%Y%m%d.%H%M'
+    file_datetimes = [datetime.strptime(file_time, pattern) for file_time in file_times]
 
     # For each time in the desired range, find the closest matching remapped file and create the
     # link
@@ -87,13 +91,13 @@ for radname in radar_list:
         if closest <= config.radremap_param['tolerance'] and closest > 0:
             closest_index = np.abs(diff).argmin()
             closest_file_path = remapped_file_paths[closest_index]
-            link_name = t.strftime('{}.%Y%m%d.%H%M%S'.format(radname))
+            link_name = t.strftime('{}.{}'.format(radname, pattern))
             link_path = os.path.join(config.remapped_radar_dir, link_name)
             # Remove existing link
             if os.path.islink(link_path):
                 os.remove(link_path)
             os.symlink(remapped_file_paths[closest_index], link_path)
-        
+
         elif closest == 0:
             tmp = os.system(f'ln -s {link_path} {remapped_file_paths[0]}')
 

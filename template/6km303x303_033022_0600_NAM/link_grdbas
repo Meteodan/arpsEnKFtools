@@ -1,0 +1,16 @@
+#!/bin/bash
+
+basedir='/scratch/rice/d/dawson29/VORTEXSE/simulations/ARPS/2016_IOP3/EnKF/6kmconv/6kmconvLIN/'
+dir1='ENF001/'
+dir2='ENfmean/'
+runname1='enf001'
+runname2='efmean'
+
+filenames=$(ls ${basedir}${dir1}${runname1}.hdfgrdbas*)
+
+for file in ${filenames}
+do
+trailer=${file: -6}
+#echo $trailer
+ln -s $file ${basedir}${dir2}${runname2}.hdfgrdbas_${trailer}
+done
